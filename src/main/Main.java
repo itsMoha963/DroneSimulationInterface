@@ -2,6 +2,7 @@ package src.main;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 
 public class Main
 {
@@ -31,6 +31,13 @@ public class Main
             throw new RuntimeException("Failed to load configuration files");
         }
 
+        EventQueue.invokeLater( () ->  {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.setVisible(true);
+        }
+        );
+
+
         try {
             URL url = new URL(ENDPOINT_URL + "drones/?format=json");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -45,18 +52,21 @@ public class Main
             String inputLine;
             StringBuffer response = new StringBuffer();
             while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
                 response.append(inputLine);
             }
 
             JSONObject json = new JSONObject(response.toString());
             JSONArray jsonFile = json.getJSONArray("results");
+
             for (int i = 0; i < jsonFile.length(); i++) {
                 JSONObject o = jsonFile.getJSONObject(i);
                 if(o.has("carriage_type") && o.has("carriage_weight")){
                     String a = o.getString("carriage_type");
                     int b = o.getInt("carriage_weight");
                     int id = o.getInt("id");
-                    System.out.println("Drone " + id + ": carriage type " + a + " (weight: " + b + "g)");
+                    String data = "Drone " + id + ": carriage type " + a + " (weight: " + b + "g)";
+                    System.out.println(data);
                 }
             }
 
