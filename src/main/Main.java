@@ -32,7 +32,7 @@ public class Main
         }
 
         EventQueue.invokeLater( () ->  {
-            MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow()
             mainWindow.setVisible(true);
         }
         );
