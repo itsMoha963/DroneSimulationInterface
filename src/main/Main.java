@@ -41,7 +41,6 @@ public class Main
         try {
             URL url = new URL(ENDPOINT_URL + "drones/?format=json");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "Token " + TOKEN);
             conn.setRequestProperty("User-Agent", USER_AGENT);
@@ -69,7 +68,6 @@ public class Main
                     System.out.println(data);
                 }
             }
-
 
             conn.disconnect();
         } catch (Exception e) {

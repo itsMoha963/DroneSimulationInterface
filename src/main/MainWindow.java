@@ -8,7 +8,6 @@ public class MainWindow extends JFrame {
 
     private JList<String> droneList;
 
-
     public MainWindow() {
         setTitle("Drone Simulation Interface");
         setSize(900, 1000);
