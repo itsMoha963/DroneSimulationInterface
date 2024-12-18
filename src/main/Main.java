@@ -37,7 +37,6 @@ public class Main
         }
         );
 
-
         try {
             URL url = new URL(ENDPOINT_URL + "drones/?format=json");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
