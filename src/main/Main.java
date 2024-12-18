@@ -40,7 +40,7 @@ public class Main
             conn.setRequestProperty("User-Agent", USER_AGENT);
             conn.connect();
             int responseCode = conn.getResponseCode();
-            
+
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
