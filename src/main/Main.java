@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Properties;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -22,6 +24,13 @@ public class Main
     private static final String USER_AGENT = "group21";
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
+
+
         // To Load Token, without exposing it to GitHub.
         try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
             Properties properties = new Properties();
@@ -32,13 +41,21 @@ public class Main
         }
 
         EventQueue.invokeLater( () ->  {
-            MainWindow mainWindow = new MainWindow()
+            MainWindow mainWindow = new MainWindow();
             mainWindow.setVisible(true);
         }
         );
 
         try {
-            URL url = new URL(ENDPOINT_URL + "drones/?format=json");
+
+        } catch (Exception e) {
+            System.out.print("Failed to connect to API");
+        }
+    }
+
+    public static ArrayList<Drone> FetchDrones() {
+        try {
+            URL url = new URL(ENDPOINT_URL + "drones/?format=json&limit=1000");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "Token " + TOKEN);
@@ -57,20 +74,24 @@ public class Main
             JSONObject json = new JSONObject(response.toString());
             JSONArray jsonFile = json.getJSONArray("results");
 
+            ArrayList<Drone> drones = new ArrayList<Drone>();
+
             for (int i = 0; i < jsonFile.length(); i++) {
                 JSONObject o = jsonFile.getJSONObject(i);
-                if(o.has("carriage_type") && o.has("carriage_weight")){
-                    String a = o.getString("carriage_type");
-                    int b = o.getInt("carriage_weight");
+                if (o.has("carriage_type") && o.has("carriage_weight")) {
+                    String type = o.getString("carriage_type");
+                    int weight = o.getInt("carriage_weight");
                     int id = o.getInt("id");
-                    String data = "Drone " + id + ": carriage type " + a + " (weight: " + b + "g)";
-                    System.out.println(data);
+                    drones.add(new Drone(id, type, weight));
                 }
             }
 
-            conn.disconnect();
-        } catch (Exception e) {
+            return drones;
+        }
+        catch (Exception e) {
             System.out.print("Failed to connect to API");
         }
+
+        return null;
     }
 }

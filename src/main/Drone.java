@@ -1,25 +1,25 @@
 package src.main;
 
 public class Drone {
-    private String name;
+    private int id;
     private String carriageType;
-    private double weight;
+    private int weight;
 
-    public Drone(String name, String carriageType, double weigh) {
-        this.name = name;
+    public Drone(int id, String carriageType, int weight) {
+        this.id = id;
         this.carriageType = carriageType;
         this.weight = weight;
     }
 
-    public String getName() {
-        return name;
+    public int getId() {
+        return id;
     }
 
     public String getCarriageType() {
         return carriageType;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 }
