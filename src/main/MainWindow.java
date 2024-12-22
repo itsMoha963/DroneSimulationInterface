@@ -42,9 +42,10 @@ public class MainWindow extends JFrame {
 
         ArrayList<Drone> drones = Main.FetchDrones();
 
-        for (int i = 0; i < drones.size(); i++) {
-            Drone tmpDrone = drones.get(i);
-            contentPanel.add(createDronePanel(tmpDrone.getId(), tmpDrone.getCarriageType(), tmpDrone.getWeight()));
+        if (drones != null) {
+            for (int i = 0; i < drones.size(); i++) {
+                contentPanel.add(createDronePanel(drones.get(i)));
+            }
         }
 
         contentPanel.setVisible(true);
@@ -63,7 +64,12 @@ public class MainWindow extends JFrame {
         droneTypeComboBox.addActionListener(e -> filterDronesByType( (String)droneTypeComboBox.getSelectedItem() ) );
 
         toolBar.add(new JLabel("Refresh: "));
-        toolBar.add(createToolBarButtonHelper("Refresh", "🔄"));
+        JButton refreshButton = createToolBarButtonHelper("Refresh", "🔄");
+        refreshButton.addActionListener(e -> {
+            DroneFilterWindow filterWindow = new DroneFilterWindow();
+            filterWindow.setVisible(true);
+        });
+        toolBar.add(refreshButton);
         toolBar.addSeparator();
         toolBar.add(new JLabel("Filter: "));
         toolBar.add(droneTypeComboBox);
@@ -84,12 +90,16 @@ public class MainWindow extends JFrame {
 
         // Not sure if we should refetch or work with the existing Drones.
         ArrayList<Drone> drones = Main.FetchDrones();
+        if (drones == null) {
+            System.err.println("No Drones to Filter");
+            return;
+        }
 
         contentPanel.removeAll();
 
         for (int i = 0; i < drones.size(); i++) {
             if ( type.equals(drones.get(i).getCarriageType()) || type.equals("All Types") ) {
-                contentPanel.add(createDronePanel(drones.get(i).getId(), drones.get(i).getCarriageType(), drones.get(i).getWeight()));
+                contentPanel.add(createDronePanel(drones.get(i)));
             }
         }
 
@@ -97,31 +107,37 @@ public class MainWindow extends JFrame {
         contentPanel.repaint();
     }
 
-    private JPanel createDronePanel(int id, String type, int weight) {
+    private JPanel createDronePanel(Drone drone) {
         JPanel dronePanel = new JPanel();
 
         dronePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        dronePanel.setLayout(new GridLayout(3, 1));
+        dronePanel.setLayout(new GridLayout(5, 1));
         dronePanel.setBackground(GUNMETAL);
 
-        JLabel droneIDLabel = new JLabel(id + "", SwingConstants.CENTER);
+        JLabel droneIDLabel = createLabelHelper(drone.getId() + "");
         droneIDLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        droneIDLabel.setForeground(PLATINUM);
 
-        JLabel droneCarriageTypeLabel = new JLabel("Carriage Type: " + type, SwingConstants.CENTER);
-        droneCarriageTypeLabel.setForeground(PLATINUM);
-        droneCarriageTypeLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        JLabel droneCarriageTypeLabel = createLabelHelper("Carriage Type: " + drone.getCarriageType());
+        JLabel droneCarriageWeightLabel = createLabelHelper("Carriage Weight: " + drone.getCarriageWeight() + "g");
+        JLabel droneSerialNumberLabel = createLabelHelper("Serial Number: " + drone.getSerialNumber());
 
-        JLabel droneCarriageWeightLabel = new JLabel("Carriage Weight: " + weight + "g", SwingConstants.CENTER);
-        droneCarriageWeightLabel.setForeground(PLATINUM);
-        droneCarriageWeightLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        // TODO: Drone Type is a URL to the Dronetypes API, have to compare ID and fetch Information from Dronetypes
+        //JLabel droneTypeLabel = createLabelHelper("Drone Type: " + drone.getDroneType());
 
         dronePanel.add(droneIDLabel);
         dronePanel.add(droneCarriageTypeLabel);
         dronePanel.add(droneCarriageWeightLabel);
+        dronePanel.add(droneSerialNumberLabel);
 
         dronePanel.setBorder( new FlatLineBorder( new Insets( 16, 16, 16, 16 ), null, 0, 32 ) );
 
         return dronePanel;
+    }
+
+    private JLabel createLabelHelper(String text) {
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setForeground(PLATINUM);
+        label.setFont(new Font("Arial", Font.BOLD, 12));
+        return label;
     }
 }

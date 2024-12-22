@@ -1,25 +1,22 @@
 package src.main;
 
-public class Drone {
-    private int id;
+public class Drone extends DroneBase {
     private String carriageType;
-    private int weight;
+    private int carriageWeight;
+    private String droneType;
+    private String created;
 
-    public Drone(int id, String carriageType, int weight) {
+    public Drone(int id, String serialNumber, String carriageType, int carriageWeight, String droneType, String created) {
         this.id = id;
+        this.serialNumber = serialNumber;
         this.carriageType = carriageType;
-        this.weight = weight;
+        this.carriageWeight = carriageWeight;
+        this.droneType = droneType;
+        this.created = created;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getCarriageType() {
-        return carriageType;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
+    public String getCarriageType() { return carriageType; }
+    public int getCarriageWeight() { return carriageWeight; }
+    public String getDroneType() { return droneType; }
+    public String getCreated() { return created; }
 }
