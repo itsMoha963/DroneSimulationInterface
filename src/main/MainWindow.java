@@ -40,7 +40,15 @@ public class MainWindow extends JFrame {
         contentPanel.setLayout(new FlowLayout());
         contentPanel.setBackground(new Color(27, 27, 30));
 
-        ArrayList<Drone> drones = Main.FetchDrones();
+        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
+
+        ArrayList<Drone> drones = null;
+        try {
+            drones = api.fetchDrones();
+            int n = api.fetchDroneDynamics().size();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         if (drones != null) {
             for (int i = 0; i < drones.size(); i++) {
@@ -89,7 +97,16 @@ public class MainWindow extends JFrame {
         System.out.println("Filtering Drones by Type: " + type);
 
         // Not sure if we should refetch or work with the existing Drones.
-        ArrayList<Drone> drones = Main.FetchDrones();
+
+        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
+
+        ArrayList<Drone> drones = null;
+        try {
+            drones = api.fetchDrones();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (drones == null) {
             System.err.println("No Drones to Filter");
             return;

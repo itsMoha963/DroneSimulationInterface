@@ -39,58 +39,19 @@ public class Main
             throw new RuntimeException("Failed to load configuration files");
         }
 
+        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
+        try {
+            api.fetchDrones();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         EventQueue.invokeLater( () ->  {
             MainWindow mainWindow = new MainWindow();
             mainWindow.setVisible(true);
         }
         );
     }
-
-    public static ArrayList<Drone> FetchDrones() {
-        try {
-            URL url = new URL(ENDPOINT_URL + "drones/?format=json&limit=1000");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Token " + TOKEN);
-            conn.setRequestProperty("User-Agent", USER_AGENT);
-            conn.connect();
-            int responseCode = conn.getResponseCode();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
-                response.append(inputLine);
-            }
-
-            JSONObject json = new JSONObject(response.toString());
-            JSONArray jsonFile = json.getJSONArray("results");
-
-            ArrayList<Drone> drones = new ArrayList<Drone>();
-
-            for (int i = 0; i < jsonFile.length(); i++) {
-                JSONObject o = jsonFile.getJSONObject(i);
-                if (o.has("carriage_type") && o.has("carriage_weight")) {
-                    String type = o.getString("carriage_type");
-                    String droneTypeURL = o.getString("dronetype");
-                    String serialNumber = o.getString("serialnumber");
-                    String created = o.getString("created");
-                    int weight = o.getInt("carriage_weight");
-                    int id = o.getInt("id");
-                    drones.add(new Drone(id, serialNumber, type, weight, droneTypeURL, created));
-                }
-            }
-
-            return drones;
-        }
-        catch (Exception e) {
-            System.err.println("Failed to connect to API");
-        }
-
-        return null;
-    }
-
 
     // There are 3 JSON Formats to Parse
     /*
