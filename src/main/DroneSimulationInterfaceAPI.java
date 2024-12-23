@@ -21,7 +21,7 @@ public class DroneSimulationInterfaceAPI {
     private final String droneDynamicsEndpoint = "dronedynamics";
     private final String droneEndpoint = "drones";
 
-    private final String TOKEN = "<token>";
+    private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
     public DroneSimulationInterfaceAPI() {
         httpClient = HttpClient.newBuilder()
@@ -42,7 +42,8 @@ public class DroneSimulationInterfaceAPI {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
         StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
+
+        while ( (inputLine = in.readLine()) != null ) {
             System.out.println(inputLine);
             response.append(inputLine);
         }
@@ -75,7 +76,7 @@ public class DroneSimulationInterfaceAPI {
     }
 
     public void fetchDroneTypes() {
-
+        throw new RuntimeException("DroneSimulationInterfaceAPI.fetchDroneTypes is Not Implemented");
     }
 
     public ArrayList<DynamicDrone> fetchDroneDynamics() throws IOException {
@@ -107,7 +108,7 @@ public class DroneSimulationInterfaceAPI {
     }
 
     private HttpURLConnection getConnection(String endpointUrl) throws IOException {
-        URL url = new URL(baseUrl + endpointUrl + "/?format=json");
+        URL url = new URL(baseUrl + endpointUrl + "/?format=json&limit=100");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Token " + TOKEN);

@@ -114,11 +114,26 @@ public class MainWindow extends JFrame {
 
         contentPanel.removeAll();
 
+        DroneFilter filter = new DroneFilter.Builder()
+                .weightRange(0, 10)
+                .carriageType("ACT")
+                .build();
+
+        DroneFilterService droneFilterService = new DroneFilterService();
+        List<Drone> filteredDrones = droneFilterService.filterDrones(drones, filter);
+
+        System.out.println(filteredDrones.size() + " Drones after Filtering");
+
+        for (int i = 0; i < filteredDrones.size(); i++) {
+            contentPanel.add(createDronePanel(filteredDrones.get(i)));
+        }
+
+        /*
         for (int i = 0; i < drones.size(); i++) {
             if ( type.equals(drones.get(i).getCarriageType()) || type.equals("All Types") ) {
                 contentPanel.add(createDronePanel(drones.get(i)));
             }
-        }
+        }*/
 
         contentPanel.revalidate();
         contentPanel.repaint();
