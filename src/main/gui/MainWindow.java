@@ -1,6 +1,11 @@
-package src.main;
+package src.main.gui;
 
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import src.main.core.Drone;
+import src.main.core.parser.DroneParser;
+import src.main.services.DroneFilterService;
+import src.main.services.DroneSimulationInterfaceAPI;
+import src.main.utils.DroneFilter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -44,11 +49,12 @@ public class MainWindow extends JFrame {
 
         ArrayList<Drone> drones = null;
         try {
-            drones = api.fetchDrones();
-            int n = api.fetchDroneDynamics().size();
+            drones = api.fetchDroneData(new DroneParser());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println(drones.size() + " Drones fetched");
 
         if (drones != null) {
             for (int i = 0; i < drones.size(); i++) {
@@ -103,6 +109,7 @@ public class MainWindow extends JFrame {
         ArrayList<Drone> drones = null;
         try {
             drones = api.fetchDrones();
+            drones = api.fetchDroneData(new DroneParser());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

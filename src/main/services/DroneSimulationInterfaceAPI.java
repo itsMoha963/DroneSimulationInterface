@@ -1,13 +1,15 @@
-package src.main;
+package src.main.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import src.main.core.Drone;
+import src.main.core.DynamicDrone;
+import src.main.core.parser.JsonDroneParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.time.Duration;
@@ -51,8 +53,9 @@ public class DroneSimulationInterfaceAPI {
         return new JSONObject(response.toString());
     }
 
-
     // Gets info from fetchDataFromEndpoint and then Parse accordingly
+
+    @Deprecated
     public ArrayList<Drone> fetchDrones() throws IOException {
         JSONObject jsonObject = fetchDataFromEndpoint(droneEndpoint);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
@@ -75,36 +78,21 @@ public class DroneSimulationInterfaceAPI {
         return drones;
     }
 
-    public void fetchDroneTypes() {
-        throw new RuntimeException("DroneSimulationInterfaceAPI.fetchDroneTypes is Not Implemented");
-    }
 
-    public ArrayList<DynamicDrone> fetchDroneDynamics() throws IOException {
+    public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
         JSONObject jsonObject = fetchDataFromEndpoint(droneEndpoint);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
 
-        ArrayList<DynamicDrone> drones = new ArrayList<DynamicDrone>();
+        ArrayList<T> data = new ArrayList<T>();
 
         for (int i = 0; i < jsonFile.length(); i++) {
             JSONObject o = jsonFile.getJSONObject(i);
-            if (o.has("drone") && o.has("timestamp")) {
-                String droneURL = o.getString("drone");
-                String timestamp = o.getString("timestamp");
-                int speed = o.getInt("speed");
-                int allign_roll = o.getInt("allign_roll");
-                int allign_pitch = o.getInt("allign_pitch");
-                int allign_yaw = o.getInt("allign_yaw");
-                double longitude = o.getDouble("longitude");
-                double latitude = o.getDouble("latitude");
-                int battery_status = o.getInt("battery_status");
-                String last_seen = o.getString("last_seen");
-                int status = o.getInt("status");
-
-                drones.add(new DynamicDrone(droneURL, timestamp, speed, allign_roll, allign_pitch, allign_yaw, longitude, latitude, battery_status, last_seen, status));
+            if (parser.isValid(o)) {
+                data.add(parser.parse(o));
             }
         }
 
-        return drones;
+        return data;
     }
 
     private HttpURLConnection getConnection(String endpointUrl) throws IOException {

@@ -1,4 +1,4 @@
-package src.main;
+package src.main.core;
 
 public class DynamicDrone extends DroneBase {
     private String drone;

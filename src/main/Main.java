@@ -1,21 +1,13 @@
 package src.main;
 
 import javax.swing.*;
-
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.Properties;
-
 import com.formdev.flatlaf.FlatLightLaf;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import src.main.gui.MainWindow;
+import src.main.services.DroneSimulationInterfaceAPI;
 
 public class Main
 {

@@ -1,4 +1,7 @@
-package src.main;
+package src.main.services;
+
+import src.main.core.Drone;
+import src.main.utils.DroneFilter;
 
 import java.util.List;
 import java.util.stream.Collectors;

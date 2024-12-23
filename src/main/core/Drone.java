@@ -1,4 +1,6 @@
-package src.main;
+package src.main.core;
+
+import src.main.core.DroneBase;
 
 public class Drone extends DroneBase {
     private String carriageType;

@@ -1,4 +1,4 @@
-package src.main;
+package src.main.utils;
 
 public class DroneFilter {
     private final String carriageType;
