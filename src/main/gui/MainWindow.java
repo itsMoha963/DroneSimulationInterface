@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class MainWindow extends JFrame {
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new FlowLayout());
-        contentPanel.setBackground(new Color(27, 27, 30));
+        contentPanel.setBackground(EERIE_BLACK);
 
         DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
 
@@ -56,10 +55,8 @@ public class MainWindow extends JFrame {
 
         System.out.println(drones.size() + " Drones fetched");
 
-        if (drones != null) {
-            for (int i = 0; i < drones.size(); i++) {
-                contentPanel.add(createDronePanel(drones.get(i)));
-            }
+        for (int i = 0; i < drones.size(); i++) {
+            contentPanel.add(createDronePanel(drones.get(i)));
         }
 
         contentPanel.setVisible(true);
@@ -108,7 +105,7 @@ public class MainWindow extends JFrame {
 
         ArrayList<Drone> drones = null;
         try {
-            drones = api.fetchDrones();
+            //drones = api.fetchDrones();
             drones = api.fetchDroneData(new DroneParser());
         } catch (IOException e) {
             throw new RuntimeException(e);

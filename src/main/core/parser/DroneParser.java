@@ -20,3 +20,4 @@ public class DroneParser implements JsonDroneParser<Drone> {
         return obj.has("carriage_type") && obj.has("carriage_weight");
     }
 }
+

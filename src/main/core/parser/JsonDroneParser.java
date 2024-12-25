@@ -6,3 +6,4 @@ public interface JsonDroneParser<T> {
     T parse(JSONObject obj);
     boolean isValid(JSONObject obj);
 }
+

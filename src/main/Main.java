@@ -31,13 +31,6 @@ public class Main
             throw new RuntimeException("Failed to load configuration files");
         }
 
-        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
-        try {
-            api.fetchDrones();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         EventQueue.invokeLater( () ->  {
             MainWindow mainWindow = new MainWindow();
             mainWindow.setVisible(true);

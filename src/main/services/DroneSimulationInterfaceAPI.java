@@ -53,32 +53,6 @@ public class DroneSimulationInterfaceAPI {
         return new JSONObject(response.toString());
     }
 
-    // Gets info from fetchDataFromEndpoint and then Parse accordingly
-
-    @Deprecated
-    public ArrayList<Drone> fetchDrones() throws IOException {
-        JSONObject jsonObject = fetchDataFromEndpoint(droneEndpoint);
-        JSONArray jsonFile = jsonObject.getJSONArray("results");
-
-        ArrayList<Drone> drones = new ArrayList<Drone>();
-
-        for (int i = 0; i < jsonFile.length(); i++) {
-            JSONObject o = jsonFile.getJSONObject(i);
-            if (o.has("carriage_type") && o.has("carriage_weight")) {
-                String type = o.getString("carriage_type");
-                String droneTypeURL = o.getString("dronetype");
-                String serialNumber = o.getString("serialnumber");
-                String created = o.getString("created");
-                int weight = o.getInt("carriage_weight");
-                int id = o.getInt("id");
-                drones.add(new Drone(id, serialNumber, type, weight, droneTypeURL, created));
-            }
-        }
-
-        return drones;
-    }
-
-
     public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
         JSONObject jsonObject = fetchDataFromEndpoint(droneEndpoint);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
