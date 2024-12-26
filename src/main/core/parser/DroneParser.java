@@ -19,5 +19,10 @@ public class DroneParser implements JsonDroneParser<Drone> {
     public boolean isValid(org.json.JSONObject obj) {
         return obj.has("carriage_type") && obj.has("carriage_weight");
     }
+
+    @Override
+    public String getEndpoint() {
+        return "drones";
+    }
 }
 

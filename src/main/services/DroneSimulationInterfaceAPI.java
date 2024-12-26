@@ -14,23 +14,17 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 
 public class DroneSimulationInterfaceAPI {
-    private final HttpClient httpClient;
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
     private final String droneTypesEndpoint = "dronetypes";
-    private final String droneDynamicsEndpoint = "dronedynamics";
-    private final String droneEndpoint = "drones";
 
     private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
     public DroneSimulationInterfaceAPI() {
-        httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(60))
-                .executor(Executors.newFixedThreadPool(5))
-                .version(HttpClient.Version.HTTP_2)
-                .build();
+
     }
 
     private JSONObject fetchDataFromEndpoint(String endpointUrl) throws IOException {
@@ -54,7 +48,7 @@ public class DroneSimulationInterfaceAPI {
     }
 
     public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
-        JSONObject jsonObject = fetchDataFromEndpoint(droneEndpoint);
+        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint());
         JSONArray jsonFile = jsonObject.getJSONArray("results");
 
         ArrayList<T> data = new ArrayList<T>();
