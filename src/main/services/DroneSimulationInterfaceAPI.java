@@ -20,7 +20,6 @@ import java.util.concurrent.Executors;
 public class DroneSimulationInterfaceAPI {
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
     private final String droneTypesEndpoint = "dronetypes";
-
     private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
     public DroneSimulationInterfaceAPI() {

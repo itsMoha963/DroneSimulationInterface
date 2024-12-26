@@ -11,10 +11,6 @@ import src.main.services.DroneSimulationInterfaceAPI;
 
 public class Main
 {
-    private static String TOKEN;
-    private static final String ENDPOINT_URL = "http://dronesim.facets-labs.com/api/";
-    private static final String USER_AGENT = "group21";
-
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
@@ -22,6 +18,7 @@ public class Main
             System.err.println("Failed to initialize FlatLightLeaf Look and Feel");
         }
 
+        /* Don't really need this anymore as API Token is useless without the VPN
         // To Load Token, without exposing it to GitHub.
         try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
             Properties properties = new Properties();
@@ -30,6 +27,7 @@ public class Main
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration files");
         }
+        */
 
         EventQueue.invokeLater( () ->  {
             MainWindow mainWindow = new MainWindow();
@@ -71,5 +69,4 @@ public class Main
             carriage_weight	28
             carriage_type	"ACT"
      */
-
 }
