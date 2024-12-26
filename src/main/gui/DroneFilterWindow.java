@@ -12,10 +12,12 @@ public class DroneFilterWindow extends JDialog {
     private JComboBox<String> droneTypeComboBox;
 
     private DroneWindow window;
+    private DroneFilter currentFilter;
 
-    public DroneFilterWindow(DroneWindow window) {
+    public DroneFilterWindow(DroneWindow window, DroneFilter currentFilter) {
         setTitle("Drone Filter");
         this.window = window;
+        this.currentFilter = currentFilter;
         init();
         pack();
     }
@@ -132,6 +134,12 @@ public class DroneFilterWindow extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
 
         ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+
+        minWeightSpinner.setValue(Double.valueOf(currentFilter.getMinWeight()));
+        maxWeightSpinner.setValue(Double.valueOf(currentFilter.getMaxWeight()));
+
+        carriageTypeComboBox.setSelectedItem(currentFilter.getCarriageType());
     }
 
     public void resetFilter() {

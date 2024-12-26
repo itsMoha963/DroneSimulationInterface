@@ -7,7 +7,6 @@ import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.util.ArrayList;
 

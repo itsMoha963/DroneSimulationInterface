@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DroneWindow extends JPanel {
-
-    private JPanel innerContentPanel;
+    private final JPanel innerContentPanel;
     private DroneFilter filter;
 
     public DroneWindow() {
@@ -41,20 +40,30 @@ public class DroneWindow extends JPanel {
     private void createToolBar() {
         JToolBar toolBar = new JToolBar();
 
-        toolBar.add(new JLabel("Filter: "));
-        JButton filterButton = createToolBarButtonHelper("Filter Drones by Type", "🔄");
+        JButton filterButton = createToolBarButtonHelper("Filter Drones", "Icons/filter.png");
         filterButton.addActionListener(e -> {
-            DroneFilterWindow filterWindow = new DroneFilterWindow(this);
+            DroneFilterWindow filterWindow = new DroneFilterWindow(this, filter);
             filterWindow.setVisible(true);
         });
         toolBar.add(filterButton);
+
         //toolBar.addSeparator();
+        JButton refreshButton = createToolBarButtonHelper("Reset Filter and refresh", "Icons/refresh.png");
+        refreshButton.addActionListener(e -> {
+            filter = new DroneFilter.Builder().weightRange(0, 1000).carriageType("All Types").build();
+            updateDroneView();
+        });
+
+        toolBar.add(refreshButton);
 
         add(toolBar, BorderLayout.NORTH);
     }
 
-    private JButton createToolBarButtonHelper(String tooltip, String text) {
-        JButton button = new JButton(text);
+    private JButton createToolBarButtonHelper(String tooltip, String iconPath) {
+        ImageIcon icon = new ImageIcon(iconPath);
+        JButton button = new JButton();
+        button.setMargin(new Insets(0, 0, 0, 0));
+        button.setIcon(new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         button.setToolTipText(tooltip);
         button.setBackground(Colors.GUNMETAL);
         button.setForeground(Colors.PLATINUM);
