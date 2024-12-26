@@ -15,8 +15,8 @@ public class DroneSimulationInterfaceAPI {
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
     private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
-    private JSONObject fetchDataFromEndpoint(String endpointUrl) throws IOException {
-        HttpURLConnection connection = getConnection(endpointUrl);
+    private JSONObject fetchDataFromEndpoint(String endpointUrl, int limit, int offset) throws IOException {
+        HttpURLConnection connection = getConnection(endpointUrl, limit, offset);
         connection.connect();
 
         if (connection.getResponseCode() != 200) {
@@ -36,7 +36,7 @@ public class DroneSimulationInterfaceAPI {
     }
 
     public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
-        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint());
+        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), 100, 0);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
 
         ArrayList<T> data = new ArrayList<T>();
@@ -51,8 +51,24 @@ public class DroneSimulationInterfaceAPI {
         return data;
     }
 
-    private HttpURLConnection getConnection(String endpointUrl) throws IOException {
-        URL url = new URL(baseUrl + endpointUrl + "/?format=json&limit=100");
+    public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser, int limit, int offset) throws IOException {
+        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), limit, offset);
+        JSONArray jsonFile = jsonObject.getJSONArray("results");
+
+        ArrayList<T> data = new ArrayList<T>();
+
+        for (int i = 0; i < jsonFile.length(); i++) {
+            JSONObject o = jsonFile.getJSONObject(i);
+            if (parser.isValid(o)) {
+                data.add(parser.parse(o));
+            }
+        }
+
+        return data;
+    }
+
+    private HttpURLConnection getConnection(String endpointUrl, int limit, int offset) throws IOException {
+        URL url = new URL(baseUrl + endpointUrl + "/?format=json&limit=" + limit + "&offset=" + offset);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Token " + TOKEN);

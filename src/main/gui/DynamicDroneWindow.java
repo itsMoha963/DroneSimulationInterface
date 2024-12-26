@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class DynamicDroneWindow extends JPanel {
     private JPanel innerContentPanel;
+    private JLabel pageLabel;
+    private int currentPage = 1;
 
     public DynamicDroneWindow() {
         setLayout(new BorderLayout());
@@ -37,10 +39,33 @@ public class DynamicDroneWindow extends JPanel {
     private void createPagePanel() {
         JPanel pagePanel = new JPanel();
         pagePanel.setLayout(new BorderLayout());
-        pagePanel.setBackground(Colors.EERIE_BLACK);
-        pagePanel.add(new Button("Next Page"), BorderLayout.EAST);
-        pagePanel.add(new Button("Previous Page"), BorderLayout.WEST);
-        pagePanel.add(new JLabel("1"), BorderLayout.CENTER);
+        pagePanel.setBackground(Colors.POWDER_BLUE);
+    
+        JButton nextButton = new JButton(">");
+        JButton prevButton = new JButton("<");
+        pageLabel = new JLabel(currentPage + "", SwingConstants.CENTER);
+        pageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        pageLabel.setForeground(Colors.GUNMETAL);
+
+        nextButton.addActionListener(e -> {
+            currentPage++;
+            pageLabel.setText(currentPage + "");
+            System.out.println("Current Page: " + currentPage);
+            updateDroneView();
+        });
+
+        prevButton.addActionListener(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                updateDroneView();
+            }
+            System.out.println("Current Page: " + currentPage);
+            pageLabel.setText(currentPage + "");
+        });
+    
+        pagePanel.add(nextButton, BorderLayout.EAST);
+        pagePanel.add(prevButton, BorderLayout.WEST);
+        pagePanel.add(pageLabel, BorderLayout.CENTER);
         add(pagePanel, BorderLayout.SOUTH);
     }
 
@@ -49,7 +74,7 @@ public class DynamicDroneWindow extends JPanel {
 
         ArrayList<DynamicDrone> drones = new ArrayList<>();
         try {
-            drones = api.fetchDroneData(new DynamicDroneParser());
+            drones = api.fetchDroneData(new DynamicDroneParser(), 16, (currentPage - 1) * 16 + 1);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
