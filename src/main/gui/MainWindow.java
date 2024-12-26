@@ -4,6 +4,7 @@ import src.main.core.DynamicDrone;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class MainWindow extends JFrame {
 
     private static final String WINDOW_DRONE = "DRONE";
     private static final String WINDOW_DYNAMIC_DRONE = "DYNAMIC_DRONE";
+    private static final String WINDOW_DRONE_TYPES = "DRONE_TYPES";
 
     private HashMap<String, JPanel> Views = new HashMap<>();
 
@@ -33,8 +35,15 @@ public class MainWindow extends JFrame {
         Views.put(WINDOW_DRONE, new DroneWindow());
         Views.put(WINDOW_DYNAMIC_DRONE, new DynamicDroneWindow());
 
-        //switchView(WINDOW_DRONE);
-        switchView(WINDOW_DYNAMIC_DRONE);
+        createTaskBar();
+    }
+
+    public void createTaskBar() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Drone", new DroneWindow());
+        tabbedPane.addTab("Dynamic Drone", new DynamicDroneWindow());
+        tabbedPane.addTab("Drone Types", new DroneTypeView());
+        add(tabbedPane, BorderLayout.NORTH);
     }
 
     public void switchView(String viewName) {

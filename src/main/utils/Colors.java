@@ -9,4 +9,6 @@ public class Colors {
     public static final Color MOONSTONE = new Color(88, 164, 176);
     public static final Color GUNMETAL = new Color(39, 43, 52);
     public static final Color EERIE_BLACK = new Color(27, 27, 30);
+
+    public static final Color PRIMARY_TEXT_COLOR = new Color(216, 219, 226);
 }

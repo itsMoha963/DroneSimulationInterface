@@ -19,28 +19,22 @@ import java.util.List;
 public class DroneWindow extends JPanel {
 
     private JPanel innerContentPanel;
+    private DroneFilter filter;
 
     public DroneWindow() {
         setLayout(new BorderLayout());
+
+        filter = new DroneFilter.Builder()
+                .carriageType("All Types")
+                .weightRange(0, 1000).build();
+
         createToolBar();
+
         innerContentPanel = new JPanel();
         innerContentPanel.setLayout(new FlowLayout());
         innerContentPanel.setBackground(Colors.EERIE_BLACK);
 
-        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
-
-        ArrayList<Drone> drones = null;
-        try {
-            drones = api.fetchDroneData(new DroneParser());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println(drones.size() + " Drones fetched");
-
-        for (int i = 0; i < drones.size(); i++) {
-            innerContentPanel.add(createDronePanel(drones.get(i)));
-        }
+        updateDroneView();
 
         add(innerContentPanel);
         setVisible(true);
@@ -49,24 +43,14 @@ public class DroneWindow extends JPanel {
     private void createToolBar() {
         JToolBar toolBar = new JToolBar();
 
-        JComboBox<String> droneTypeComboBox = new JComboBox<>(new String[]{
-                "All Types",
-                "NOT",
-                "ACT",
-                "SEN"
-        });
-        droneTypeComboBox.addActionListener(e -> filterDronesByType( (String)droneTypeComboBox.getSelectedItem() ) );
-
-        toolBar.add(new JLabel("Refresh: "));
-        JButton refreshButton = createToolBarButtonHelper("Refresh", "🔄");
-        refreshButton.addActionListener(e -> {
-            DroneFilterWindow filterWindow = new DroneFilterWindow();
+        toolBar.add(new JLabel("Filter: "));
+        JButton filterButton = createToolBarButtonHelper("Filter Drones by Type", "🔄");
+        filterButton.addActionListener(e -> {
+            DroneFilterWindow filterWindow = new DroneFilterWindow(this);
             filterWindow.setVisible(true);
         });
-        toolBar.add(refreshButton);
+        toolBar.add(filterButton);
         toolBar.addSeparator();
-        toolBar.add(new JLabel("Filter: "));
-        toolBar.add(droneTypeComboBox);
 
         add(toolBar, BorderLayout.NORTH);
     }
@@ -79,9 +63,7 @@ public class DroneWindow extends JPanel {
         return button;
     }
 
-    private void filterDronesByType(String type) {
-        System.out.println("Filtering Drones by Type: " + type);
-
+    private void updateDroneView() {
         DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
 
         ArrayList<Drone> drones = null;
@@ -91,17 +73,7 @@ public class DroneWindow extends JPanel {
             throw new RuntimeException(e);
         }
 
-        if (drones == null) {
-            System.err.println("No Drones to Filter");
-            return;
-        }
-
         innerContentPanel.removeAll();
-
-        DroneFilter filter = new DroneFilter.Builder()
-                .weightRange(0, 10)
-                .carriageType("ACT")
-                .build();
 
         DroneFilterService droneFilterService = new DroneFilterService();
         List<Drone> filteredDrones = droneFilterService.filterDrones(drones, filter);
@@ -148,5 +120,10 @@ public class DroneWindow extends JPanel {
         label.setForeground(Colors.PLATINUM);
         label.setFont(new Font("Arial", Font.BOLD, 12));
         return label;
+    }
+
+    public void setFilter(DroneFilter filter) {
+        this.filter = filter;
+        updateDroneView();
     }
 }

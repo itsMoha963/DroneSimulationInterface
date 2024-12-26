@@ -17,7 +17,7 @@ public class DroneFilterService {
     private boolean meetsCondition(Drone drone, DroneFilter filter) {
         boolean conditionMet = true;
 
-        conditionMet &= filter.getCarriageType().equals(drone.getCarriageType()) || filter.getCarriageType().equals("ALL_TYPES");
+        conditionMet &= filter.getCarriageType().equals(drone.getCarriageType()) || filter.getCarriageType().equals("All Types");
         conditionMet &= filter.getMinWeight() <= drone.getCarriageWeight() && filter.getMaxWeight() > drone.getCarriageWeight();
 
         return conditionMet;
