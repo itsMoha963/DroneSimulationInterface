@@ -2,29 +2,18 @@ package src.main.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import src.main.core.Drone;
-import src.main.core.DynamicDrone;
 import src.main.core.parser.JsonDroneParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.Executors;
 
 public class DroneSimulationInterfaceAPI {
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
-    private final String droneTypesEndpoint = "dronetypes";
     private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
-
-    public DroneSimulationInterfaceAPI() {
-
-    }
 
     private JSONObject fetchDataFromEndpoint(String endpointUrl) throws IOException {
         HttpURLConnection connection = getConnection(endpointUrl);
@@ -69,5 +58,4 @@ public class DroneSimulationInterfaceAPI {
         connection.setRequestProperty("Authorization", "Token " + TOKEN);
         return connection;
     }
-
 }

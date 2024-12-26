@@ -8,10 +8,8 @@ import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
 import src.main.utils.DroneFilter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +48,7 @@ public class DroneWindow extends JPanel {
             filterWindow.setVisible(true);
         });
         toolBar.add(filterButton);
-        toolBar.addSeparator();
+        //toolBar.addSeparator();
 
         add(toolBar, BorderLayout.NORTH);
     }

@@ -7,15 +7,12 @@ import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 
 public class DynamicDroneWindow extends JPanel {
     private JPanel innerContentPanel;
-
-    // TODO: Bandaid fix for proper wrapping of elements
-    private int droneCount = 0;
 
     public DynamicDroneWindow() {
         setLayout(new BorderLayout());
@@ -23,12 +20,31 @@ public class DynamicDroneWindow extends JPanel {
 
         innerContentPanel = new JPanel();
         innerContentPanel.setBackground(Colors.EERIE_BLACK);
-        innerContentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        innerContentPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Or use GridLayout
 
-        JScrollPane scrollPane = new JScrollPane(innerContentPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(innerContentPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(null);
 
+        updateDroneView();
+        createPagePanel();
+
+        adjustInnerPanelSize(100);
+
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void createPagePanel() {
+        JPanel pagePanel = new JPanel();
+        pagePanel.setLayout(new BorderLayout());
+        pagePanel.setBackground(Colors.EERIE_BLACK);
+        pagePanel.add(new Button("Next Page"), BorderLayout.EAST);
+        pagePanel.add(new Button("Previous Page"), BorderLayout.WEST);
+        pagePanel.add(new JLabel("1"), BorderLayout.CENTER);
+        add(pagePanel, BorderLayout.SOUTH);
+    }
+
+    private void updateDroneView() {
         DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
 
         ArrayList<DynamicDrone> drones = new ArrayList<>();
@@ -38,17 +54,23 @@ public class DynamicDroneWindow extends JPanel {
             System.err.println(e.getMessage());
         }
 
-        droneCount = drones.size();
+        innerContentPanel.removeAll();
 
-        System.out.println("Total Dynamic Drones: " + drones.size());
-
-        for (int i = 0; i < drones.size(); i++) {
-            innerContentPanel.add(createDronePanel(drones.get(i)));
+        for (DynamicDrone drone : drones) {
+            innerContentPanel.add(createDronePanel(drone));
         }
 
-        adjustInnerPanelSize(drones.size());
+        innerContentPanel.revalidate();
+        innerContentPanel.repaint();
+    }
 
-        add(scrollPane, BorderLayout.CENTER);
+    private void adjustInnerPanelSize(int itemCount) {
+        int rows = (itemCount / 4) + ((itemCount % 4 > 0) ? 1 : 0);
+        int panelWidth = 600; // Adjust as needed
+        int panelHeight = rows * 150; // Adjust based on item height
+        innerContentPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        innerContentPanel.revalidate();
+        innerContentPanel.repaint();
     }
 
     private JPanel createDronePanel(DynamicDrone drone) {
@@ -79,22 +101,5 @@ public class DynamicDroneWindow extends JPanel {
         label.setForeground(Colors.PLATINUM);
         label.setFont(new Font("Arial", Font.BOLD, 12));
         return label;
-    }
-
-    /*
-    ?????????????????????????????????????????
-     */
-    private void adjustInnerPanelSize(int droneCount) {
-        int panelWidth = 220; // Breite eines DronePanels + Padding
-        int panelHeight = 310; // Höhe eines DronePanels + Padding
-        int panelsPerRow = 3; // Beispiel: Anzahl der Panels pro Reihe vor Wrapping
-
-        // Berechnung von Breite und Höhe
-        int totalWidth = panelsPerRow * panelWidth;
-        int totalRows = (int) Math.ceil(droneCount / (double) panelsPerRow);
-        int totalHeight = totalRows * panelHeight;
-
-        innerContentPanel.setPreferredSize(new Dimension(totalWidth, totalHeight));
-        innerContentPanel.revalidate(); // Panel-Layout neu berechnen
     }
 }

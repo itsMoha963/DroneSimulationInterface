@@ -18,7 +18,7 @@ public class MainWindow extends JFrame {
     private static final String WINDOW_DYNAMIC_DRONE = "DYNAMIC_DRONE";
     private static final String WINDOW_DRONE_TYPES = "DRONE_TYPES";
 
-    private HashMap<String, JPanel> Views = new HashMap<>();
+    private final HashMap<String, JPanel> Views = new HashMap<>();
 
     public MainWindow() {
         setTitle("Drone Simulation Interface");
@@ -32,12 +32,28 @@ public class MainWindow extends JFrame {
             System.err.println("Failed to load App Icon: " + e.getMessage());
         }
 
+        add(contentPanel);
+        createViewSwitcher();
+
         Views.put(WINDOW_DRONE, new DroneWindow());
         Views.put(WINDOW_DYNAMIC_DRONE, new DynamicDroneWindow());
+        Views.put(WINDOW_DRONE_TYPES, new DroneTypeView());
 
-        createTaskBar();
+        switchView(WINDOW_DRONE);
     }
 
+    public void createViewSwitcher() {
+        JComboBox<String> viewSwitcher = new JComboBox<>();
+        viewSwitcher.addItem(WINDOW_DRONE);
+        viewSwitcher.addItem(WINDOW_DYNAMIC_DRONE);
+        viewSwitcher.addItem(WINDOW_DRONE_TYPES);
+        viewSwitcher.addActionListener(e -> {
+            switchView(viewSwitcher.getSelectedItem().toString());
+        });
+        add(viewSwitcher, BorderLayout.NORTH);
+    }
+
+    /* PIECE OF SHIT JTABBEDPANE BREAKS ALL LAYOUTS AND SCROLLING FUCK YOU*/
     public void createTaskBar() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Drone", new DroneWindow());
@@ -47,7 +63,10 @@ public class MainWindow extends JFrame {
     }
 
     public void switchView(String viewName) {
-        contentPanel = Views.get(viewName);
-        add(contentPanel);
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(Views.get(viewName), BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 }
