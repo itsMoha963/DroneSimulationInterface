@@ -6,7 +6,7 @@ import src.main.core.parser.DroneParser;
 import src.main.services.DroneFilterService;
 import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
-import src.main.utils.DroneFilter;
+import src.main.utils.DefaultDroneFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,14 +16,12 @@ import java.util.List;
 
 public class DroneWindow extends JPanel {
     private final JPanel innerContentPanel;
-    private DroneFilter filter;
+    private DefaultDroneFilter filter;
 
     public DroneWindow() {
         setLayout(new BorderLayout());
 
-        filter = new DroneFilter.Builder()
-                .carriageType("All Types")
-                .weightRange(0, 1000).build();
+        filter = new DefaultDroneFilter("All Types", 0, 1000);
 
         createToolBar();
 
@@ -53,7 +51,7 @@ public class DroneWindow extends JPanel {
         //toolBar.addSeparator();
         JButton refreshButton = createToolBarButtonHelper("Reset Filter and refresh", "Icons/refresh.png");
         refreshButton.addActionListener(e -> {
-            filter = new DroneFilter.Builder().weightRange(0, 1000).carriageType("All Types").build();
+            filter = new DefaultDroneFilter("All Types", 0, 1000);
             updateDroneView();
         });
 
@@ -134,7 +132,7 @@ public class DroneWindow extends JPanel {
         return label;
     }
 
-    public void setFilter(DroneFilter filter) {
+    public void setFilter(DefaultDroneFilter filter) {
         this.filter = filter;
         updateDroneView();
     }

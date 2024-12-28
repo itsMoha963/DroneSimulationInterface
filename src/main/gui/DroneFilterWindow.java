@@ -1,6 +1,6 @@
 package src.main.gui;
 
-import src.main.utils.DroneFilter;
+import src.main.utils.DefaultDroneFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +12,9 @@ public class DroneFilterWindow extends JDialog {
     private JComboBox<String> droneTypeComboBox;
 
     private DroneWindow window;
-    private DroneFilter currentFilter;
+    private DefaultDroneFilter currentFilter;
 
-    public DroneFilterWindow(DroneWindow window, DroneFilter currentFilter) {
+    public DroneFilterWindow(DroneWindow window, DefaultDroneFilter currentFilter) {
         setTitle("Drone Filter");
         this.window = window;
         this.currentFilter = currentFilter;
@@ -154,10 +154,7 @@ public class DroneFilterWindow extends JDialog {
         double min = (Double) minWeightSpinner.getValue();
         double max = (Double) maxWeightSpinner.getValue();
 
-        DroneFilter filter = new DroneFilter.Builder()
-                .weightRange( (int) min, (int) max)
-                .carriageType(carriageTypeComboBox.getSelectedItem().toString())
-                .build();
+        DefaultDroneFilter filter = new DefaultDroneFilter(carriageTypeComboBox.getSelectedItem().toString(), (int) min, (int) max);
 
         window.setFilter(filter);
     }
