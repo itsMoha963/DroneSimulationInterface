@@ -28,12 +28,15 @@ public class DroneWindow extends JPanel {
         createToolBar();
 
         innerContentPanel = new JPanel();
-        innerContentPanel.setLayout(new FlowLayout());
+        innerContentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         innerContentPanel.setBackground(Colors.EERIE_BLACK);
+
+        JScrollPane scrollPane = new JScrollPane(innerContentPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         updateDroneView();
 
-        add(innerContentPanel);
+        add(scrollPane, BorderLayout.CENTER);
         setVisible(true);
     }
 
@@ -86,6 +89,8 @@ public class DroneWindow extends JPanel {
         List<Drone> filteredDrones = droneFilterService.filterDrones(drones, filter);
 
         System.out.println(filteredDrones.size() + " Drones after Filtering");
+
+        innerContentPanel.setPreferredSize(new Dimension(850, filteredDrones.size() * 120));
 
         for (int i = 0; i < filteredDrones.size(); i++) {
             innerContentPanel.add(createDronePanel(filteredDrones.get(i)));

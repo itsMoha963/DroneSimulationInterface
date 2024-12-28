@@ -14,7 +14,7 @@ public class DroneTypeParser implements JsonDroneParser<DroneType> {
                 obj.getInt("max_speed"),
                 obj.getInt("battery_capacity"),
                 obj.getInt("control_range"),
-                obj.getInt("max_carriages")
+                obj.getInt("max_carriage")
         );
     }
 

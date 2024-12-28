@@ -7,7 +7,7 @@ public class DroneType extends DroneBase {
     private int maxSpeed;
     private int batteryCapacity;
     private int controlRange;
-    private int maxCarriages;
+    private int maxCarriage;
 
     public DroneType(int id, String manufacturer, String typeName, int weight, int maxSpeed, int batteryCapacity, int controlRange, int maxCarriages) {
         this.id = id;
@@ -17,8 +17,10 @@ public class DroneType extends DroneBase {
         this.maxSpeed = maxSpeed;
         this.batteryCapacity = batteryCapacity;
         this.controlRange = controlRange;
-        this.maxCarriages = maxCarriages;
+        this.maxCarriage = maxCarriage;
     }
+
+    public  int getId() { return id;}
 
     public String getManufacturer() {
         return manufacturer;
@@ -44,8 +46,8 @@ public class DroneType extends DroneBase {
         return controlRange;
     }
 
-    public int getMaxCarriages() {
-        return maxCarriages;
+    public int getMaxCarriage() {
+        return maxCarriage;
     }
 
 }
