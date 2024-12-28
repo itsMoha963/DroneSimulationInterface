@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DroneTypeView extends JPanel {
+public class    DroneTypeView extends JPanel {
     private JPanel innerContentPanel;
     //private JLabel pageLabel;
     public DroneTypeView() {

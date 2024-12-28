@@ -9,7 +9,7 @@ public class DroneType extends DroneBase {
     private int controlRange;
     private int maxCarriage;
 
-    public DroneType(int id, String manufacturer, String typeName, int weight, int maxSpeed, int batteryCapacity, int controlRange, int maxCarriages) {
+    public DroneType(int id, String manufacturer, String typeName, int weight, int maxSpeed, int batteryCapacity, int controlRange, int maxCarriage) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.typeName = typeName;
