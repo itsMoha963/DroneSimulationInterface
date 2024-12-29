@@ -1,7 +1,11 @@
 package src.main.gui;
 
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import src.main.core.Drone;
+import src.main.core.DroneType;
 import src.main.core.DynamicDrone;
+import src.main.core.parser.DroneParser;
+import src.main.core.parser.DroneTypeParser;
 import src.main.core.parser.DynamicDroneParser;
 import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
@@ -9,11 +13,16 @@ import src.main.utils.Colors;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DynamicDroneWindow extends JPanel {
     private JPanel innerContentPanel;
     private JLabel pageLabel;
     private int currentPage = 1;
+    private final DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
+    private Map<Integer, DroneType> droneTypeCache = new HashMap<>();
+    private Map<Integer, Drone> droneCache = new HashMap<>();
 
     public DynamicDroneWindow() {
         setLayout(new BorderLayout());
@@ -27,12 +36,22 @@ public class DynamicDroneWindow extends JPanel {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(null);
 
+        preWarm();
         updateDroneView();
         createPagePanel();
 
         adjustInnerPanelSize(100);
 
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void preWarm() {
+        try {
+            droneCache = api.bulkFetch(new DroneParser());
+            droneTypeCache = api.bulkFetch(new DroneTypeParser());
+        } catch (Exception e) {
+
+        }
     }
 
     private void createPagePanel() {
@@ -46,9 +65,13 @@ public class DynamicDroneWindow extends JPanel {
         pageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         pageLabel.setForeground(Colors.GUNMETAL);
 
+        JTextField pageNumberField = new JTextField("" + currentPage);
+
+
         nextButton.addActionListener(e -> {
             currentPage++;
             pageLabel.setText(currentPage + "");
+            pageNumberField.setText("" + currentPage);
             System.out.println("Current Page: " + currentPage);
             updateDroneView();
         });
@@ -60,17 +83,22 @@ public class DynamicDroneWindow extends JPanel {
             }
             System.out.println("Current Page: " + currentPage);
             pageLabel.setText(currentPage + "");
+            pageNumberField.setText("" + currentPage);
+        });
+
+        pageNumberField.addActionListener(e -> {
+            currentPage = Integer.parseInt(pageNumberField.getText());
+            updateDroneView();
         });
     
         pagePanel.add(nextButton, BorderLayout.EAST);
         pagePanel.add(prevButton, BorderLayout.WEST);
-        pagePanel.add(pageLabel, BorderLayout.CENTER);
+        //pagePanel.add(pageLabel, BorderLayout.CENTER);
+        pagePanel.add(pageNumberField, BorderLayout.CENTER);
         add(pagePanel, BorderLayout.SOUTH);
     }
 
     private void updateDroneView() {
-        DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
-
         ArrayList<DynamicDrone> drones = new ArrayList<>();
         try {
             drones = api.fetchDroneData(new DynamicDroneParser(), 16, (currentPage - 1) * 16 + 1);
@@ -100,7 +128,7 @@ public class DynamicDroneWindow extends JPanel {
     private JPanel createDronePanel(DynamicDrone drone) {
         JPanel dronePanel = new JPanel();
         dronePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        dronePanel.setLayout(new GridLayout(11, 1));
+        dronePanel.setLayout(new GridLayout(12, 1));
         dronePanel.setBackground(Colors.GUNMETAL);
 
         dronePanel.add(createLabelHelper("Drone: " + drone.getDrone()));
@@ -115,9 +143,23 @@ public class DynamicDroneWindow extends JPanel {
         dronePanel.add(createLabelHelper("Last Seen: " + drone.getLastSeen()));
         dronePanel.add(createLabelHelper("Status: " + drone.getStatus()));
 
+        int id = extractId(drone.getDrone());
+
+        if (id != -1) {
+            Drone d = droneCache.get(id);
+            int typeID = extractId(d.getDroneType());
+            DroneType droneType = droneTypeCache.get(typeID);
+            dronePanel.add(new BatteryPanel(drone.getBatteryStatus(), droneType.getBatteryCapacity()));
+        }
+
         dronePanel.setBorder( new FlatLineBorder( new Insets( 16, 16, 16, 16 ), null, 0, 32 ) );
 
         return dronePanel;
+    }
+
+    private int extractId(String url) {
+        String[] parts  = url.split("/");
+        return parts.length > 0 ? Integer.parseInt(parts[parts.length - 2]) : -1;
     }
 
     private JLabel createLabelHelper(String text) {

@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class MainWindow extends JFrame {
 
-    private JPanel contentPanel = new JPanel();
+    private final JPanel contentPanel = new JPanel();
 
     private static final String WINDOW_DRONE = "DRONE";
     private static final String WINDOW_DYNAMIC_DRONE = "DYNAMIC_DRONE";

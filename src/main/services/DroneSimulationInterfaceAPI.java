@@ -2,6 +2,9 @@ package src.main.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import src.main.core.Drone;
+import src.main.core.DroneBase;
+import src.main.core.DroneType;
 import src.main.core.parser.JsonDroneParser;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +13,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DroneSimulationInterfaceAPI {
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
@@ -48,6 +53,22 @@ public class DroneSimulationInterfaceAPI {
             }
         }
 
+        return data;
+    }
+
+    public  <T extends DroneBase> Map<Integer, T> bulkFetch(JsonDroneParser<T> parser) throws IOException {
+        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), 100, 0);
+        JSONArray jsonFile = jsonObject.getJSONArray("results");
+
+        Map<Integer, T> data = new HashMap<Integer, T>();
+
+        for (int i = 0; i < jsonFile.length(); i++) {
+            JSONObject o = jsonFile.getJSONObject(i);
+            if (parser.isValid(o)) {
+                T x = parser.parse(o);
+                data.put(x.getId(), x);
+            }
+        }
         return data;
     }
 
