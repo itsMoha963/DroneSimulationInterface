@@ -33,7 +33,8 @@ public class MainWindow extends JFrame {
         }
 
         add(contentPanel);
-        createViewSwitcher();
+        //createViewSwitcher();
+        createTaskBar();
 
         Views.put(WINDOW_DRONE, new DroneWindow());
         Views.put(WINDOW_DYNAMIC_DRONE, new DynamicDroneWindow());
@@ -59,7 +60,7 @@ public class MainWindow extends JFrame {
         tabbedPane.addTab("Drone", new DroneWindow());
         tabbedPane.addTab("Dynamic Drone", new DynamicDroneWindow());
         tabbedPane.addTab("Drone Types", new DroneTypeView());
-        add(tabbedPane, BorderLayout.NORTH);
+        add(tabbedPane, BorderLayout.CENTER);
     }
 
     public void switchView(String viewName) {

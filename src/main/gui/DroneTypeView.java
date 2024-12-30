@@ -45,8 +45,8 @@ public class    DroneTypeView extends JPanel {
 
             Collections.sort(droneTypes, Comparator.comparingInt(DroneType::getId));
 
-            int rows = (int) Math.ceil((double) droneTypes.size() / 5);
-            innerContentPanel.setLayout(new GridLayout(rows, 5, 20, 20));
+            int rows = (int) Math.ceil((double) droneTypes.size() / 3);
+            innerContentPanel.setLayout(new GridLayout(rows, 6, 20, 20));
             innerContentPanel.removeAll();
             for (DroneType droneType : droneTypes) {
                 innerContentPanel.add(createDroneTypePanel(droneType));

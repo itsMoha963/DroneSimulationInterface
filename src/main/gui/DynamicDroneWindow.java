@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Comparator;
 
 public class DynamicDroneWindow extends JPanel {
     private JPanel innerContentPanel;
@@ -40,7 +41,7 @@ public class DynamicDroneWindow extends JPanel {
         updateDroneView();
         createPagePanel();
 
-        adjustInnerPanelSize(100);
+        //adjustInnerPanelSize(100);
 
         add(scrollPane, BorderLayout.CENTER);
     }
@@ -106,6 +107,21 @@ public class DynamicDroneWindow extends JPanel {
             System.err.println(e.getMessage());
         }
 
+        //Sort the drones by drone ID
+        drones.sort(Comparator.comparing(drone -> {String fullDroneUrl = drone.getDrone();
+            String droneId = extractDroneId(fullDroneUrl);
+
+            //Try to parse the drone ID as an integer
+            try {
+                return Integer.parseInt(droneId);
+            }catch (NumberFormatException e){
+                return 0;
+            }
+        }));
+
+        int columns = 3;
+        int rows = (int) Math.ceil((double) drones.size()/columns);
+        innerContentPanel.setLayout(new GridLayout(rows, columns, 20, 20));
         innerContentPanel.removeAll();
 
         for (DynamicDrone drone : drones) {
@@ -116,6 +132,7 @@ public class DynamicDroneWindow extends JPanel {
         innerContentPanel.repaint();
     }
 
+    /*
     private void adjustInnerPanelSize(int itemCount) {
         int rows = (itemCount / 4) + ((itemCount % 4 > 0) ? 1 : 0);
         int panelWidth = 600; // Adjust as needed
@@ -123,7 +140,7 @@ public class DynamicDroneWindow extends JPanel {
         innerContentPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         innerContentPanel.revalidate();
         innerContentPanel.repaint();
-    }
+    }*/
 
     private JPanel createDronePanel(DynamicDrone drone) {
         JPanel dronePanel = new JPanel();
@@ -131,7 +148,10 @@ public class DynamicDroneWindow extends JPanel {
         dronePanel.setLayout(new GridLayout(12, 1));
         dronePanel.setBackground(Colors.GUNMETAL);
 
-        dronePanel.add(createLabelHelper("Drone: " + drone.getDrone()));
+        String fullDroneUrl = drone.getDrone(); // take the value of drone from the JSON of class DynamicDrone
+        String droneId = extractDroneId(fullDroneUrl); // Inilialize with the full URL
+
+        dronePanel.add(createLabelHelper("Drone: " + droneId));
         dronePanel.add(createLabelHelper("Timestamp: " + drone.getTimestamp()));
         dronePanel.add(createLabelHelper("Speed: " + drone.getSpeed()));
         dronePanel.add(createLabelHelper("Align Roll: " + drone.getAlignRoll()));
@@ -142,6 +162,9 @@ public class DynamicDroneWindow extends JPanel {
         dronePanel.add(createLabelHelper("Battery Status: " + drone.getBatteryStatus()));
         dronePanel.add(createLabelHelper("Last Seen: " + drone.getLastSeen()));
         dronePanel.add(createLabelHelper("Status: " + drone.getStatus()));
+
+        // TODO: Drone is a URL to the Drone API, have to compare ID and fetch Information from Dronet
+        //JLabel droneLabel = createLabelHelper("Drone : " + drone.getDrone()); ? i dont kwow what to do!
 
         int id = extractId(drone.getDrone());
 
@@ -167,5 +190,20 @@ public class DynamicDroneWindow extends JPanel {
         label.setForeground(Colors.PLATINUM);
         label.setFont(new Font("Arial", Font.BOLD, 12));
         return label;
+    }
+
+    //Little helper method to extract the drone ID from the URL
+    private String extractDroneId(String fullDroneUrl)
+    {
+        String droneId = fullDroneUrl;
+        try {
+            if (fullDroneUrl != null && !fullDroneUrl.isEmpty()){
+                String[] parts = fullDroneUrl.split("/");
+                droneId = parts[parts.length - 2];
+            }
+        }catch (Exception e){
+            System.err.println("Error while extracting drone ID:" + e.getMessage());
+        }
+        return droneId;
     }
 }
