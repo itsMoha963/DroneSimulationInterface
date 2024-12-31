@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -89,10 +91,14 @@ public class DroneSimulationInterfaceAPI {
     }
 
     private HttpURLConnection getConnection(String endpointUrl, int limit, int offset) throws IOException {
-        URL url = new URL(baseUrl + endpointUrl + "/?format=json&limit=" + limit + "&offset=" + offset);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Authorization", "Token " + TOKEN);
-        return connection;
+        try {
+            URL url = new URI(baseUrl + endpointUrl + "/?format=json&limit=" + limit + "&offset=" + offset).toURL();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Token " + TOKEN);
+            return connection;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
