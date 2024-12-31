@@ -9,6 +9,7 @@ import src.main.core.parser.DroneTypeParser;
 import src.main.core.parser.DynamicDroneParser;
 import src.main.services.DroneSimulationInterfaceAPI;
 import src.main.utils.Colors;
+import src.main.utils.DynamicDroneFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,7 @@ public class DynamicDroneWindow extends JPanel {
     private final DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
     private Map<Integer, DroneType> droneTypeCache = new HashMap<>();
     private Map<Integer, Drone> droneCache = new HashMap<>();
+    private DynamicDroneFilter filter;
 
     public DynamicDroneWindow() {
         setLayout(new BorderLayout());
@@ -37,11 +39,16 @@ public class DynamicDroneWindow extends JPanel {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(null);
 
+        // TODO: Not sure when to apply filter?
+        /*
+            How does filter affect paging?
+            What when filter gets reset while your on page x?
+
+            Easiest way seems to just go back to page 1 when filter is applied
+         */
         preWarm();
         updateDroneView();
         createPagePanel();
-
-        //adjustInnerPanelSize(100);
 
         add(scrollPane, BorderLayout.CENTER);
     }
@@ -131,16 +138,6 @@ public class DynamicDroneWindow extends JPanel {
         innerContentPanel.revalidate();
         innerContentPanel.repaint();
     }
-
-    /*
-    private void adjustInnerPanelSize(int itemCount) {
-        int rows = (itemCount / 4) + ((itemCount % 4 > 0) ? 1 : 0);
-        int panelWidth = 600; // Adjust as needed
-        int panelHeight = rows * 150; // Adjust based on item height
-        innerContentPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-        innerContentPanel.revalidate();
-        innerContentPanel.repaint();
-    }*/
 
     private JPanel createDronePanel(DynamicDrone drone) {
         JPanel dronePanel = new JPanel();

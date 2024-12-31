@@ -2,9 +2,7 @@ package src.main.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import src.main.core.Drone;
 import src.main.core.DroneBase;
-import src.main.core.DroneType;
 import src.main.core.parser.JsonDroneParser;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +40,7 @@ public class DroneSimulationInterfaceAPI {
         return new JSONObject(response.toString());
     }
 
+    @Deprecated
     public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
         JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), 100, 0);
         JSONArray jsonFile = jsonObject.getJSONArray("results");

@@ -76,7 +76,7 @@ public class DroneWindow extends JPanel {
 
         ArrayList<Drone> drones = null;
         try {
-            drones = api.fetchDroneData(new DroneParser());
+            drones = api.fetchDroneData(new DroneParser(), 40, 0);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

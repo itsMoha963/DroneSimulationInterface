@@ -41,7 +41,7 @@ public class    DroneTypeView extends JPanel {
         try {
             DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
             // Rufe die DroneType-Daten von der API ab
-            ArrayList<DroneType> droneTypes = api.fetchDroneData(new DroneTypeParser());
+            ArrayList<DroneType> droneTypes = api.fetchDroneData(new DroneTypeParser(), 40, 0);
 
             Collections.sort(droneTypes, Comparator.comparingInt(DroneType::getId));
 
