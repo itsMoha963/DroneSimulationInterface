@@ -55,8 +55,8 @@ public class DynamicDroneWindow extends JPanel {
 
     private void preWarm() {
         try {
-            droneCache = api.bulkFetch(new DroneParser());
-            droneTypeCache = api.bulkFetch(new DroneTypeParser());
+            droneCache = api.bulkFetch(new DroneParser(), 100, 0);
+            droneTypeCache = api.bulkFetch(new DroneTypeParser(), 100, 0);
         } catch (Exception e) {
 
         }

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import src.main.core.DroneBase;
 import src.main.core.parser.JsonDroneParser;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,10 +16,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class DroneSimulationInterfaceAPI {
     private final String baseUrl = "http://dronesim.facets-labs.com/api/";
-    private final String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
+    private String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
     private JSONObject fetchDataFromEndpoint(String endpointUrl, int limit, int offset) throws IOException {
         HttpURLConnection connection = getConnection(endpointUrl, limit, offset);
@@ -40,25 +42,11 @@ public class DroneSimulationInterfaceAPI {
         return new JSONObject(response.toString());
     }
 
-    @Deprecated
-    public <T> ArrayList<T> fetchDroneData(JsonDroneParser<T> parser) throws IOException {
-        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), 100, 0);
-        JSONArray jsonFile = jsonObject.getJSONArray("results");
-
-        ArrayList<T> data = new ArrayList<T>();
-
-        for (int i = 0; i < jsonFile.length(); i++) {
-            JSONObject o = jsonFile.getJSONObject(i);
-            if (parser.isValid(o)) {
-                data.add(parser.parse(o));
-            }
-        }
-
-        return data;
-    }
-
-    public  <T extends DroneBase> Map<Integer, T> bulkFetch(JsonDroneParser<T> parser) throws IOException {
-        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), 100, 0);
+    // TODO: Should probably remove all other fetchDroneData classes and replace it with this one
+    // Would work for everything except the DynamicDrone as it lacks an id
+    // Would just extractID from the drone link in DynamicDrone
+    public  <T extends DroneBase> Map<Integer, T> bulkFetch(JsonDroneParser<T> parser, int limit, int offset) throws IOException {
+        JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), limit, offset);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
 
         Map<Integer, T> data = new HashMap<Integer, T>();
@@ -98,6 +86,24 @@ public class DroneSimulationInterfaceAPI {
             return connection;
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private JSONArray getResults(String endpoint, int limit, int offset) throws IOException {
+        JSONObject jsonObject = fetchDataFromEndpoint(endpoint, limit, offset);
+        return jsonObject.getJSONArray("results");
+    }
+
+    /**
+    Not needed currently as TOKEN is useless without connection to the VPN, so no need to hide it.
+    */
+    private void LoadToken() {
+        try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            TOKEN = properties.getProperty("API_TOKEN");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load configuration files");
         }
     }
 }
