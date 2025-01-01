@@ -1,0 +1,20 @@
+Timestamp: 2025-01-01T21:02:37.760877
+Message: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Level: INFO
+
+Timestamp: 2025-01-01T21:02:37.763796
+Message: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Level: ERROR
+
+Timestamp: 2025-01-01T21:02:37.763815
+Message: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Level: DEBUG
+
+Timestamp: 2025-01-01T21:02:37.763823
+Message: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Level: WARN
+
+Timestamp: 2025-01-01T21:02:37.763829
+Message: testing the entry logs
+Level: INFO
+
