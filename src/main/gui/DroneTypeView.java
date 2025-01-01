@@ -10,9 +10,7 @@ import src.main.utils.Colors;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 public class    DroneTypeView extends JPanel {
@@ -41,14 +39,12 @@ public class    DroneTypeView extends JPanel {
         try {
             DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
             // Rufe die DroneType-Daten von der API ab
-            ArrayList<DroneType> droneTypes = api.fetchDroneData(new DroneTypeParser(), 40, 0);
-
-            Collections.sort(droneTypes, Comparator.comparingInt(DroneType::getId));
+            Map<Integer, DroneType> droneTypes = api.fetchDrones(new DroneTypeParser(), 40, 0);
 
             int rows = (int) Math.ceil((double) droneTypes.size() / 3);
             innerContentPanel.setLayout(new GridLayout(rows, 6, 20, 20));
             innerContentPanel.removeAll();
-            for (DroneType droneType : droneTypes) {
+            for (DroneType droneType : droneTypes.values()) {
                 innerContentPanel.add(createDroneTypePanel(droneType));
             }
 

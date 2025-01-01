@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DroneWindow extends JPanel {
     private final JPanel innerContentPanel;
@@ -74,24 +75,24 @@ public class DroneWindow extends JPanel {
     private void updateDroneView() {
         DroneSimulationInterfaceAPI api = new DroneSimulationInterfaceAPI();
 
-        ArrayList<Drone> drones = null;
+        Map<Integer, Drone> drones = Map.of();
         try {
-            drones = api.fetchDroneData(new DroneParser(), 40, 0);
-        } catch (IOException e) {
+            drones = api.fetchDrones(new DroneParser(), 40, 0);
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         innerContentPanel.removeAll();
 
         DroneFilterService droneFilterService = new DroneFilterService();
-        List<Drone> filteredDrones = droneFilterService.filterDrones(drones, filter);
+        List<Drone> filteredDrones = droneFilterService.filterDrones(drones.values(), filter);
 
         System.out.println(filteredDrones.size() + " Drones after Filtering");
 
         innerContentPanel.setPreferredSize(new Dimension(850, filteredDrones.size() * 120));
 
-        for (int i = 0; i < filteredDrones.size(); i++) {
-            innerContentPanel.add(createDronePanel(filteredDrones.get(i)));
+        for (Drone drone : filteredDrones) {
+            innerContentPanel.add(createDronePanel(drone));
         }
 
         innerContentPanel.revalidate();
@@ -111,9 +112,6 @@ public class DroneWindow extends JPanel {
         JLabel droneCarriageTypeLabel = createLabelHelper("Carriage Type: " + drone.getCarriageType());
         JLabel droneCarriageWeightLabel = createLabelHelper("Carriage Weight: " + drone.getCarriageWeight() + "g");
         JLabel droneSerialNumberLabel = createLabelHelper("Serial Number: " + drone.getSerialNumber());
-
-        // TODO: Drone Type is a URL to the Dronetypes API, have to compare ID and fetch Information from Dronetypes
-        //JLabel droneTypeLabel = createLabelHelper("Drone Type: " + drone.getDroneType());
 
         dronePanel.add(droneIDLabel);
         dronePanel.add(droneCarriageTypeLabel);

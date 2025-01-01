@@ -55,8 +55,8 @@ public class DynamicDroneWindow extends JPanel {
 
     private void preWarm() {
         try {
-            droneCache = api.bulkFetch(new DroneParser(), 100, 0);
-            droneTypeCache = api.bulkFetch(new DroneTypeParser(), 100, 0);
+            droneCache = api.fetchDrones(new DroneParser(), 100, 0);
+            droneTypeCache = api.fetchDrones(new DroneTypeParser(), 100, 0);
         } catch (Exception e) {
 
         }
@@ -108,8 +108,10 @@ public class DynamicDroneWindow extends JPanel {
 
     private void updateDroneView() {
         ArrayList<DynamicDrone> drones = new ArrayList<>();
+        Map<Integer, DynamicDrone> newDrones = Map.of();
         try {
-            drones = api.fetchDroneData(new DynamicDroneParser(), 16, (currentPage - 1) * 16 + 1);
+            //drones = api.fetchDroneData(new DynamicDroneParser(), 16, (currentPage - 1) * 16 + 1);
+            newDrones = api.fetchDrones(new DynamicDroneParser(), 16, (currentPage - 1) * 16 + 1);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -131,7 +133,7 @@ public class DynamicDroneWindow extends JPanel {
         innerContentPanel.setLayout(new GridLayout(rows, columns, 20, 20));
         innerContentPanel.removeAll();
 
-        for (DynamicDrone drone : drones) {
+        for (DynamicDrone drone : newDrones.values()) {
             innerContentPanel.add(createDronePanel(drone));
         }
 
@@ -159,9 +161,6 @@ public class DynamicDroneWindow extends JPanel {
         dronePanel.add(createLabelHelper("Battery Status: " + drone.getBatteryStatus()));
         dronePanel.add(createLabelHelper("Last Seen: " + drone.getLastSeen()));
         dronePanel.add(createLabelHelper("Status: " + drone.getStatus()));
-
-        // TODO: Drone is a URL to the Drone API, have to compare ID and fetch Information from Dronet
-        //JLabel droneLabel = createLabelHelper("Drone : " + drone.getDrone()); ? i dont kwow what to do!
 
         int id = extractId(drone.getDrone());
 

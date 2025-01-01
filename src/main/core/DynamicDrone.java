@@ -25,6 +25,8 @@ public class DynamicDrone extends DroneBase {
         this.battery_status = battery_status;
         this.last_seen = last_seen;
         this.status = status;
+
+        this.id = Integer.parseInt(extractDroneId(drone));
     }
 
     public String getDrone() {
@@ -69,5 +71,19 @@ public class DynamicDrone extends DroneBase {
 
     public String getStatus() {
         return status;
+    }
+
+    private String extractDroneId(String fullDroneUrl)
+    {
+        String droneId = fullDroneUrl;
+        try {
+            if (fullDroneUrl != null && !fullDroneUrl.isEmpty()){
+                String[] parts = fullDroneUrl.split("/");
+                droneId = parts[parts.length - 2];
+            }
+        }catch (Exception e){
+            System.err.println("Error while extracting drone ID:" + e.getMessage());
+        }
+        return droneId;
     }
 }
