@@ -44,7 +44,7 @@ public class DroneSimulationInterfaceAPI {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            log.log(Level.SEVERE, "Error fetching data from endpoint " + endpointUrl);
+            log.log(Level.SEVERE, "Error fetching data from endpoint " + endpointUrl + "Limit and Offset: " + limit + " " + offset);
             throw new IOException("API Fetch failed with status code: " + response.statusCode());
         }
 
@@ -52,7 +52,7 @@ public class DroneSimulationInterfaceAPI {
         return new JSONObject(response.body());
     }
 
-    public  <T extends DroneBase> Map<Integer, T> fetchDrones(JsonDroneParser<T> parser, int limit, int offset) throws IOException, InterruptedException {
+    public <T extends DroneBase> Map<Integer, T> fetchDrones(JsonDroneParser<T> parser, int limit, int offset) throws IOException, InterruptedException {
         JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), limit, offset);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
 
@@ -80,7 +80,7 @@ public class DroneSimulationInterfaceAPI {
     /**
     Not needed currently as TOKEN is useless without connection to the VPN, so no need to hide it.
     */
-    private void LoadToken() {
+    private void loadToken() {
         try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
             Properties properties = new Properties();
             properties.load(inputStream);
