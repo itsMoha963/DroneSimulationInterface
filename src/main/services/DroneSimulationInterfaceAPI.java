@@ -18,7 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import java.util.logging.*;
+
 public class DroneSimulationInterfaceAPI {
+    private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
     private final String BASEURL = "http://dronesim.facets-labs.com/api/";
     private String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
 
@@ -41,9 +44,11 @@ public class DroneSimulationInterfaceAPI {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
+            log.log(Level.SEVERE, "Error fetching data from endpoint " + endpointUrl);
             throw new IOException("API Fetch failed with status code: " + response.statusCode());
         }
 
+        log.log(Level.INFO, "Fetched data from endpoint " + endpointUrl + ": " + response.toString());
         return new JSONObject(response.body());
     }
 

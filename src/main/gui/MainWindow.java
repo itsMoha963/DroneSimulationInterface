@@ -1,19 +1,13 @@
 package src.main.gui;
 
-import src.main.services.LogService;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
 public class MainWindow extends JFrame {
-    private LogService logService;
-    private LogView logView;
 
     public MainWindow() {
-        logService = new LogService();
-        logView = new LogView(logService);
 
         setTitle("Drone Simulation Interface");
         setSize(900, 1000);
@@ -33,7 +27,6 @@ public class MainWindow extends JFrame {
         tabbedPane.addTab("Drone", new DroneWindow());
         tabbedPane.addTab("Dynamic Drone", new DynamicDroneWindow());
         tabbedPane.addTab("Drone Types", new DroneTypeView());
-        tabbedPane.addTab("Logs", logView); // Use the initialized LogView
         add(tabbedPane);
     }
 }
