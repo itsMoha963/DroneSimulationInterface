@@ -9,7 +9,7 @@
 | ----------    | ----------    | ----------
 | Burak         | .             | @MandoV0
 | Gabriel       | .             | @Gibo20001119
-| Mohammed      | .             | @itsMoha963
+| Mohammad      | .             | @itsMoha963
 
 # 🖥️ Setup Instructions
 
