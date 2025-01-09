@@ -1,6 +1,5 @@
 package services;
 
-import core.Drone;
 import core.DroneBase;
 import core.parser.JsonDroneParser;
 import org.json.JSONArray;
@@ -22,7 +21,13 @@ import java.util.Properties;
 
 import java.util.logging.*;
 
-public final class DroneSimulationInterfaceAPI {
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import utils.AutoRefresh;
+
+public class DroneSimulationInterfaceAPI {
     private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
     private final String BASEURL = "http://dronesim.facets-labs.com/api/";
     private String TOKEN = "b2d431185fd5a8670e99e3efdcb2afe193083931";
@@ -30,19 +35,14 @@ public final class DroneSimulationInterfaceAPI {
     private final HttpClient httpClient;
     private final int SECONDS_TILL_TIMEOUT = 300;
 
-    private static DroneSimulationInterfaceAPI instance;
+    private ScheduledExecutorService scheduler;
 
-    public static DroneSimulationInterfaceAPI getInstance() {
-        if (instance == null) {
-            instance = new DroneSimulationInterfaceAPI();
-        }
-        return instance;
-    }
-
-    private DroneSimulationInterfaceAPI() {
+    public <T extends DroneBase> DroneSimulationInterfaceAPI(JsonDroneParser<T> parser, int limit, int offset) {
         httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(SECONDS_TILL_TIMEOUT))
                 .build();
+
+        startAutoUpdate(parser, limit, offset);
     }
 
     private JSONObject fetchDataFromEndpoint(String endpointUrl, int limit, int offset) throws IOException, InterruptedException {
@@ -88,6 +88,32 @@ public final class DroneSimulationInterfaceAPI {
         }
     }
 
+    AutoRefresh autoRefresh = new AutoRefresh();
+    public <T extends DroneBase> void startAutoUpdate(JsonDroneParser<T> parser, int limit, int offset) {
+    Runnable task = () -> {
+        try {
+            Map<Integer, T> data = fetchDrones(parser, limit, offset);
+            log.log(Level.INFO, "Updating data...");
+            for (Map.Entry<Integer, T> entry : data.entrySet()) {
+                log.log(Level.INFO, "Updating drone with ID: " + entry.getKey());
+            }
+            log.log(Level.INFO, "Data updated successfully");
+        }catch (IOException | InterruptedException e){
+            log.log(Level.SEVERE, "Error during scheduled task execution", e);
+        }
+    };
+    autoRefresh.start(task, 0, 120, TimeUnit.SECONDS);
+        }
+
+    public void stopAutoUpdate() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            //scheduler.shutdownNow();
+            //log.log(Level.INFO, "Auto Update Stopped");
+            autoRefresh.stop(); // AutoRefresh stoppen
+            log.log(Level.INFO, "Auto Update Stopped");
+        }
+    }
+
     /**
     Not needed currently as TOKEN is useless without connection to the VPN, so no need to hide it.
     */
@@ -101,3 +127,4 @@ public final class DroneSimulationInterfaceAPI {
         }
     }
 }
+//Hier muss ich noch denn Aufruf von AutoRefresher hinzufügen

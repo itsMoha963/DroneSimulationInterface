@@ -22,6 +22,8 @@ public class MainWindow extends JFrame {
         setSize(900, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        initalizeAPI();
+
         try {
             setIconImage(ImageIO.read(new File("Icons/appicon.png")));
         } catch (IOException e) {
@@ -29,6 +31,17 @@ public class MainWindow extends JFrame {
         }
 
         createTaskBar();
+    }
+
+    private void initalizeAPI() {
+        try{
+            JsonDroneParser<Drone> parser = new DroneParser();
+            droneAPI = new DroneSimulationInterfaceAPI(parser, 100, 0);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> droneAPI.stopAutoUpdate()));
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to initialize API: = " + e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void createTaskBar() {
