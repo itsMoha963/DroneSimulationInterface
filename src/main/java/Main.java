@@ -13,7 +13,7 @@ public class Main {
         }
 
         try {
-            RootLogger.init();
+            RootLogger.init(true);
         }
         catch( Exception ex ) {
             System.err.println("Failed to initialize RootLogger");

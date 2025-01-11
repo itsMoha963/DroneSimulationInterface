@@ -1,6 +1,5 @@
 package utils;
 
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +53,6 @@ public class AutoRefresh {
      *
      * @return true if the scheduler is running, false otherwise
      */
-
     public boolean isRunning() {
         return isRunning;
     }

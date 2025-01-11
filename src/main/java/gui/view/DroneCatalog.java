@@ -1,7 +1,6 @@
 package gui.view;
 
 import core.DroneType;
-import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import services.DroneSimulationInterfaceAPI;
 
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class DroneCatalog extends JPanel {
+
     public DroneCatalog() {
         setLayout(new BorderLayout());
 
@@ -20,6 +20,7 @@ public class DroneCatalog extends JPanel {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
 
+        // Seperate this into its own class. No need for scheduling as this Data doesn't change.
         Map<Integer, DroneType> drones = Map.of();
         try {
             drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
@@ -30,6 +31,7 @@ public class DroneCatalog extends JPanel {
         for (DroneType drone : drones.values()) {
             contentPanel.add(createDronePanel(drone));
         }
+        //
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);

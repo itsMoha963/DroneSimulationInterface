@@ -8,6 +8,7 @@ import core.parser.DroneTypeParser;
 import core.parser.DynamicDroneParser;
 import gui.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
+import utils.AutoRefresh;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ import java.time.OffsetDateTime;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class FlightDynamics extends JPanel {
     public static final int MAX_DRONES_PER_PAGE = 32;
@@ -56,6 +58,12 @@ public class FlightDynamics extends JPanel {
 
         preWarm();
         loadPage(0);
+
+        AutoRefresh refresh = new AutoRefresh();
+
+        // This Interval is just for demonstration purposes.
+        // Current Problem: We need to implement a loading indicator and stop the page from reseting back to the start when loading
+        refresh.start(() -> { loadPage(currentPage);}, 15, 5, TimeUnit.SECONDS);
     }
 
     private void preWarm() {
@@ -68,7 +76,9 @@ public class FlightDynamics extends JPanel {
     }
 
     private void loadPage(int page) {
-        if (page < 0) { return; }
+        if (page < 0) {
+            return;
+        }
 
         // Remove all existing Drone Panels
         contentPanel.removeAll();
