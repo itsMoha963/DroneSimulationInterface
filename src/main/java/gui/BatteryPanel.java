@@ -25,7 +25,7 @@ public class BatteryPanel extends JPanel {
         setOpaque(false);
 
         try {
-            batteryImage = ImageIO.read(new File("Icons/battery.png"));
+            batteryImage = ImageIO.read(getClass().getResource("/Icons/battery.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

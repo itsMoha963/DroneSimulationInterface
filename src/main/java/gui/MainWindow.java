@@ -1,8 +1,5 @@
 package gui;
 
-import core.Drone;
-import core.parser.DroneParser;
-import core.parser.JsonDroneParser;
 import gui.view.DroneCatalog;
 import gui.view.DroneDashboard;
 import gui.view.FlightDynamics;
@@ -22,7 +19,7 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         try {
-            setIconImage(ImageIO.read(new File("Icons/appicon.png")));
+            setIconImage(ImageIO.read(getClass().getResource("/Icons/appicon.png")));
         } catch (IOException e) {
             System.err.println("Failed to load App Icon: " + e.getMessage());
         }
