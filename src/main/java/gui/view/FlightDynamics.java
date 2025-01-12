@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 public class FlightDynamics extends JPanel {
     public static final int MAX_DRONES_PER_PAGE = 32;
     private int currentPage = 0;
-    private JPanel contentPanel;
-    private JLabel currentPageLabel;
+    private final JPanel contentPanel;
+    private final JLabel currentPageLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
 
@@ -110,7 +110,7 @@ public class FlightDynamics extends JPanel {
 
         OffsetDateTime offsetDateTime = OffsetDateTime.parse(drone.getLastSeen(), inputFormatter);
         String formattedLastSeen = offsetDateTime.format(outputFormatter);
-      //System.out.println(formattedLastSeen);
+
         panel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(UIManager.getColor("TextField.borderColor"), 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)

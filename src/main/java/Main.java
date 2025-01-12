@@ -8,14 +8,14 @@ public class Main {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel( new FlatDarculaLaf() );
-        } catch( Exception ex ) {
+        } catch(Exception ex) {
             System.err.println("Failed to initialize FlatLightLeaf Look and Feel");
         }
 
         try {
             RootLogger.init(true);
         }
-        catch( Exception ex ) {
+        catch (Exception ex) {
             System.err.println("Failed to initialize RootLogger");
         }
 

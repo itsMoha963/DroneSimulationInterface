@@ -17,7 +17,6 @@ public class MainWindow extends JFrame {
     private DroneSimulationInterfaceAPI droneAPI;
 
     public MainWindow() {
-
         setTitle("Drone Simulation Interface");
         setSize(900, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
