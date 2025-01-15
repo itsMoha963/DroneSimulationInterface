@@ -1,12 +1,14 @@
 package gui.view;
 
 import core.Drone;
+import core.DynamicDrone;
 import core.parser.DroneParser;
 import services.DroneSimulationInterfaceAPI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +16,7 @@ import java.util.logging.Logger;
 public class DroneDashboard extends JPanel {
     private final Logger log = Logger.getLogger(DroneDashboard.class.getName());
     private final JPanel dronesPanel;
+    private final JPanel droneInfoLabel;
 
     public DroneDashboard() {
         setLayout(new GridBagLayout());
@@ -35,15 +38,15 @@ public class DroneDashboard extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         add(leftScrollPane, gridBagConstraints);
 
-        JPanel rightPanel = new JPanel();
-        rightPanel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+        droneInfoLabel = new JPanel();
+        droneInfoLabel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker()));
-        rightPanel.setBackground(UIManager.getColor("Panel.background"));
+        droneInfoLabel.setBackground(UIManager.getColor("Panel.background"));
         gridBagConstraints.gridx = 1;
         gridBagConstraints.weighty = 1;
         gridBagConstraints.weightx = 0.9;                                       // Fills 90% of the screen
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        add(rightPanel, gridBagConstraints);
+        add(droneInfoLabel, gridBagConstraints);
 
         try {
             loadDrones();
@@ -55,14 +58,14 @@ public class DroneDashboard extends JPanel {
     private void loadDrones() throws IOException, InterruptedException {
         dronesPanel.removeAll();
 
-        // Only 20 Drones exist, so we only fetch 20 drones.
-        Map<Integer, Drone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 20, 0);
+        // Only 40 Drones exist, so we only fetch 40 drones.
+        Map<Integer, Drone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
 
         for (Drone drone : drones.values()) {
             dronesPanel.add(createDroneButton(drone));
         }
 
-        log.log(Level.INFO, "Successfully fetched " + drones.size() + "Drones. Repainting.");
+        log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones. Repainting.");
 
         dronesPanel.revalidate();
         dronesPanel.repaint();
@@ -76,13 +79,25 @@ public class DroneDashboard extends JPanel {
      * @param drone
      */
     private void loadDronePage(Drone drone) {
+        int id = drone.getId();
 
+        System.out.println("Fetching Dynamis Data for Drone " + id);
+        try {
+            ArrayList<DynamicDrone> dynamics = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
+            for (DynamicDrone d : dynamics) {
+                System.out.println("Drone " + d.getId());
+            }
+
+        } catch (IOException | RuntimeException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // TODO: Resize Buttons to fill horizontally
     private JButton createDroneButton(Drone drone) {
         JButton button = new JButton();
         button.setText("Drone " + drone.getId());
+        button.addActionListener(e -> loadDronePage(drone));
         return button;
     }
 }

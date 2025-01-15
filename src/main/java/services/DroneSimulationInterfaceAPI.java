@@ -1,6 +1,8 @@
 package services;
 
 import core.DroneBase;
+import core.DynamicDrone;
+import core.parser.DynamicDroneParser;
 import core.parser.JsonDroneParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -80,6 +83,23 @@ public final class DroneSimulationInterfaceAPI {
                 data.put(x.getId(), x);
             }
         }
+        return data;
+    }
+
+    public ArrayList<DynamicDrone> fetchDrones(int id, int limit, int offset) throws IOException, InterruptedException {
+        JSONObject jsonObject = fetchDataFromEndpoint(id + "/dynamics", limit, offset);
+        JSONArray jsonFile = jsonObject.getJSONArray("results");
+
+        ArrayList<DynamicDrone> data = new ArrayList<>();
+        DynamicDroneParser parser = new DynamicDroneParser();
+
+        for (int i = 0; i < jsonFile.length(); i++) {
+            JSONObject o = jsonFile.getJSONObject(i);
+            if (parser.isValid(o)) {
+                data.add(parser.parse(o));
+            }
+        }
+
         return data;
     }
 

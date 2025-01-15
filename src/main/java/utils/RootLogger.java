@@ -19,7 +19,7 @@ public class RootLogger {
         }
 
         String logsDirPath = "logs" + File.separator + "dsi_logs.txt";
-        System.out.println(logsDirPath);
+
         // If append is false, then the file gets reset everytime the App gets started
         FileHandler fh = new FileHandler(logsDirPath, false);
         fh.setFormatter(new SimpleFormatter());

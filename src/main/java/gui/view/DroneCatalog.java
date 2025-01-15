@@ -31,7 +31,6 @@ public class DroneCatalog extends JPanel {
         for (DroneType drone : drones.values()) {
             contentPanel.add(createDronePanel(drone));
         }
-        //
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
