@@ -1,25 +1,25 @@
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\Drone.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\DroneBase.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\DroneType.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\DynamicDrone.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\parser\DroneParser.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\parser\DroneTypeParser.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\parser\DynamicDroneParser.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\core\parser\JsonDroneParser.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\BatteryPanel.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\DroneFilterWindow.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\filter\FilterRange.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\MainWindow.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\view\DroneCatalog.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\view\DroneDashboard.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\gui\view\FlightDynamics.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\Main.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\services\DroneFilterService.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\services\DroneSimulationInterfaceAPI.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\services\Helper.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\AutoRefresh.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\BaseDroneFilter.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\DefaultDroneFilter.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\DroneFilterCondition.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\DynamicDroneFilter.java
-C:\Users\burak\Documents\Universität\Semester 3\Java\Projekt\DSI-Auto-Gabriel\DroneSimulationInterface\src\main\java\utils\RootLogger.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/Main.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/Drone.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/DroneBase.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/DroneType.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/DynamicDrone.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/parser/DroneParser.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/parser/DroneTypeParser.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/parser/DynamicDroneParser.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/core/parser/JsonDroneParser.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/BatteryPanel.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/DroneFilterWindow.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/MainWindow.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/filter/FilterRange.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/view/DroneCatalog.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/view/DroneDashboard.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/gui/view/FlightDynamics.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/services/DroneFilterService.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/services/DroneSimulationInterfaceAPI.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/services/Helper.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/AutoRefresh.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/BaseDroneFilter.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/DefaultDroneFilter.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/DroneFilterCondition.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/DynamicDroneFilter.java
+/Users/mohammadalatallah/Desktop/finalfinal/DroneSimulationInterface/src/main/java/utils/RootLogger.java
