@@ -38,6 +38,7 @@ public class DroneDashboard extends JPanel {
         JScrollPane leftScrollPane = new JScrollPane(dronesPanel);
         leftScrollPane.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker()));
+        leftScrollPane.getVerticalScrollBar().setUnitIncrement(16);                     // Smoother scrolling
 
         leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -51,7 +52,6 @@ public class DroneDashboard extends JPanel {
         droneInfoLabel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker()));
         droneInfoLabel.setBackground(UIManager.getColor("Panel.background"));
-
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.weighty = 1;

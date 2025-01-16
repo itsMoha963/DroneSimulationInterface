@@ -7,12 +7,14 @@ import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import core.parser.DynamicDroneParser;
 import gui.BatteryPanel;
+import gui.DroneFilterWindow;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
+import utils.BaseDroneFilter;
+import utils.DefaultDroneFilter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +32,7 @@ public class FlightDynamics extends JPanel {
     private final JLabel currentPageLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
+    private DefaultDroneFilter defaultDroneFilter = new DefaultDroneFilter("NOT", 0, Integer.MAX_VALUE);
 
     public FlightDynamics() {
         setLayout(new BorderLayout());
@@ -39,15 +42,32 @@ public class FlightDynamics extends JPanel {
         JLabel titleLabel = new JLabel("Flight Dynamics", JLabel.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         titleLabel.setOpaque(true);
-        titleLabel.setBackground(Color.DARK_GRAY);
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBackground(UIManager.getColor("Panel.background"));
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         titlePanel.add(titleLabel, BorderLayout.CENTER);
         add(titlePanel, BorderLayout.NORTH);
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(Color.DARK_GRAY);
+        contentPanel.setBackground(UIManager.getColor("Panel.background"));
+
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+        toolBar.setBackground(UIManager.getColor("Panel.background").brighter());
+        ImageIcon refreshIcon = new ImageIcon(new ImageIcon(getClass().getResource("/icons/filter.png")).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+
+        JButton filterButton = new JButton(refreshIcon);
+        filterButton.setToolTipText("Filter Drones");
+        filterButton.setBackground(UIManager.getColor("Button.background"));
+        filterButton.addActionListener(e -> {
+            DroneFilterWindow df = new DroneFilterWindow(this, defaultDroneFilter);
+            df.setVisible(true);
+        }
+        );
+
+        toolBar.add(filterButton);
+        add(toolBar, BorderLayout.PAGE_START);
 
         JScrollPane scrollPane = new JScrollPane(contentPanel) {
             @Override
@@ -65,11 +85,11 @@ public class FlightDynamics extends JPanel {
 
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        paginationPanel.setBackground(Color.DARK_GRAY);
+        paginationPanel.setBackground(UIManager.getColor("Panel.background"));
         JButton prevPageButton = new JButton("< Previous");
         JButton nextPageButton = new JButton("Next >");
         currentPageLabel = new JLabel("Page: " + (currentPage + 1));
-        currentPageLabel.setForeground(Color.WHITE);
+        currentPageLabel.setForeground(UIManager.getColor("Label.foreground"));
 
         prevPageButton.addActionListener(e -> loadPage(currentPage - 1));
         nextPageButton.addActionListener(e -> loadPage(currentPage + 1));
@@ -125,7 +145,7 @@ public class FlightDynamics extends JPanel {
 
             for (DynamicDrone drone : drones.values()) {
                 contentPanel.add(createDronePanel(drone));
-                contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Add spacing between cards
+                contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
             }
 
             contentPanel.revalidate();
@@ -140,33 +160,15 @@ public class FlightDynamics extends JPanel {
     }
 
     private JPanel createDronePanel(DynamicDrone drone) {
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g.create();
-
-                // Activate anti-aliasing
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                // Shadow properties
-                int shadowOffset = 10;
-                int shadowAlpha = 50;
-                g2d.setColor(new Color(0, 0, 0, shadowAlpha));
-                g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2, getHeight() - shadowOffset * 2, 15, 15);
-
-                g2d.dispose();
-            }
-        };
+        JPanel panel = new JPanel();
 
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(70, 70, 70), 2),
+                BorderFactory.createLineBorder(UIManager.getColor("Panel.background").darker(), 2),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
-        panel.setBackground(new Color(50, 50, 50));
-
+        panel.setBackground(UIManager.getColor("Panel.background"));
 
         Drone d = null;
         DroneType type = null;
@@ -179,20 +181,20 @@ public class FlightDynamics extends JPanel {
         }
 
         JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
 
         JLabel detailsLabel = new JLabel(String.format(
                 "Speed: %.2f km/h, Last Seen: %s, Status: %s",
                 (double) drone.getSpeed(), OffsetDateTime.parse(drone.getLastSeen()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm")), drone.getStatus()
         ));
-        detailsLabel.setForeground(Color.LIGHT_GRAY);
+        detailsLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
 
         JLabel locationLabel = new JLabel(String.format(
                 "Location: [%.6f, %.6f] | Control Range: %.2f m",
                 drone.getLongitude(), drone.getLatitude(), (double) type.getControlRange()
         ));
-        locationLabel.setForeground(Color.LIGHT_GRAY);
+        locationLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
@@ -216,5 +218,9 @@ public class FlightDynamics extends JPanel {
         textPanel.add(statusPanel);
         panel.add(textPanel, BorderLayout.CENTER);
         return panel;
+    }
+
+    public void setFilter(DefaultDroneFilter filter) {
+
     }
 }
