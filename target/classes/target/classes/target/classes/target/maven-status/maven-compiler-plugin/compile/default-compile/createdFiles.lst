@@ -1,6 +1,7 @@
 gui/filter/FilterRange.class
 gui/BatteryPanel.class
 utils/AutoRefresh.class
+gui/view/FlightDynamics$1.class
 services/Helper.class
 utils/DroneFilterCondition.class
 gui/MainWindow.class
@@ -9,6 +10,8 @@ gui/view/DroneDashboard$1.class
 core/parser/DroneParser.class
 utils/RootLogger.class
 Main.class
+gui/view/FlightDynamics$2.class
+gui/view/DroneCatalog$2.class
 services/DroneFilterService.class
 core/DroneBase.class
 utils/DynamicDroneFilter.class

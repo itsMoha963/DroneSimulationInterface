@@ -12,10 +12,10 @@ import utils.AutoRefresh;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.time.OffsetDateTime;
-
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -31,39 +31,56 @@ public class FlightDynamics extends JPanel {
     public FlightDynamics() {
         setLayout(new BorderLayout());
 
+        // Top panel for title
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = new JLabel("Flight Dynamics", JLabel.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(Color.DARK_GRAY);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        add(titlePanel, BorderLayout.NORTH);
+
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(UIManager.getColor("Panel.background"));
+        contentPanel.setBackground(Color.DARK_GRAY);
 
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setBorder(null);
+        JScrollPane scrollPane = new JScrollPane(contentPanel) {
+            @Override
+            public void setBounds(int x, int y, int width, int height) {
+                super.setBounds(x, y, width, height);
+                titlePanel.setVisible(getVerticalScrollBar().getValue() == 0);
+            }
+        };
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
+            titlePanel.setVisible(scrollPane.getVerticalScrollBar().getValue() == 0);
+        });
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton prevPageButton = new JButton("<");
-        JButton nextPageButton = new JButton(">");
-        currentPageLabel = new JLabel(currentPage + 1 + "");
+        paginationPanel.setBackground(Color.DARK_GRAY);
+        JButton prevPageButton = new JButton("< Previous");
+        JButton nextPageButton = new JButton("Next >");
+        currentPageLabel = new JLabel("Page: " + (currentPage + 1));
+        currentPageLabel.setForeground(Color.WHITE);
 
-        prevPageButton.addActionListener(e -> { loadPage(currentPage - 1); });
-        nextPageButton.addActionListener(e -> { loadPage(currentPage + 1); });
+        prevPageButton.addActionListener(e -> loadPage(currentPage - 1));
+        nextPageButton.addActionListener(e -> loadPage(currentPage + 1));
 
-        // Don't change the Order. As it is a FlowLayout we need the Elements to be ordered correctly from left to right
         paginationPanel.add(prevPageButton);
         paginationPanel.add(currentPageLabel);
         paginationPanel.add(nextPageButton);
-
         add(paginationPanel, BorderLayout.SOUTH);
 
         preWarm();
         loadPage(0);
 
         AutoRefresh refresh = new AutoRefresh();
-
-        // This Interval is just for demonstration purposes.
-        // Current Problem: We need to implement a loading indicator and stop the page from reseting back to the start when loading
-        refresh.start(() -> { loadPage(currentPage);}, 15, 5, TimeUnit.SECONDS);
+        refresh.start(() -> loadPage(currentPage), 15, 5, TimeUnit.SECONDS);
     }
 
     private void preWarm() {
@@ -80,7 +97,6 @@ public class FlightDynamics extends JPanel {
             return;
         }
 
-        // Remove all existing Drone Panels
         contentPanel.removeAll();
 
         try {
@@ -88,57 +104,67 @@ public class FlightDynamics extends JPanel {
 
             for (DynamicDrone drone : drones.values()) {
                 contentPanel.add(createDronePanel(drone));
+                contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Add spacing between cards
             }
 
             contentPanel.revalidate();
             contentPanel.repaint();
 
             currentPage = page;
-            currentPageLabel.setText(currentPage + 1 + "");
-        }
-        catch (IOException | InterruptedException e) {
+            currentPageLabel.setText("Page: " + (currentPage + 1));
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error while fetching Dynamic Drones", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private JPanel createDronePanel(DynamicDrone drone) {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+
+                // Activate anti-aliasing
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Shadow properties
+                int shadowOffset = 10;
+                int shadowAlpha = 50;
+                g2d.setColor(new Color(0, 0, 0, shadowAlpha));
+                g2d.fillRoundRect(shadowOffset, shadowOffset, getWidth() - shadowOffset * 2, getHeight() - shadowOffset * 2, 15, 15);
+
+                g2d.dispose();
+            }
+        };
+
         panel.setLayout(new BorderLayout());
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm");
-
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(drone.getLastSeen(), inputFormatter);
-        String formattedLastSeen = offsetDateTime.format(outputFormatter);
-
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UIManager.getColor("TextField.borderColor"), 1),
+                BorderFactory.createLineBorder(new Color(70, 70, 70), 2),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
-        panel.setBackground(UIManager.getColor("Panel.background").darker());
+        panel.setBackground(new Color(50, 50, 50));
 
         Drone d = droneCache.get(drone.getId());
         DroneType type = droneTypesCache.get(d.getDroneTypeID());
 
-        // Drone info labels
         JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
-        titleLabel.setForeground(UIManager.getColor("TextField.foreground"));
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+
         JLabel detailsLabel = new JLabel(String.format(
                 "Speed: %.2f km/h, Last Seen: %s, Status: %s",
-                (double) drone.getSpeed(),formattedLastSeen, drone.getStatus()
+                (double) drone.getSpeed(), OffsetDateTime.parse(drone.getLastSeen()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm")), drone.getStatus()
         ));
-        detailsLabel.setForeground(UIManager.getColor("TextField.foreground"));
+        detailsLabel.setForeground(Color.LIGHT_GRAY);
 
-        // Longitude & Latitude
         JLabel locationLabel = new JLabel(String.format(
                 "Location: [%.6f, %.6f] | Control Range: %.2f m",
                 drone.getLongitude(), drone.getLatitude(), (double) type.getControlRange()
         ));
-        locationLabel.setForeground(UIManager.getColor("TextField.foreground"));
+        locationLabel.setForeground(Color.LIGHT_GRAY);
 
-        // Add components to text panel
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
@@ -150,18 +176,15 @@ public class FlightDynamics extends JPanel {
         statusPanel.setOpaque(false);
         statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-        textPanel.add(statusPanel);
-        statusPanel.add(new BatteryPanel(drone.getBatteryStatus(), type.getBatteryCapacity()));
+        BatteryPanel batteryPanel = new BatteryPanel(drone.getBatteryStatus(), type.getBatteryCapacity());
+        statusPanel.add(batteryPanel);
 
         JPanel powerStatus = new JPanel();
-        JLabel statusLabel = new JLabel("Status:");
-        statusPanel.add(statusLabel);
-
-        //reternary operator to check the status of the drone better than the if statment
         powerStatus.setBackground(Objects.equals(drone.getStatus(), "ON") ? Color.GREEN : Color.RED);
-
+        powerStatus.setPreferredSize(new Dimension(15, 15));
         statusPanel.add(powerStatus);
 
+        textPanel.add(statusPanel);
         panel.add(textPanel, BorderLayout.CENTER);
         return panel;
     }
