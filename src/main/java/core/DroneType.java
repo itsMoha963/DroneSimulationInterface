@@ -20,8 +20,6 @@ public class DroneType extends DroneBase {
         this.maxCarriage = maxCarriage;
     }
 
-    public  int getId() { return id;}
-
     public String getManufacturer() {
         return manufacturer;
     }

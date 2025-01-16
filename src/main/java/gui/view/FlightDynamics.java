@@ -19,8 +19,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FlightDynamics extends JPanel {
+    private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
     public static final int MAX_DRONES_PER_PAGE = 32;
     private int currentPage = 0;
     private final JPanel contentPanel;
@@ -79,8 +82,21 @@ public class FlightDynamics extends JPanel {
         preWarm();
         loadPage(0);
 
+        JTextField pageInputField = new JTextField(5);
+        pageInputField.addActionListener(e -> {
+            try {
+                int targetPage = Integer.parseInt(pageInputField.getText().trim());
+                if (targetPage > 0) {
+                    loadPage(targetPage - 1);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid page number. Please enter a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        paginationPanel.add(pageInputField);
+
         AutoRefresh refresh = new AutoRefresh();
-        refresh.start(() -> loadPage(currentPage), 15, 5, TimeUnit.SECONDS);
+        refresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
     }
 
     private void preWarm() {
@@ -88,7 +104,7 @@ public class FlightDynamics extends JPanel {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Failed to cache DroneTypes/Drones.");
         }
     }
 
@@ -98,6 +114,11 @@ public class FlightDynamics extends JPanel {
         }
 
         contentPanel.removeAll();
+
+        if (droneCache.isEmpty() || droneTypesCache.isEmpty()) {
+            log.log(Level.INFO, "Drone Cache is empty. Attempting to cache drones.");
+            preWarm();
+        }
 
         try {
             Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
@@ -113,7 +134,7 @@ public class FlightDynamics extends JPanel {
             currentPage = page;
             currentPageLabel.setText("Page: " + (currentPage + 1));
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page);
             JOptionPane.showMessageDialog(this, "Error while fetching Dynamic Drones", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -146,8 +167,16 @@ public class FlightDynamics extends JPanel {
 
         panel.setBackground(new Color(50, 50, 50));
 
-        Drone d = droneCache.get(drone.getId());
-        DroneType type = droneTypesCache.get(d.getDroneTypeID());
+
+        Drone d = null;
+        DroneType type = null;
+
+        try {
+            d = droneCache.get(drone.getId());
+            type = droneTypesCache.get(d.getDroneTypeID());
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Drone cache is empty. Cant create Drone Panel.");
+        }
 
         JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
         titleLabel.setForeground(Color.WHITE);

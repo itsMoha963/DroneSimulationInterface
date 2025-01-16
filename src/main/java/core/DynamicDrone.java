@@ -15,6 +15,20 @@ public class DynamicDrone extends DroneBase {
     private final String last_seen;
     private final String status;
 
+    /**
+     * Simply creates the DynamicDrone and additionally extracts the ID out of the {@code drone} link.
+     * @param drone
+     * @param timestamp
+     * @param speed
+     * @param align_roll
+     * @param align_pitch
+     * @param align_yaw
+     * @param longitude
+     * @param latitude
+     * @param battery_status
+     * @param last_seen
+     * @param status
+     */
     public DynamicDrone(String drone, String timestamp, int speed, double align_roll, double align_pitch, double align_yaw, double longitude, double latitude, int battery_status, String last_seen, String status) {
         this.drone = drone;
         this.timestamp = timestamp;

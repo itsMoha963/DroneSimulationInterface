@@ -24,6 +24,11 @@ import java.util.Properties;
 
 import java.util.logging.*;
 
+/**
+ * The DroneSimulationInterfaceAPI class provides an interface for interacting with a dronesim API.
+ * This class is implemented as a Singleton to ensure a single instance is used across the application, as it is stateless.
+ * It supports fetching all different drone types (Drone, DynamicDrone, DroneType) data from the API using parsers and configurable parameters.
+ */
 public final class DroneSimulationInterfaceAPI {
     private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
     private final String BASEURL = "http://dronesim.facets-labs.com/api/";
@@ -36,7 +41,7 @@ public final class DroneSimulationInterfaceAPI {
 
     /**
      * DroneSimulationInterfaceAPI is a Singleton as it is stateless.
-     * No need to create multiple Instances for each View.
+     * No need to create multiple Instances for each use.
      * @return Instance of the DroneSimulationInterfaceAPI
      */
     public static DroneSimulationInterfaceAPI getInstance() {
@@ -70,6 +75,18 @@ public final class DroneSimulationInterfaceAPI {
         return new JSONObject(response.body());
     }
 
+    /**
+     * Fetches drones from the API using the given JsonDroneParser {@code parser}.
+     * The parser determines the type of drone and validates the API response.
+     *
+     * @param parser The JsonDroneParser to parse the API response into drone classes
+     * @param limit The maximum number of results to fetch from the API
+     * @param offset The starting position of results for pagination
+     * @param <T> A type that extends DroneBase
+     * @return A map of drone IDs to their respective parsed drone class
+     * @throws IOException If an I/O error occurs during the API call
+     * @throws InterruptedException If the API call is interrupted
+     */
     public <T extends DroneBase> Map<Integer, T> fetchDrones(JsonDroneParser<T> parser, int limit, int offset) throws IOException, InterruptedException {
         JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), limit, offset);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
@@ -86,6 +103,17 @@ public final class DroneSimulationInterfaceAPI {
         return data;
     }
 
+    /**
+     * Fetches the dynamic drone data for a specific drone {@code id} from the API.
+     * This method retrieves data using the drone ID {@code id} and parses it into DynamicDrone class.
+     *
+     * @param id The ID of the drone to fetch dynamic data for
+     * @param limit The maximum number of results to fetch from the API
+     * @param offset The starting position of results for pagination
+     * @return A list of DynamicDrone objects containing the parsed dynamic data
+     * @throws IOException If an I/O error occurs during the API call
+     * @throws InterruptedException If the API call is interrupted
+     */
     public ArrayList<DynamicDrone> fetchDrones(int id, int limit, int offset) throws IOException, InterruptedException {
         JSONObject jsonObject = fetchDataFromEndpoint(id + "/dynamics", limit, offset);
         JSONArray jsonFile = jsonObject.getJSONArray("results");
@@ -113,8 +141,10 @@ public final class DroneSimulationInterfaceAPI {
     }
 
     /**
-    Not needed currently as TOKEN is useless without connection to the VPN, so no need to hide it.
-    */
+     * Loads the API token from a configuration file.
+     * This method reads the token from a "config.properties" file and sets it for authentication.
+     * Note: This method is currently not needed as the token is already hardcoded.
+     */
     private void loadToken() {
         try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
             Properties properties = new Properties();
