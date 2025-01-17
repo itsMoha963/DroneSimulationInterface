@@ -10,7 +10,6 @@ import gui.BatteryPanel;
 import gui.DroneFilterWindow;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
-import utils.BaseDroneFilter;
 import utils.DefaultDroneFilter;
 
 import javax.swing.*;
@@ -51,6 +50,9 @@ public class FlightDynamics extends JPanel {
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
+
+        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+                UIManager.getColor("Panel.background").darker())));
 
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
@@ -143,6 +145,8 @@ public class FlightDynamics extends JPanel {
         try {
             Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
+            /* Filter doesn't work properly with paging as we only have the MAX_DRONES_PER_PAGE to work with per page. */
+
             for (DynamicDrone drone : drones.values()) {
                 contentPanel.add(createDronePanel(drone));
                 contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -221,6 +225,8 @@ public class FlightDynamics extends JPanel {
     }
 
     public void setFilter(DefaultDroneFilter filter) {
-
+        defaultDroneFilter = filter;
+        log.log(Level.INFO, "Set Drone Filter");
+        loadPage(currentPage);
     }
 }

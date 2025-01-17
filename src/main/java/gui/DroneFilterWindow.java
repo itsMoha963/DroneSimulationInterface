@@ -1,7 +1,5 @@
 package gui;
 
-
-
 import gui.filter.FilterRange;
 import gui.view.FlightDynamics;
 import utils.DefaultDroneFilter;
@@ -9,11 +7,6 @@ import utils.DefaultDroneFilter;
 import javax.swing.*;
 import java.awt.*;
 
-// TODO: Should make this generic to work with all DroneTypes
-/*
-Should probably split all filtering Types (ComboBox, Range and so on) into their own JComponents.
-Could then remove the ugly gridBagLayout and dynamically add required Components from the DroneFilters Condition.
- */
 public class DroneFilterWindow extends JDialog {
     private JComboBox<String> carriageTypeComboBox;
 

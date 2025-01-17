@@ -5,17 +5,19 @@ import core.DroneType;
 import core.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
-import services.DroneSimulationInterfaceAPI;
 import gui.BatteryPanel;
+import services.DroneSimulationInterfaceAPI;
+import services.Helper;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,26 +72,19 @@ public class DroneDashboard extends JPanel {
     }
 
     private void loadDrones() throws IOException, InterruptedException {
-        dronesPanel.removeAll();
-
         // Only 40 Drones exist, so we only fetch 40 drones.
         Map<Integer, Drone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
 
         for (Drone drone : drones.values()) {
-            addDroneButton(drone);
+            dronesPanel.add(createDroneButton(drone.getId()));
         }
 
-        log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones. Repainting.");
+        log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones.");
 
         dronesPanel.revalidate();
         dronesPanel.repaint();
     }
-    public void addDroneButton(Drone drone) {
-        JButton button = createDroneButton(drone);
-        dronesPanel.add(button);
-        dronesPanel.revalidate();
-        dronesPanel.repaint();
-    }
+
     private void preWarm() {
         try {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
@@ -104,226 +99,121 @@ public class DroneDashboard extends JPanel {
      * Calculates Custom Information from existing Data.
      * - How much Battery time is left
      * - Drone Carriage ballast
-     * @param drone
+     * @param id
      */
-    private void loadDronePage(Drone drone) {
+    private void loadDronePage(int id) {
         droneInfoLabel.removeAll();
+        droneInfoLabel.setLayout(new BorderLayout(10, 10));
+        droneInfoLabel.setBackground(new Color(245, 245, 245));
+        droneInfoLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        int id = drone.getId();
-        droneInfoLabel.removeAll();
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        // Static drone details panel
-        JPanel staticDetailsPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        staticDetailsPanel.setBorder(BorderFactory.createTitledBorder("Static Drone Details"));
-        Font labelFont = new Font("Arial", Font.PLAIN, 16); // Increase font size by 5-8 points
-
-        JLabel typeLabel = new JLabel("Type:");
-        typeLabel.setFont(labelFont);
-        staticDetailsPanel.add(typeLabel);
-        JLabel typeValue = new JLabel(String.valueOf(drone.getId()));
-        typeValue.setFont(labelFont);
-        staticDetailsPanel.add(typeValue);
-
-        JLabel weightLabel = new JLabel("Weight:");
-        weightLabel.setFont(labelFont);
-        staticDetailsPanel.add(weightLabel);
-        JLabel weightValue = new JLabel(drone.getCarriageWeight() + " kg");
-        weightValue.setFont(labelFont);
-        staticDetailsPanel.add(weightValue);
-
-        JLabel droneTypeLabel = new JLabel("Drone Type:");
-        droneTypeLabel.setFont(labelFont);
-        staticDetailsPanel.add(droneTypeLabel);
-
-        String droneType = drone.getDroneType();
-        String droneTypeId = "Unknown";
-        if (droneType != null) {
-            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(".*/(\\d+)/\\?format=json");
-            java.util.regex.Matcher matcher = pattern.matcher(droneType);
-            if (matcher.find()) {
-                droneTypeId = matcher.group(1);
-            }
-        }
-        JLabel droneTypeValue = new JLabel(droneTypeId);
-        droneTypeValue.setFont(labelFont);
-        staticDetailsPanel.add(droneTypeValue);
-
-        JLabel createdLabel = new JLabel("Created:");
-        createdLabel.setFont(labelFont);
-        staticDetailsPanel.add(createdLabel);
+        List<DynamicDrone> dynamicDrones = new ArrayList<>();
         try {
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm");
-            OffsetDateTime offsetDateTime = OffsetDateTime.parse(drone.getCreated(), inputFormatter);
-            String formattedCreated = offsetDateTime.format(outputFormatter);
-            JLabel createdValue = new JLabel(formattedCreated);
-            createdValue.setFont(labelFont);
-            staticDetailsPanel.add(createdValue);
-        } catch (DateTimeParseException e) {
-            JLabel createdValue = new JLabel("Invalid date format");
-            createdValue.setFont(labelFont);
-            staticDetailsPanel.add(createdValue);
+            dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
+        } catch (IOException | InterruptedException e) {
+            log.log(Level.SEVERE, "Failed to load Drone Sample.");
+            throw new RuntimeException(e);
         }
+        log.log(Level.INFO, "Successfully loaded " + dynamicDrones.size() + " Drones.");
 
-        Drone ddrone = droneCache.get(drone.getId());
-        DroneType type = droneTypesCache.get(ddrone.getDroneTypeID());
+        if (!dynamicDrones.isEmpty()) {
+            DynamicDrone latestDrone = dynamicDrones.get(dynamicDrones.size() - 1);
 
-        int maxCarriageWeight = type.getMaxCarriage();
-        int currentCarriageWeight = drone.getCarriageWeight();
-        double loadPercentage = ((double) currentCarriageWeight / maxCarriageWeight) * 100;
+            // Create top status bar
+            JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+            statusBar.setBackground(new Color(230, 230, 230));
+            statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-        JLabel maxWeightLabel = new JLabel("Max Carriage Weight:");
-        maxWeightLabel.setFont(labelFont);
-        staticDetailsPanel.add(maxWeightLabel);
-        JLabel maxWeightValue = new JLabel(maxCarriageWeight + " kg");
-        maxWeightValue.setFont(labelFont);
-        staticDetailsPanel.add(maxWeightValue);
+            // Add timestamp
+            JLabel timestampLabel = new JLabel("Timestamp: " + "XXXX-XXXX");
+            timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            statusBar.add(new BatteryPanel(latestDrone.getBatteryStatus(), droneTypesCache.get(droneCache.get(latestDrone.getId()).getDroneTypeID()).getBatteryCapacity() ));
 
-        JLabel currentWeightLabel = new JLabel("Current Carriage Weight:");
-        currentWeightLabel.setFont(labelFont);
-        staticDetailsPanel.add(currentWeightLabel);
-        JLabel currentWeightValue = new JLabel(currentCarriageWeight + " kg");
-        currentWeightValue.setFont(labelFont);
-        staticDetailsPanel.add(currentWeightValue);
+            boolean isOn = false;
 
-        JLabel loadPercentageLabel = new JLabel("Load Percentage:");
-        loadPercentageLabel.setFont(labelFont);
-        staticDetailsPanel.add(loadPercentageLabel);
-        JLabel loadPercentageValue = new JLabel(String.format("%.2f%%", loadPercentage));
-        loadPercentageValue.setFont(labelFont);
-        staticDetailsPanel.add(loadPercentageValue);
-
-        mainPanel.add(staticDetailsPanel);
-
-        // Dynamic data panel
-        JPanel dynamicDataPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        dynamicDataPanel.setBorder(BorderFactory.createTitledBorder("Dynamic Data"));
-
-        double totalSpeed = 0;
-        int speedCount = 0;
-        double totalDistance = 0;
-        double previousLatitude = 0;
-        double previousLongitude = 0;
-        boolean isFirstPoint = true;
-
-        int maxBatteryCapacity = type.getBatteryCapacity();
-        int initialBatteryCapacity = maxBatteryCapacity;
-        int finalBatteryCapacity = 0;
-
-        try {
-            ArrayList<DynamicDrone> dynamics = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
-
-            for (DynamicDrone d : dynamics) {
-                totalSpeed += d.getSpeed();
-                speedCount++;
-
-                double currentLatitude = d.getLatitude();
-                double currentLongitude = d.getLongitude();
-
-                if (!isFirstPoint) {
-                    double distance = calculateHaversineDistance(previousLatitude, previousLongitude, currentLatitude, currentLongitude);
-                    totalDistance += distance;
-                } else {
-                    isFirstPoint = false;
+            // Add status indicator
+            JPanel statusIndicator = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.setColor(latestDrone.getStatus().equals("ON") ? Color.GREEN : Color.RED);
+                    g2.fillOval(0, 0, 20, 20);
                 }
+            };
+            statusIndicator.setPreferredSize(new Dimension(20, 20));
 
-                previousLatitude = currentLatitude;
-                previousLongitude = currentLongitude;
+            // Add components to status bar
+            statusBar.add(timestampLabel);
+            statusBar.add(statusIndicator);
 
-                finalBatteryCapacity = d.getBatteryStatus();
+            // Create main info panel
+            JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
+            mainInfo.setBackground(new Color(245, 245, 245));
+
+            // Calculate required information
+            double totalDistance = 0;
+            for (int i = 1; i < dynamicDrones.size(); i++) {
+                DynamicDrone prev = dynamicDrones.get(i - 1);
+                DynamicDrone curr = dynamicDrones.get(i);
+                totalDistance += Helper.haversineDistance(prev.getLongitude(), prev.getLatitude(), curr.getLongitude(), curr.getLatitude());
             }
 
-            if (speedCount > 0) {
-                double averageSpeed = totalSpeed / speedCount;
-                JLabel avgSpeedLabel = new JLabel("Average Speed:");
-                avgSpeedLabel.setFont(labelFont);
-                dynamicDataPanel.add(avgSpeedLabel);
-                JLabel avgSpeedValue = new JLabel(String.format("%.2f km/h", averageSpeed));
-                avgSpeedValue.setFont(labelFont);
-                dynamicDataPanel.add(avgSpeedValue);
-            } else {
-                JLabel avgSpeedLabel = new JLabel("Average Speed:");
-                avgSpeedLabel.setFont(labelFont);
-                dynamicDataPanel.add(avgSpeedLabel);
-                JLabel avgSpeedValue = new JLabel("No data available");
-                avgSpeedValue.setFont(labelFont);
-                dynamicDataPanel.add(avgSpeedValue);
-            }
+            // Create info boxes with data
+            mainInfo.add(createInfoBox("Speed", String.format("%.1f km/h", (double) latestDrone.getSpeed())));
+            mainInfo.add(createInfoBox("Total Distance", String.format("%.2f km", totalDistance / 1000)));
+            mainInfo.add(createInfoBox("Location",
+                    String.format("%.6f, %.6f", latestDrone.getLongitude(), latestDrone.getLatitude())));
 
-            JLabel totalDistanceLabel = new JLabel("Total Distance:");
-            totalDistanceLabel.setFont(labelFont);
-            dynamicDataPanel.add(totalDistanceLabel);
-            JLabel totalDistanceValue = new JLabel(String.format("%.2f km", totalDistance));
-            totalDistanceValue.setFont(labelFont);
-            dynamicDataPanel.add(totalDistanceValue);
+            // Last info panel (Last Seen & Carriage)
+            JPanel lastInfoPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+            lastInfoPanel.setBackground(new Color(245, 245, 245));
 
-            int batteryConsumed = initialBatteryCapacity - finalBatteryCapacity;
-            JLabel batteryConsumedLabel = new JLabel("Battery Consumed:");
-            batteryConsumedLabel.setFont(labelFont);
-            dynamicDataPanel.add(batteryConsumedLabel);
-            JLabel batteryConsumedValue = new JLabel(batteryConsumed + " mAh");
-            batteryConsumedValue.setFont(labelFont);
-            dynamicDataPanel.add(batteryConsumedValue);
 
-        } catch (IOException | RuntimeException | InterruptedException e) {
-            JLabel errorLabel = new JLabel("Error fetching dynamic data:");
-            errorLabel.setFont(labelFont);
-            dynamicDataPanel.add(errorLabel);
-            JLabel errorMessage = new JLabel(e.getMessage());
-            errorMessage.setFont(labelFont);
-            dynamicDataPanel.add(errorMessage);
+            lastInfoPanel.add(createInfoBox("Last Seen", "Yesterday oder so"));
+            lastInfoPanel.add(createInfoBox("Carriage Last", "Mock Info"));
+            mainInfo.add(lastInfoPanel);
+
+            // Add all components to main panel
+            droneInfoLabel.add(statusBar, BorderLayout.NORTH);
+            droneInfoLabel.add(mainInfo, BorderLayout.CENTER);
         }
 
-        mainPanel.add(dynamicDataPanel);
-
-        // Add BatteryPanel to display battery status visually
-        BatteryPanel batteryPanel = new BatteryPanel(finalBatteryCapacity, maxBatteryCapacity);
-        batteryPanel.setBorder(BorderFactory.createTitledBorder("Battery Status"));
-        mainPanel.add(batteryPanel);
-
-        // Create a JScrollPane to make the content scrollable
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-        // Add the JScrollPane to the droneInfoLabel
-        droneInfoLabel.setLayout(new BorderLayout());
-        droneInfoLabel.add(scrollPane, BorderLayout.CENTER);
-
-        // Refresh the layout
         droneInfoLabel.revalidate();
         droneInfoLabel.repaint();
     }
 
+    // Helper method to create consistent info boxes
+    private JPanel createInfoBox(String title, String value) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout(5, 5));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(10, 15, 10, 10)
+        ));
 
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        titleLabel.setForeground(Color.GRAY);
 
-    //generated by chatgpt
-    private double calculateHaversineDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int EARTH_RADIUS = 6371; // Radius of the earth in km
+        JLabel valueLabel = new JLabel(value);
+        valueLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(valueLabel, BorderLayout.CENTER);
 
-        return EARTH_RADIUS * c;
+        return panel;
     }
 
-    private JButton createDroneButton(Drone drone) {
-        JButton button = new JButton("Drone " + drone.getId());
+    private JButton createDroneButton(int id) {
+        JButton button = new JButton("Drone " + id);
         button.setHorizontalAlignment(SwingConstants.CENTER);
-
 
         button.setMinimumSize(new Dimension(120, 50));
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         button.setPreferredSize(new Dimension(100, 50));
-
 
         button.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -337,14 +227,13 @@ public class DroneDashboard extends JPanel {
             }
         });
 
-        button.addActionListener(e -> loadDronePage(drone));
+        button.addActionListener(e -> loadDronePage(id));
         return button;
     }
 
     private void showPlaceholder() {
         droneInfoLabel.removeAll();
 
-        // Platzhalter
         JPanel placeholderPanel = new JPanel();
         placeholderPanel.setLayout(new BoxLayout(placeholderPanel, BoxLayout.Y_AXIS));
         placeholderPanel.setBorder(BorderFactory.createEmptyBorder(100, 50, 100, 50));

@@ -29,6 +29,12 @@ public class DroneCatalog extends JPanel {
         cardLayout.show(mainPanel, "DroneList");
     }
 
+    /*
+    TODO:
+            - SWITCH OUT Hardcoded COLORS for UIManager.getColor("property")
+            - can then be modified using .brighter() or .darker()
+     */
+
     private JPanel createDroneListPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -37,15 +43,21 @@ public class DroneCatalog extends JPanel {
         JLabel titleLabel = new JLabel("Drone Catalog", JLabel.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         titleLabel.setOpaque(true);
-        titleLabel.setBackground(Color.DARK_GRAY);
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titleLabel.setBackground(UIManager.getColor("Label.background"));
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
+
+        titlePanel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+                UIManager.getColor("Panel.background").darker()));
+
         titlePanel.add(titleLabel, BorderLayout.CENTER);
+
         panel.add(titlePanel, BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(Color.DARK_GRAY);
+        contentPanel.setBackground(UIManager.getColor("Panel.background"));
+        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+                UIManager.getColor("Panel.background").darker())));
 
         // Fetch drones (separate logic into another class or method if needed)
         Map<Integer, DroneType> drones = Map.of();

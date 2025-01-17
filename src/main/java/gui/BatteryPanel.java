@@ -7,6 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Displays Battery Percentage.
+ * Code is really fucking ugly.
+ */
 public class BatteryPanel extends JPanel {
     private final int maxBatteryCapacity;
     private final int currentBatteryCapacity;
@@ -16,7 +20,11 @@ public class BatteryPanel extends JPanel {
     // Gap between BatteryImage and Rect
     private static final int FILL_MARGIN = 4;
 
-
+    /**
+     * Simply creates the Battery Panel and displays the percentage
+     * @param currentBatteryCapacity
+     * @param maxBatteryCapacity
+     */
     public BatteryPanel(int currentBatteryCapacity, int maxBatteryCapacity) {
         this.currentBatteryCapacity = currentBatteryCapacity;
         this.maxBatteryCapacity = maxBatteryCapacity;
@@ -37,6 +45,8 @@ public class BatteryPanel extends JPanel {
                 Graphics2D g2d = (Graphics2D) g;
 
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                /* This part is party generated with ChatGPT */
 
                 // Calculate the scale factor
                 int scaledWidth = getWidth();
@@ -81,6 +91,8 @@ public class BatteryPanel extends JPanel {
 
                 g2d.setColor(Color.WHITE); // Foreground text
                 g2d.drawString(percentageText, textX, textY);
+
+                /* ----------------- End GPT --------- */
             }
 
             @Override
