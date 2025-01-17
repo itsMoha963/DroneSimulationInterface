@@ -4,10 +4,10 @@ import gui.view.DroneCatalog;
 import gui.view.DroneDashboard;
 import gui.view.FlightDynamics;
 import services.DroneSimulationInterfaceAPI;
+import utils.Constants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.File;
 import java.io.IOException;
 
 public class MainWindow extends JFrame {
@@ -19,7 +19,7 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         try {
-            setIconImage(ImageIO.read(getClass().getResource("/Icons/appicon.png")));
+            setIconImage(ImageIO.read(getClass().getResource(Constants.APP_ICON_PATH)));
         } catch (IOException e) {
             System.err.println("Failed to load App Icon: " + e.getMessage());
         }

@@ -7,6 +7,8 @@ import utils.DefaultDroneFilter;
 import javax.swing.*;
 import java.awt.*;
 
+import utils.Constants;
+
 public class DroneFilterWindow extends JDialog {
     private JComboBox<String> carriageTypeComboBox;
 
@@ -24,7 +26,7 @@ public class DroneFilterWindow extends JDialog {
     }
 
     private void init() {
-        String[] carriageTypes = {"All Types", "NOT", "ACT", "SEN"};
+        String[] carriageTypes = {Constants.ALL, Constants.NOT, Constants.ACT, Constants.SEN};
         carriageTypeComboBox = new JComboBox<>(carriageTypes);
 
         setLayout(new GridLayout(3, 1));

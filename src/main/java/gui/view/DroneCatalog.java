@@ -121,15 +121,15 @@ public class DroneCatalog extends JPanel {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
-        panel.setBackground(new Color(50, 50, 50));
+        panel.setBackground(UIManager.getColor("Panel.background"));
 
         JLabel titleLabel = new JLabel(droneType.getManufacturer() + " " + droneType.getTypeName(), JLabel.LEFT);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
 
         JLabel detailsLabel = new JLabel("Weight: " + droneType.getWeight() + "kg, Max Speed: " + droneType.getMaxSpeed() + " km/h");
         detailsLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        detailsLabel.setForeground(Color.LIGHT_GRAY);
+        detailsLabel.setForeground(UIManager.getColor("Label.foreground"));
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
@@ -148,12 +148,12 @@ public class DroneCatalog extends JPanel {
 
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                panel.setBackground(new Color(70, 70, 70));
+                panel.setBackground(UIManager.getColor("Panel.background").brighter());
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                panel.setBackground(new Color(50, 50, 50));
+                panel.setBackground(UIManager.getColor("Panel.background"));
             }
         });
 
@@ -163,7 +163,7 @@ public class DroneCatalog extends JPanel {
     private void showDroneDetails(DroneType drone) {
         JPanel detailsPanel = new JPanel(new BorderLayout());
         detailsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        detailsPanel.setBackground(new Color(40, 40, 40));
+        detailsPanel.setBackground(UIManager.getColor("Panel.background").darker());
 
         // Back button
         JButton backButton = new JButton("<-");// Back button??? or should it be an arrow????
@@ -172,7 +172,7 @@ public class DroneCatalog extends JPanel {
         backButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         backButton.setForeground(Color.WHITE);
-        backButton.setBackground(new Color(70, 70, 70));
+        backButton.setBackground(UIManager.getColor("Button.background").brighter());
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "DroneList"));
 
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -183,7 +183,7 @@ public class DroneCatalog extends JPanel {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.setBackground(new Color(40, 40, 40));
+        infoPanel.setBackground(UIManager.getColor("Panel.background").brighter());
 
         JLabel title = new JLabel(drone.getManufacturer() + " - " + drone.getTypeName(), JLabel.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 26));
@@ -225,7 +225,7 @@ public class DroneCatalog extends JPanel {
         JLabel label = new JLabel(text);
         label.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        label.setForeground(Color.LIGHT_GRAY);
+        label.setForeground(UIManager.getColor("Label.foreground").brighter());
         return label;
     }
 }

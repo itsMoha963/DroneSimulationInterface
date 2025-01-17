@@ -9,6 +9,8 @@ import gui.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import services.Helper;
 
+import gui.filter.FilterRange;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;

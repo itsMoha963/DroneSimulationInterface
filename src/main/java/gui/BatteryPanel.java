@@ -1,5 +1,7 @@
 package gui;
 
+import utils.Constants;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +35,7 @@ public class BatteryPanel extends JPanel {
         setOpaque(false);
 
         try {
-            batteryImage = ImageIO.read(getClass().getResource("/Icons/battery.png"));
+            batteryImage = ImageIO.read(getClass().getResource(Constants.BATTERY_ICON_PATH));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
