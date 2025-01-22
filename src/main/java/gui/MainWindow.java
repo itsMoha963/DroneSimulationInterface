@@ -9,6 +9,7 @@ import utils.Constants;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class MainWindow extends JFrame {
@@ -24,7 +25,15 @@ public class MainWindow extends JFrame {
         add(toolBar, BorderLayout.NORTH);
 
         try {
-            setIconImage(ImageIO.read(getClass().getResource(Constants.APP_ICON_PATH)));
+            BufferedImage appIcon = ImageIO.read(getClass().getResource(Constants.APP_ICON_PATH));
+
+            if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                Taskbar.getTaskbar().setIconImage(appIcon);
+            }
+            else {
+                setIconImage(appIcon);
+            }
+
         } catch (IOException e) {
             System.err.println("Failed to load App Icon: " + e.getMessage());
         }
