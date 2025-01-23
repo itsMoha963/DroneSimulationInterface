@@ -1,8 +1,10 @@
 package gui.view;
 
 import core.DroneType;
+import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import services.DroneSimulationInterfaceAPI;
+import utils.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +12,11 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DroneCatalog extends JPanel {
+    private final Logger log = Logger.getLogger(DroneCatalog.class.getName());
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -38,41 +43,79 @@ public class DroneCatalog extends JPanel {
     private JPanel createDroneListPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Title Panel
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Drone Catalog", JLabel.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        titleLabel.setOpaque(true);
-        titleLabel.setBackground(UIManager.getColor("Label.background"));
-        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
-
-        titlePanel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
-                UIManager.getColor("Panel.background").darker()));
-
-        titlePanel.add(titleLabel, BorderLayout.CENTER);
-
+        JPanel titlePanel = createTitlePanel();
         panel.add(titlePanel, BorderLayout.NORTH);
 
+        try {
+            Map<Integer, DroneType> droneTypes = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
+            if (droneTypes.isEmpty()) { throw new DroneAPIException("Error in fetching Drone Types. DroneTypes is empty"); }
+            JPanel contentPanel = createContentPanel(droneTypes);
+            JScrollPane scrollPane = new JScrollPane(contentPanel);
+            configureScrollPane(scrollPane, titlePanel, panel);
+            panel.add(scrollPane, BorderLayout.CENTER);
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error while creating DroneListPanel.");
+            panel.add(createErrorHandlingPanel(e), BorderLayout.CENTER);
+        }
+
+        return panel;
+    }
+
+    private JPanel createErrorHandlingPanel(Exception e) {
+        JPanel errorPanel = new JPanel(new BorderLayout());
+        errorPanel.setBackground(UIManager.getColor("Panel.background"));
+
+        // Error Message
+        JLabel errorLabel = new JLabel("Failed to Load Drone Catalog", JLabel.CENTER);
+        errorLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        errorLabel.setForeground(Color.RED);
+
+        // Detailed Error Message
+        JTextArea errorDetails = new JTextArea(e.getMessage());
+        errorDetails.setEditable(false);
+        errorDetails.setBackground(UIManager.getColor("Panel.background"));
+        errorDetails.setForeground(UIManager.getColor("Label.foreground"));
+
+        // Button Panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+
+        JButton retryButton = new JButton("Retry");
+        retryButton.addActionListener(e1 -> {
+            // Reload the entire drone catalog panel
+            mainPanel.remove(mainPanel.getComponent(0));
+            mainPanel.add(createDroneListPanel(), "DroneList");
+            cardLayout.show(mainPanel, "DroneList");
+        });
+
+        JButton exitButton = new JButton("Exit Program");
+        exitButton.addActionListener(e1 -> System.exit(0));
+
+        buttonPanel.add(retryButton);
+        buttonPanel.add(exitButton);
+
+        // Assemble Error Panel
+        errorPanel.add(errorLabel, BorderLayout.NORTH);
+        errorPanel.add(new JScrollPane(errorDetails), BorderLayout.CENTER);
+        errorPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return errorPanel;
+    }
+
+    private JPanel createContentPanel(Map<Integer, DroneType> droneTypes) {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
         contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker())));
 
-        // Fetch drones (separate logic into another class or method if needed)
-        Map<Integer, DroneType> drones = Map.of();
-        try {
-            drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        for (DroneType drone : drones.values()) {
+        for (DroneType drone : droneTypes.values()) {
             contentPanel.add(createDronePanel(drone));
             contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Spacing between cards
         }
+        return contentPanel;
+    }
 
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
+    private void configureScrollPane(JScrollPane scrollPane, JPanel titlePanel, JPanel contentPanel) {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
@@ -86,14 +129,24 @@ public class DroneCatalog extends JPanel {
                 if (shouldShowTitle != isTitleVisible) {
                     titlePanel.setVisible(shouldShowTitle);
                     isTitleVisible = shouldShowTitle;
-                    panel.revalidate();
-                    panel.repaint();
+                    contentPanel.revalidate();
+                    contentPanel.repaint();
                 }
             }
         });
+    }
 
-        panel.add(scrollPane, BorderLayout.CENTER);
-        return panel;
+    private JPanel createTitlePanel() {
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = new JLabel("Drone Catalog", JLabel.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(UIManager.getColor("Label.background"));
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
+
+        titlePanel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+                UIManager.getColor("Panel.background").darker()));
+        return titlePanel;
     }
 
     private JPanel createDronePanel(DroneType droneType) {

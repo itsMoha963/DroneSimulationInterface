@@ -12,6 +12,7 @@ import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
 import utils.Constants;
 import utils.DefaultDroneFilter;
+import utils.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -126,7 +127,7 @@ public class FlightDynamics extends JPanel {
         try {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
-        } catch (IOException | InterruptedException e) {
+        } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to cache DroneTypes/Drones.");
         }
     }
@@ -158,9 +159,9 @@ public class FlightDynamics extends JPanel {
 
             currentPage = page;
             currentPageLabel.setText("Page: " + (currentPage + 1));
-        } catch (IOException | InterruptedException e) {
+        } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page);
-            JOptionPane.showMessageDialog(this, "Error while fetching Dynamic Drones", "ERROR", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(this, "Error while fetching Dynamic Drones", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 

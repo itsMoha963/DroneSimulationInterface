@@ -1,0 +1,106 @@
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI getInstance
+INFORMATION: Initializing new instance for the DroneSimulationInterfaceAPI
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.DroneCatalog createDroneListPanel
+SCHWERWIEGEND: Error while creating DroneListPanel.
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.FlightDynamics preWarm
+SCHWERWIEGEND: Failed to cache DroneTypes/Drones.
+Jan. 23, 2025 3:15:48 PM gui.view.FlightDynamics loadPage
+INFORMATION: Drone Cache is empty. Attempting to cache drones.
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.FlightDynamics preWarm
+SCHWERWIEGEND: Failed to cache DroneTypes/Drones.
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronedynamics on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronedynamics on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronedynamics on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.FlightDynamics loadPage
+SCHWERWIEGEND: Failed to fetch DynamicDrone during page load: 0
+Jan. 23, 2025 3:15:48 PM utils.AutoRefresh start
+INFORMATION: Scheduler started
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.DroneDashboard loadDrones
+SCHWERWIEGEND: Failed to load Drones. Creating Error handling panel.
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:48 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:48 PM gui.view.DroneDashboard preWarm
+SCHWERWIEGEND: Failed to load Drones for Cache.
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:50 PM gui.view.DroneDashboard preWarm
+SCHWERWIEGEND: Failed to load Drones for Cache.
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 1
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 2
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 3
+Jan. 23, 2025 3:15:50 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:50 PM gui.view.DroneDashboard loadDrones
+SCHWERWIEGEND: Failed to load Drones. Creating Error handling panel.
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 1
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 2
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint dronetypes on attempt: 3
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:51 PM gui.view.DroneDashboard preWarm
+SCHWERWIEGEND: Failed to load Drones for Cache.
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 1
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 2
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+SCHWERWIEGEND: Error while fetching data from endpoint drones on attempt: 3
+Jan. 23, 2025 3:15:51 PM services.DroneSimulationInterfaceAPI fetchDrones
+SCHWERWIEGEND: Error while parsing drone data
+Jan. 23, 2025 3:15:51 PM gui.view.DroneDashboard loadDrones
+SCHWERWIEGEND: Failed to load Drones. Creating Error handling panel.

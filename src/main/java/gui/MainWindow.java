@@ -11,8 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainWindow extends JFrame {
+    private static final Logger log = Logger.getLogger(MainWindow.class.getName());
     private DroneSimulationInterfaceAPI droneAPI;
 
     public MainWindow() {
@@ -33,9 +36,8 @@ public class MainWindow extends JFrame {
             else {
                 setIconImage(appIcon);
             }
-
         } catch (IOException e) {
-            System.err.println("Failed to load App Icon: " + e.getMessage());
+            log.log(Level.WARNING, "Failed to load App Icon" + e.getMessage());
         }
 
         createTaskBar();

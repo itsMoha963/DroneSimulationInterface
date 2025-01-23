@@ -8,17 +8,16 @@ import core.parser.DroneTypeParser;
 import gui.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import services.Helper;
-
-import gui.filter.FilterRange;
+import utils.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -65,34 +64,37 @@ public class DroneDashboard extends JPanel {
 
         showPlaceholder();
 
-        try {
-            loadDrones();
-        } catch (IOException | InterruptedException e) {
-            log.log(Level.SEVERE, "Failed to load Drones.");
-        }
+        loadDrones();
+
         preWarm();
     }
 
-    private void loadDrones() throws IOException, InterruptedException {
-        // Only 40 Drones exist, so we only fetch 40 drones.
-        Map<Integer, Drone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
+    private void loadDrones() {
+        try {
+            // Only 40 Drones exist, so we only fetch 40 drones.
+            Map<Integer, Drone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
 
-        for (Drone drone : drones.values()) {
-            dronesPanel.add(createDroneButton(drone.getId()));
+            for (Drone drone : drones.values()) {
+                dronesPanel.add(createDroneButton(drone.getId()));
+            }
+
+            log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones.");
+
+            dronesPanel.revalidate();
+            dronesPanel.repaint();
+        } catch (DroneAPIException e) {
+            log.log(Level.SEVERE, "Failed to load Drones. Creating Error handling panel.");
+            showPlaceholder();
         }
-
-        log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones.");
-
-        dronesPanel.revalidate();
-        dronesPanel.repaint();
     }
 
     private void preWarm() {
         try {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        } catch (DroneAPIException e) {
+            log.log(Level.SEVERE, "Failed to load Drones for Cache.");
+            showPlaceholder();
         }
     }
 
@@ -112,9 +114,9 @@ public class DroneDashboard extends JPanel {
         List<DynamicDrone> dynamicDrones = new ArrayList<>();
         try {
             dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
-        } catch (IOException | InterruptedException e) {
+        } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drone Sample.");
-            throw new RuntimeException(e);
+            throw new DroneAPIException("Failed to load drone sample");
         }
         log.log(Level.INFO, "Successfully loaded " + dynamicDrones.size() + " Drones.");
 
@@ -130,6 +132,14 @@ public class DroneDashboard extends JPanel {
             JLabel timestampLabel = new JLabel("Timestamp: " + "XXXX-XXXX");
             timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
             statusBar.add(new BatteryPanel(latestDrone.getBatteryStatus(), droneTypesCache.get(droneCache.get(latestDrone.getId()).getDroneTypeID()).getBatteryCapacity() ));
+
+            System.out.println(latestDrone.getTimestamp());
+
+            OffsetDateTime dateTime = OffsetDateTime.parse(latestDrone.getTimestamp());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            String formattedDate = dateTime.format(formatter);
+
+            System.out.println(formattedDate);
 
             boolean isOn = false;
 
@@ -171,7 +181,6 @@ public class DroneDashboard extends JPanel {
             // Last info panel (Last Seen & Carriage)
             JPanel lastInfoPanel = new JPanel(new GridLayout(1, 2, 10, 0));
             lastInfoPanel.setBackground(new Color(245, 245, 245));
-
 
             lastInfoPanel.add(createInfoBox("Last Seen", "Yesterday oder so"));
             lastInfoPanel.add(createInfoBox("Carriage Last", "Mock Info"));
@@ -249,6 +258,13 @@ public class DroneDashboard extends JPanel {
         placeholderLabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
         placeholderLabel2.setFont(new Font("Arial", Font.ITALIC, 16));
         placeholderPanel.add(placeholderLabel2);
+
+        JButton retryButton = new JButton("Retry/Reload");
+        retryButton.addActionListener(e -> {
+            preWarm();
+            loadDrones();
+        });
+        placeholderPanel.add(retryButton);
 
         droneInfoLabel.setLayout(new BorderLayout());
         droneInfoLabel.add(placeholderPanel, BorderLayout.CENTER);
