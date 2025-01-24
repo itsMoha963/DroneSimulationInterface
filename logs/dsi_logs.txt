@@ -1,0 +1,20 @@
+Jan. 24, 2025 6:48:40 PM services.DroneSimulationInterfaceAPI getInstance
+INFORMATION: Initializing new instance for the DroneSimulationInterfaceAPI
+Jan. 24, 2025 6:48:40 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:42 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:42 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:43 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:43 PM utils.AutoRefresh start
+INFORMATION: Scheduler started
+Jan. 24, 2025 6:48:44 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:44 PM gui.view.DroneDashboard loadDrones
+INFORMATION: Successfully fetched 40 Drones.
+Jan. 24, 2025 6:48:44 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 24, 2025 6:48:45 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
