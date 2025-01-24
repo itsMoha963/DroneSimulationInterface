@@ -1,36 +1,78 @@
 # 🚁 Drone Simulation Interface
-This project was created for our Object-Oriented Programming in Java class in our 3. semester in the Frankfurt University of Applied Sciences.
 
-# Prerequisites
-1. JDK: Ensure you have a JDK installed. For this we used Java 23 but older versions should work too.
+This project was created for our Object-Oriented Programming in Java class in our 3rd semester at the Frankfurt University of Applied Sciences.
+
+## Table of Contents
+- Prerequisites
+- Setup
+- Running the Simulation
+- Collaborators
+- Screenshots
+- License
+
+## Prerequisites
+1. JDK: Ensure you have a JDK installed. For this, we used Java 23, but older versions should work too.
 2. Maven: Ensure Maven is installed.
-3. We recommend the IntelliJ IDEA as the setup is very easy and all dependencys get installed easily. 
+3. IDE: We recommend IntelliJ IDEA as the setup is very easy and all dependencies get installed automatically.
 
-# Setup
+## Setup
 1. Clone the Repository
 ```console
-git clone https://github.com/MandoV0/DroneSimulationInterface
+git clone https://github.com/MandoV0/DroneSimulationInterface.git
 cd DroneSimulationInterface
 ```
-2. Start the project in your IDEA.
-If you are using InteliJ simply click on the pom.xml. A button will appear in the top right corner to install all required dependencys.
-
+2. Start the Project in Your IDE
+If you are using IntelliJ, simply click on the `pom.xml`. A button will appear in the top-right corner to install all required dependencies.
 3. Build the Project
 ```console
-maven clean package
+mvn clean package
 ```
-4. Run from Command Line
+
+## Running the Program
+1. Run from the IDE
+- Open the `Main.java` file in your IDE.
+- Right-click the file and select Run or use the IDE’s run configuration.
+2. Run from Command Line
 ```console
 java -jar target/DSI.jar
 ```
 
-# 👩‍💻 Collaborators
-| Name          |   Role        | GitHub Profile
-| ----------    | ----------    | ----------
-| Burak         | .             | @MandoV0
-| Gabriel       | .             | @Gibo20001119
-| Mohammad      | .             | @itsMoha963
+## Collaborators
+| Name          | Role          | GitHub Profile         |
+|---------------|---------------|------------------------|
+| Burak         | .             | @MandoV0              |
+| Gabriel       | .             | @Gibo20001119         |
+| Mohammad      | .             | @itsMoha963           |
 
-# 📷 Screenshots
+## Screenshots
+(Add screenshots of your application here)
 
-# 🛡️ License
+## Dependencies
+1. FlatLaf (for modern UI look and feel):
+```xml
+<dependency>
+    <groupId>com.formdev</groupId>
+    <artifactId>flatlaf</artifactId>
+    <version>3.5.4</version>
+</dependency>
+```
+
+2. org.json (for JSON parsing):
+```
+<dependency>
+  <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20231013</version>
+</dependency>
+```
+
+
+
+
+
+
+
+
+
+
+
