@@ -173,6 +173,7 @@ public final class DroneSimulationInterfaceAPI {
             return new URI(BASEURL + endpointUrl + "/?format=json&limit=" + limit + "&offset=" + offset);
         }
         catch (URISyntaxException e) {
+            log.log(Level.SEVERE, "Error while constructing URI");
             throw new RuntimeException("Error while constructing URI.");
         }
     }
@@ -188,6 +189,7 @@ public final class DroneSimulationInterfaceAPI {
             properties.load(inputStream);
             TOKEN = properties.getProperty("API_TOKEN");
         } catch (IOException e) {
+            log.log(Level.SEVERE, "Failed to load configuration files");
             throw new RuntimeException("Failed to load configuration files");
         }
     }

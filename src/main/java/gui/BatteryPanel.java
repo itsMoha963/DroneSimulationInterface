@@ -8,12 +8,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Displays Battery Percentage.
  * Code is really fucking ugly.
  */
 public class BatteryPanel extends JPanel {
+    private static final Logger log = Logger.getLogger(BatteryPanel.class.getName());
+
     private final int maxBatteryCapacity;
     private final int currentBatteryCapacity;
     private final BufferedImage batteryImage;
@@ -37,6 +41,7 @@ public class BatteryPanel extends JPanel {
         try {
             batteryImage = ImageIO.read(getClass().getResource(Constants.BATTERY_ICON_PATH));
         } catch (IOException e) {
+            log.log(Level.SEVERE, "Failed to load Battery Icon" + e.getMessage());
             throw new RuntimeException(e);
         }
 

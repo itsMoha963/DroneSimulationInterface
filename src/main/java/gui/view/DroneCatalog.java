@@ -2,7 +2,6 @@ package gui.view;
 
 import core.DroneType;
 import core.parser.DroneTypeParser;
-import customException.DroneDataFetchException;
 import services.DroneSimulationInterfaceAPI;
 import utils.Constants;
 import utils.exception.DroneAPIException;
