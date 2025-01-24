@@ -17,7 +17,8 @@ This project was created for our Object-Oriented Programming in Java class in ou
 git clone https://github.com/MandoV0/DroneSimulationInterface.git
 cd DroneSimulationInterface
 ```
-2. Start the Project in Your IDE
+2. Ensure you are connected to the university's Wi-Fi network or accessing it through a VPN.
+3. Start the Project in Your IDE
 If you are using IntelliJ, simply click on the `pom.xml`. A button will appear in the top-right corner to install all required dependencies.
 3. Build the Project
 ```console
