@@ -145,18 +145,17 @@ public class DroneDashboard extends JPanel {
             //statusBar.setBackground(new Color(230, 230, 230));
             statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
+            OffsetDateTime dateTime = OffsetDateTime.parse(latestDynamicDrone.getTimestamp());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            String formattedDate = dateTime.format(formatter);
             // Add timestamp
-            JLabel timestampLabel = new JLabel("Timestamp: " + "XXXX-XXXX");
+            JLabel timestampLabel = new JLabel("Timestamp: " + formattedDate);
             timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
             statusBar.add(new BatteryPanel(latestDynamicDrone.getBatteryStatus(), latestDroneType.getBatteryCapacity()));
 
             System.out.println(latestDynamicDrone.getTimestamp());
 
-            OffsetDateTime dateTime = OffsetDateTime.parse(latestDynamicDrone.getTimestamp());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-            String formattedDate = dateTime.format(formatter);
 
-            System.out.println(formattedDate);
 
             boolean isOn = false;
 
