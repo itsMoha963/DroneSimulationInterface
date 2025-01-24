@@ -58,7 +58,7 @@ java -jar target/DSI.jar
 ```
 
 2. org.json (for JSON parsing):
-```
+```xml
 <dependency>
   <groupId>org.json</groupId>
     <artifactId>json</artifactId>
