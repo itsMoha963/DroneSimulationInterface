@@ -1,9 +1,0 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-.env
-config.properties
-out
-logs/
-target/
-.DS_Store
