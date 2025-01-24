@@ -10,15 +10,15 @@ This project was created for our Object-Oriented Programming in Java class in ou
 1. JDK: Ensure you have a JDK installed. For this, we used Java 23, but older versions should work too.
 2. Maven: Ensure Maven is installed.
 3. IDE: We recommend IntelliJ IDEA as the setup is very easy and all dependencies get installed automatically.
+4. Ensure you are connected to the university's Wi-Fi network or accessing it through a VPN.
 
 ## Setup
 1. Clone the Repository
 ```console
 git clone https://github.com/MandoV0/DroneSimulationInterface.git
 cd DroneSimulationInterface
-```
-2. Ensure you are connected to the university's Wi-Fi network or accessing it through a VPN.
-3. Start the Project in Your IDE
+``` 
+2. Start the Project in Your IDE
 If you are using IntelliJ, simply click on the `pom.xml`. A button will appear in the top-right corner to install all required dependencies.
 3. Build the Project
 ```console
