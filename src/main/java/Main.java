@@ -6,7 +6,6 @@ import utils.RootLogger;
 
 public class Main {
     public static void main(String[] args) {
-
         // Default Theme
         try {
             UIManager.setLookAndFeel( new FlatDarculaLaf() );

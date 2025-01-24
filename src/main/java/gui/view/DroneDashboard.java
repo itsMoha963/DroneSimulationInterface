@@ -5,16 +5,16 @@ import core.DroneType;
 import core.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
+import gui.APIErrorPanel;
 import gui.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import services.Helper;
-import utils.DroneAPIException;
+import utils.exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class DroneDashboard extends JPanel {
             dronesPanel.repaint();
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drones. Creating Error handling panel.");
-            showPlaceholder();
+            showErrorPanel(e);
         }
     }
 
@@ -94,8 +94,21 @@ public class DroneDashboard extends JPanel {
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drones for Cache.");
-            showPlaceholder();
+            showErrorPanel(e);
         }
+    }
+
+    private void showErrorPanel(DroneAPIException exception) {
+        APIErrorPanel errorPanel = new APIErrorPanel(action -> {
+            showPlaceholder();
+            preWarm();
+            loadDrones();
+        }, exception.getMessage());
+
+        droneInfoLabel.removeAll();
+        droneInfoLabel.add(errorPanel);
+        droneInfoLabel.revalidate();
+        droneInfoLabel.repaint();
     }
 
     /**
@@ -108,7 +121,7 @@ public class DroneDashboard extends JPanel {
     private void loadDronePage(int id) {
         droneInfoLabel.removeAll();
         droneInfoLabel.setLayout(new BorderLayout(10, 10));
-        droneInfoLabel.setBackground(new Color(245, 245, 245));
+        droneInfoLabel.setBackground(UIManager.getColor("Panel.background"));
         droneInfoLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         List<DynamicDrone> dynamicDrones = new ArrayList<>();
@@ -116,26 +129,30 @@ public class DroneDashboard extends JPanel {
             dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drone Sample.");
+            showErrorPanel(e);
             throw new DroneAPIException("Failed to load drone sample");
         }
         log.log(Level.INFO, "Successfully loaded " + dynamicDrones.size() + " Drones.");
 
         if (!dynamicDrones.isEmpty()) {
-            DynamicDrone latestDrone = dynamicDrones.get(dynamicDrones.size() - 1);
+            DynamicDrone latestDynamicDrone = dynamicDrones.get(dynamicDrones.size() - 1);
+            Drone latestDrone = droneCache.get(latestDynamicDrone.getId());
+            DroneType latestDroneType = droneTypesCache.get(latestDrone.getDroneTypeID());
 
             // Create top status bar
             JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-            statusBar.setBackground(new Color(230, 230, 230));
+            statusBar.setOpaque(false);
+            //statusBar.setBackground(new Color(230, 230, 230));
             statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
             // Add timestamp
             JLabel timestampLabel = new JLabel("Timestamp: " + "XXXX-XXXX");
             timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            statusBar.add(new BatteryPanel(latestDrone.getBatteryStatus(), droneTypesCache.get(droneCache.get(latestDrone.getId()).getDroneTypeID()).getBatteryCapacity() ));
+            statusBar.add(new BatteryPanel(latestDynamicDrone.getBatteryStatus(), latestDroneType.getBatteryCapacity()));
 
-            System.out.println(latestDrone.getTimestamp());
+            System.out.println(latestDynamicDrone.getTimestamp());
 
-            OffsetDateTime dateTime = OffsetDateTime.parse(latestDrone.getTimestamp());
+            OffsetDateTime dateTime = OffsetDateTime.parse(latestDynamicDrone.getTimestamp());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             String formattedDate = dateTime.format(formatter);
 
@@ -150,7 +167,7 @@ public class DroneDashboard extends JPanel {
                     super.paintComponent(g);
                     Graphics2D g2 = (Graphics2D) g;
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(latestDrone.getStatus().equals("ON") ? Color.GREEN : Color.RED);
+                    g2.setColor(latestDynamicDrone.getStatus().equals("ON") ? Color.GREEN : Color.RED);
                     g2.fillOval(0, 0, 20, 20);
                 }
             };
@@ -159,36 +176,43 @@ public class DroneDashboard extends JPanel {
             // Add components to status bar
             statusBar.add(timestampLabel);
             statusBar.add(statusIndicator);
+            statusBar.add(new JLabel("SN: " + latestDrone.getSerialNumber()));
 
             // Create main info panel
             JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
-            mainInfo.setBackground(new Color(245, 245, 245));
+            mainInfo.setBackground(UIManager.getColor("Panel.background").brighter());
 
-            // Calculate required information
+            // Calculates the total distance and average speed the drone traveled for the last 40 samples.
             double totalDistance = 0;
+            double averageSpeed = 0;
             for (int i = 1; i < dynamicDrones.size(); i++) {
                 DynamicDrone prev = dynamicDrones.get(i - 1);
                 DynamicDrone curr = dynamicDrones.get(i);
                 totalDistance += Helper.haversineDistance(prev.getLongitude(), prev.getLatitude(), curr.getLongitude(), curr.getLatitude());
+                averageSpeed += curr.getSpeed();
             }
+            averageSpeed = averageSpeed / dynamicDrones.size();
+
+            double carriageLast = (double) latestDrone.getCarriageWeight() / (double) latestDroneType.getWeight();
+            carriageLast = carriageLast * 100;                  // To get the actual percentage
 
             // Create info boxes with data
-            mainInfo.add(createInfoBox("Speed", String.format("%.1f km/h", (double) latestDrone.getSpeed())));
+            mainInfo.add(createInfoBox("Current Speed", String.format("%.1f km/h", (double) latestDynamicDrone.getSpeed())));
             mainInfo.add(createInfoBox("Total Distance", String.format("%.2f km", totalDistance / 1000)));
             mainInfo.add(createInfoBox("Location",
-                    String.format("%.6f, %.6f", latestDrone.getLongitude(), latestDrone.getLatitude())));
-
-            // Last info panel (Last Seen & Carriage)
-            JPanel lastInfoPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-            lastInfoPanel.setBackground(new Color(245, 245, 245));
-
-            lastInfoPanel.add(createInfoBox("Last Seen", "Yesterday oder so"));
-            lastInfoPanel.add(createInfoBox("Carriage Last", "Mock Info"));
-            mainInfo.add(lastInfoPanel);
+                    String.format("%.6f, %.6f", latestDynamicDrone.getLongitude(), latestDynamicDrone.getLatitude())));
+            mainInfo.add(createInfoBox("Average Speed", String.format("%.2f km/h", averageSpeed)));
+            mainInfo.add(createInfoBox("Carriage Last", String.format("%.2f", carriageLast) + " %"));
+            mainInfo.add(createInfoBox("Last Seen", "Yesterday oder so"));
+            // Need to add html for line breaks to work
+            mainInfo.add(createInfoBox("General Info", "<html>" + "Carriage Type: " + latestDrone.getCarriageType() + "<br/>Manufacturer: "
+                    + latestDroneType.getManufacturer() + "<br/>Model: " + latestDroneType.getTypeName() + "</html>"));
 
             // Add all components to main panel
             droneInfoLabel.add(statusBar, BorderLayout.NORTH);
             droneInfoLabel.add(mainInfo, BorderLayout.CENTER);
+        } else {
+            // Error handling. But should even get here anyway
         }
 
         droneInfoLabel.revalidate();
@@ -199,15 +223,15 @@ public class DroneDashboard extends JPanel {
     private JPanel createInfoBox(String title, String value) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout(5, 5));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(UIManager.getColor("Panel.background").brighter());
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createLineBorder(UIManager.getColor("Panel.foreground").darker().darker().darker()),
                 BorderFactory.createEmptyBorder(10, 15, 10, 10)
         ));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        titleLabel.setForeground(Color.GRAY);
+        titleLabel.setForeground(UIManager.getColor("Label.foreground").brighter());
 
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(new Font("Arial", Font.BOLD, 16));
@@ -242,6 +266,7 @@ public class DroneDashboard extends JPanel {
         return button;
     }
 
+    // Placeholder before a drone is selected
     private void showPlaceholder() {
         droneInfoLabel.removeAll();
 
@@ -258,13 +283,6 @@ public class DroneDashboard extends JPanel {
         placeholderLabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
         placeholderLabel2.setFont(new Font("Arial", Font.ITALIC, 16));
         placeholderPanel.add(placeholderLabel2);
-
-        JButton retryButton = new JButton("Retry/Reload");
-        retryButton.addActionListener(e -> {
-            preWarm();
-            loadDrones();
-        });
-        placeholderPanel.add(retryButton);
 
         droneInfoLabel.setLayout(new BorderLayout());
         droneInfoLabel.add(placeholderPanel, BorderLayout.CENTER);

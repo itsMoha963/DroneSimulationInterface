@@ -1,16 +1,15 @@
 package gui.view;
 
 import core.DroneType;
-import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
+import gui.APIErrorPanel;
 import services.DroneSimulationInterfaceAPI;
-import utils.DroneAPIException;
+import utils.exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
-import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,50 +54,17 @@ public class DroneCatalog extends JPanel {
             panel.add(scrollPane, BorderLayout.CENTER);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error while creating DroneListPanel.");
-            panel.add(createErrorHandlingPanel(e), BorderLayout.CENTER);
+
+            // Replace Panel with error handling panel.
+            APIErrorPanel errorPanel = new APIErrorPanel(action -> {
+                mainPanel.remove(mainPanel.getComponent(0));
+                mainPanel.add(createDroneListPanel(), "DroneList");
+                cardLayout.show(mainPanel, "DroneList");
+            }, e.getMessage());
+            panel.add(errorPanel, BorderLayout.CENTER);
         }
 
         return panel;
-    }
-
-    private JPanel createErrorHandlingPanel(Exception e) {
-        JPanel errorPanel = new JPanel(new BorderLayout());
-        errorPanel.setBackground(UIManager.getColor("Panel.background"));
-
-        // Error Message
-        JLabel errorLabel = new JLabel("Failed to Load Drone Catalog", JLabel.CENTER);
-        errorLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
-        errorLabel.setForeground(Color.RED);
-
-        // Detailed Error Message
-        JTextArea errorDetails = new JTextArea(e.getMessage());
-        errorDetails.setEditable(false);
-        errorDetails.setBackground(UIManager.getColor("Panel.background"));
-        errorDetails.setForeground(UIManager.getColor("Label.foreground"));
-
-        // Button Panel
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-
-        JButton retryButton = new JButton("Retry");
-        retryButton.addActionListener(e1 -> {
-            // Reload the entire drone catalog panel
-            mainPanel.remove(mainPanel.getComponent(0));
-            mainPanel.add(createDroneListPanel(), "DroneList");
-            cardLayout.show(mainPanel, "DroneList");
-        });
-
-        JButton exitButton = new JButton("Exit Program");
-        exitButton.addActionListener(e1 -> System.exit(0));
-
-        buttonPanel.add(retryButton);
-        buttonPanel.add(exitButton);
-
-        // Assemble Error Panel
-        errorPanel.add(errorLabel, BorderLayout.NORTH);
-        errorPanel.add(new JScrollPane(errorDetails), BorderLayout.CENTER);
-        errorPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        return errorPanel;
     }
 
     private JPanel createContentPanel(Map<Integer, DroneType> droneTypes) {

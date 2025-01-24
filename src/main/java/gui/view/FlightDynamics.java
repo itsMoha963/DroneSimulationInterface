@@ -12,11 +12,10 @@ import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
 import utils.Constants;
 import utils.DefaultDroneFilter;
-import utils.DroneAPIException;
+import utils.exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -56,6 +55,7 @@ public class FlightDynamics extends JPanel {
         contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker())));
 
+        /*
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.setBackground(UIManager.getColor("Panel.background").brighter());
@@ -72,6 +72,7 @@ public class FlightDynamics extends JPanel {
 
         toolBar.add(filterButton);
         add(toolBar, BorderLayout.PAGE_START);
+        */
 
         JScrollPane scrollPane = new JScrollPane(contentPanel) {
             @Override

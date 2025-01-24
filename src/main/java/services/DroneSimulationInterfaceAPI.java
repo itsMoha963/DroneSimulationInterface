@@ -6,12 +6,11 @@ import core.parser.DynamicDroneParser;
 import core.parser.JsonDroneParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.DroneAPIException;
+import utils.exception.DroneAPIException;
 
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
