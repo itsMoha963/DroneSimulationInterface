@@ -5,10 +5,6 @@ This project was created for our Object-Oriented Programming in Java class in ou
 ## Table of Contents
 - Prerequisites
 - Setup
-- Running the Simulation
-- Collaborators
-- Screenshots
-- License
 
 ## Prerequisites
 1. JDK: Ensure you have a JDK installed. For this, we used Java 23, but older versions should work too.
@@ -45,7 +41,7 @@ java -jar target/DSI.jar
 | Mohammad      | .             | @itsMoha963           |
 
 ## Screenshots
-(Add screenshots of your application here)
+XXXX
 
 ## Dependencies
 1. FlatLaf (for modern UI look and feel):
