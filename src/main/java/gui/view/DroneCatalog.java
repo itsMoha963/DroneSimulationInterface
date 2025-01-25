@@ -25,6 +25,7 @@ public class DroneCatalog extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    // create the titel panel in the catalog
     private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Drone Catalog", JLabel.CENTER);
@@ -37,6 +38,7 @@ public class DroneCatalog extends JPanel {
         return titlePanel;
     }
 
+    // create the info label
     private JLabel createInfoLabel(String text, int fontSize) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
@@ -45,6 +47,7 @@ public class DroneCatalog extends JPanel {
         return label;
     }
 
+    // Methode to scroll the content in the GUI
     private JScrollPane createContentScrollPane() {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columns with spacing

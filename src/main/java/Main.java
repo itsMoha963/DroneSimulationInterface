@@ -14,15 +14,15 @@ public class Main {
         }
 
         try {
-            RootLogger.init(true);
+            RootLogger.init(true); // Initialize RootLogger
         }
         catch (Exception ex) {
             System.err.println("Failed to initialize RootLogger");
         }
 
         EventQueue.invokeLater( () ->  {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.setVisible(true);
+            MainWindow mainWindow = new MainWindow(); // Create the main window
+            mainWindow.setVisible(true);             // Make the main window visible
         }
         );
     }
