@@ -40,6 +40,7 @@ java -jar target/DSI.jar
 | Burak         | .             | @MandoV0              |
 | Gabriel       | .             | @Gibo20001119         |
 | Mohammad      | .             | @itsMoha963           |
+| Shaydur       | .             | @Shadowwing11         |
 
 ## Screenshots
 XXXX
