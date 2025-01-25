@@ -9,7 +9,8 @@ public final class Constants {
     public static final String BATTERY_ICON_PATH = "/icons/battery.png";
     public static final String REFRESH_ICON_PATH = "/icons/refresh.png";
     public static final String FILTER_ICON_PATH = "/icons/filter.png";
-    public static final String DRONE_ICON_PATH = "/icons/drone.png";
+    public static final String DRONE_ICON_PATH = "/icons/drone_light.png";
+    public static final String DRONE_LIGHT_THEME_ICON_PATH = "/icons/drone.png";
 
     // Carriage Types
     public static final String NOT = "NOT";

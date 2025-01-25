@@ -30,15 +30,12 @@ public class MainWindow extends JFrame {
         toolBar.setFloatable(false);
         add(toolBar, BorderLayout.NORTH);
 
-        // create settings-Menü
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        //add settings-Menü
         JMenu settingsMenu = new JMenu("Settings");
         menuBar.add(settingsMenu);
 
-        // add Theme-undermenu
         JMenu themeMenu = new JMenu("Change Theme");
         settingsMenu.add(themeMenu);
 
@@ -77,7 +74,6 @@ public class MainWindow extends JFrame {
         add(tabbedPane);
     }
 
-    // Set the theme color of the main window
     private void setLookAndFeel(String theme) {
         try{
             if(theme.equals("Dark")){

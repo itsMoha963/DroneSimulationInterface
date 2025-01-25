@@ -47,7 +47,7 @@ public class DroneDashboard extends JPanel {
         leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.weighty = 1;
-        gridBagConstraints.weightx = 0.2; // Fills 20% of the screen horizontally
+        gridBagConstraints.weightx = 0.3; // Fills 20% of the screen horizontally
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         add(leftScrollPane, gridBagConstraints);
 
@@ -58,7 +58,7 @@ public class DroneDashboard extends JPanel {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.weighty = 1;
-        gridBagConstraints.weightx = 0.8; // Fills 80% of the screen
+        gridBagConstraints.weightx = 0.7; // Fills 80% of the screen
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         add(droneInfoLabel, gridBagConstraints);
 

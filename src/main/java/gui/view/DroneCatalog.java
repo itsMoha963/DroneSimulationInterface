@@ -8,24 +8,19 @@ import utils.exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Map;
 
 public class DroneCatalog extends JPanel {
-    // In Constants.java
     public DroneCatalog() {
         setLayout(new BorderLayout());
 
-        // Title Panel
         JPanel titlePanel = createTitlePanel();
         add(titlePanel, BorderLayout.NORTH);
 
-        // Content Panel
         JScrollPane scrollPane = createContentScrollPane();
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    // create the titel panel in the catalog
     private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Drone Catalog", JLabel.CENTER);
@@ -38,7 +33,6 @@ public class DroneCatalog extends JPanel {
         return titlePanel;
     }
 
-    // create the info label
     private JLabel createInfoLabel(String text, int fontSize) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
@@ -47,14 +41,12 @@ public class DroneCatalog extends JPanel {
         return label;
     }
 
-    // Methode to scroll the content in the GUI
     private JScrollPane createContentScrollPane() {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columns with spacing
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Fetch and display drones
         Map<Integer, DroneType> drones = fetchDrones();
         for (DroneType drone : drones.values()) {
             contentPanel.add(createDroneCard(drone));
@@ -75,7 +67,6 @@ public class DroneCatalog extends JPanel {
     }
 
     private JPanel createDroneCard(DroneType droneType) {
-        // Main panel for the drone card
         JPanel panel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -90,20 +81,17 @@ public class DroneCatalog extends JPanel {
         panel.setPreferredSize(new Dimension(200, 250)); // Smaller card size
         panel.setLayout(new BorderLayout());
 
-        // Top section: Icon + Name
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
 
-        // Icon at the top left
         ImageIcon originalIcon = new ImageIcon(getClass().getResource(Constants.DRONE_ICON_PATH));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Smaller icon
+        Image scaledImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH); // Smaller icon
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
         JLabel iconLabel = new JLabel(scaledIcon);
         iconLabel.setHorizontalAlignment(JLabel.LEFT);
         iconLabel.setVerticalAlignment(JLabel.TOP);
         topPanel.add(iconLabel, BorderLayout.WEST);
 
-        // Centered name
         JLabel nameLabel = new JLabel(droneType.getManufacturer() + " " + droneType.getTypeName(), JLabel.CENTER);
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 12)); // Slightly smaller font
         nameLabel.setForeground(UIManager.getColor("Label.foreground"));
@@ -111,20 +99,17 @@ public class DroneCatalog extends JPanel {
 
         panel.add(topPanel, BorderLayout.NORTH);
 
-        // Detail section below the name
         JPanel detailPanel = new JPanel();
         detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS)); // Vertical alignment
         detailPanel.setOpaque(false);
 
-        // Add padding to push details further down
         detailPanel.add(Box.createVerticalStrut(10));
 
-        // Adding details
-        detailPanel.add(createInfoLabel("Weight: " + droneType.getWeight() + " kg", 12));
-        detailPanel.add(createInfoLabel("Max Speed: " + droneType.getMaxSpeed() + " km/h", 12));
-        detailPanel.add(createInfoLabel("Battery Capacity: " + droneType.getBatteryCapacity() + " mAh", 12));
-        detailPanel.add(createInfoLabel("Control Range: " + droneType.getControlRange() + " m", 12));
-        detailPanel.add(createInfoLabel("Max Carriage: " + droneType.getMaxCarriage() + " kg", 12));
+        detailPanel.add(createInfoLabel("Weight: " + droneType.getWeight() + " g", 16));
+        detailPanel.add(createInfoLabel("Max Speed: " + droneType.getMaxSpeed() + " km/h", 16));
+        detailPanel.add(createInfoLabel("Battery Capacity: " + droneType.getBatteryCapacity() + " mAh", 16));
+        detailPanel.add(createInfoLabel("Control Range: " + droneType.getControlRange() + " m", 16));
+        detailPanel.add(createInfoLabel("Max Carriage: " + droneType.getMaxCarriage() + " g", 16));
         panel.add(detailPanel, BorderLayout.CENTER);
 
         return panel;
