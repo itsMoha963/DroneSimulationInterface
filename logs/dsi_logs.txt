@@ -1,20 +1,52 @@
-Jan. 26, 2025 5:38:35 PM services.DroneSimulationInterfaceAPI getInstance
+Jan. 26, 2025 7:35:13 PM services.DroneSimulationInterfaceAPI getInstance
 INFORMATION: Initializing new instance for the DroneSimulationInterfaceAPI
-Jan. 26, 2025 5:38:36 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:37 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:37 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:38 PM utils.AutoRefresh start
+Jan. 26, 2025 7:35:14 PM utils.AutoRefresh start
 INFORMATION: Scheduler started
-Jan. 26, 2025 5:38:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:38 PM gui.view.DroneDashboard loadDrones
+Jan. 26, 2025 7:35:14 PM gui.view.DroneDashboard loadDrones
 INFORMATION: Successfully fetched 40 Drones.
-Jan. 26, 2025 5:38:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 5:38:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:35:14 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:25 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:25 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:25 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:25 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:26 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:26 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:27 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:27 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:28 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:28 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:28 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:28 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:29 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
+Jan. 26, 2025 7:35:30 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Got response from endpoint, after 1 trys
+Jan. 26, 2025 7:35:30 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 80 Drones with a sample size of: 80

@@ -2,7 +2,7 @@ package gui;
 
 import gui.filter.FilterRange;
 import gui.view.FlightDynamics;
-import utils.DefaultDroneFilter;
+import core.filter.DefaultDroneFilter;
 
 import javax.swing.*;
 import java.awt.*;

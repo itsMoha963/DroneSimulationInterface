@@ -17,4 +17,6 @@ public final class Constants {
     public static final String ALL = "ALL TYPES";
     public static final String ACT = "ACT";
     public static final String SEN = "SEN";
+
+    public static final String SETTINGS_FILE = "settings.xml";
 }

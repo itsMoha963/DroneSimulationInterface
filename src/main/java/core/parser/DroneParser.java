@@ -1,6 +1,6 @@
 package core.parser;
 
-import core.Drone;
+import core.drone.Drone;
 
 public class DroneParser implements JsonDroneParser<Drone> {
     @Override

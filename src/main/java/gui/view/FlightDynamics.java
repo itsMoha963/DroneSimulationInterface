@@ -1,18 +1,16 @@
 package gui.view;
 
-import core.Drone;
-import core.DroneType;
-import core.DynamicDrone;
+import core.drone.Drone;
+import core.drone.DroneType;
+import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import core.parser.DynamicDroneParser;
-import gui.BatteryPanel;
-import gui.DroneFilterWindow;
+import gui.components.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
-import utils.Constants;
-import utils.DefaultDroneFilter;
-import utils.exception.DroneAPIException;
+import core.filter.DefaultDroneFilter;
+import exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +27,7 @@ public class FlightDynamics extends JPanel {
     public static final int MAX_DRONES_PER_PAGE = 32;
     private int currentPage = 0;
     private final JPanel contentPanel;
-    private final JLabel currentPageLabel;
+    private JLabel currentPageLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
     private DefaultDroneFilter defaultDroneFilter = new DefaultDroneFilter("NOT", 0, Integer.MAX_VALUE);
@@ -55,25 +53,6 @@ public class FlightDynamics extends JPanel {
         contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker())));
 
-        /*
-        JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false);
-        toolBar.setBackground(UIManager.getColor("Panel.background").brighter());
-        ImageIcon refreshIcon = new ImageIcon(new ImageIcon(getClass().getResource(Constants.FILTER_ICON_PATH)).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
-
-        JButton filterButton = new JButton(refreshIcon);
-        filterButton.setToolTipText("Filter Drones");
-        filterButton.setBackground(UIManager.getColor("Button.background"));
-        filterButton.addActionListener(e -> {
-            DroneFilterWindow df = new DroneFilterWindow(this, defaultDroneFilter);
-            df.setVisible(true);
-        }
-        );
-
-        toolBar.add(filterButton);
-        add(toolBar, BorderLayout.PAGE_START);
-        */
-
         JScrollPane scrollPane = new JScrollPane(contentPanel) {
             @Override
             public void setBounds(int x, int y, int width, int height) {
@@ -88,6 +67,16 @@ public class FlightDynamics extends JPanel {
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         add(scrollPane, BorderLayout.CENTER);
 
+        add(createPaginationPanel(), BorderLayout.SOUTH);
+
+        preWarm();
+        loadPage(0);
+
+        AutoRefresh refresh = new AutoRefresh();
+        refresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
+    }
+
+    private JPanel createPaginationPanel() {
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         paginationPanel.setBackground(UIManager.getColor("Panel.background"));
@@ -102,11 +91,11 @@ public class FlightDynamics extends JPanel {
         paginationPanel.add(prevPageButton);
         paginationPanel.add(currentPageLabel);
         paginationPanel.add(nextPageButton);
-        add(paginationPanel, BorderLayout.SOUTH);
+        paginationPanel.add(createPagingTextField());
+        return paginationPanel;
+    }
 
-        preWarm();
-        loadPage(0);
-
+    private JTextField createPagingTextField() {
         JTextField pageInputField = new JTextField(5);
         pageInputField.addActionListener(e -> {
             try {
@@ -118,10 +107,7 @@ public class FlightDynamics extends JPanel {
                 JOptionPane.showMessageDialog(this, "Invalid page number. Please enter a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        paginationPanel.add(pageInputField);
-
-        AutoRefresh refresh = new AutoRefresh();
-        refresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
+        return pageInputField;
     }
 
     private void preWarm() {
@@ -148,8 +134,6 @@ public class FlightDynamics extends JPanel {
         try {
             Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
-            /* Filter doesn't work properly with paging as we only have the MAX_DRONES_PER_PAGE to work with per page. */
-
             for (DynamicDrone drone : drones.values()) {
                 contentPanel.add(createDronePanel(drone));
                 contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -162,7 +146,6 @@ public class FlightDynamics extends JPanel {
             currentPageLabel.setText("Page: " + (currentPage + 1));
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page);
-            //JOptionPane.showMessageDialog(this, "Error while fetching Dynamic Drones", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 

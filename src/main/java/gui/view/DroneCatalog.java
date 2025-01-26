@@ -1,16 +1,17 @@
 package gui.view;
 
-import core.DroneType;
+import core.drone.DroneType;
 import core.parser.DroneTypeParser;
 import services.DroneSimulationInterfaceAPI;
 import utils.Constants;
-import utils.exception.DroneAPIException;
+import exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
 public class DroneCatalog extends JPanel {
+
     public DroneCatalog() {
         setLayout(new BorderLayout());
 

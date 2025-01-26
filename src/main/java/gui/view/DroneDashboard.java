@@ -1,15 +1,15 @@
 package gui.view;
 
-import core.Drone;
-import core.DroneType;
-import core.DynamicDrone;
+import core.drone.Drone;
+import core.drone.DroneType;
+import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
-import gui.APIErrorPanel;
-import gui.BatteryPanel;
+import gui.components.APIErrorPanel;
+import gui.components.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import services.Helper;
-import utils.exception.DroneAPIException;
+import exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +29,7 @@ public class DroneDashboard extends JPanel {
     private final JPanel droneInfoLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
+    private static final int DRONE_SAMPLE_SIZE = 80;
 
     public DroneDashboard() {
         setLayout(new GridBagLayout());
@@ -63,9 +64,7 @@ public class DroneDashboard extends JPanel {
         add(droneInfoLabel, gridBagConstraints);
 
         showPlaceholder();
-
         loadDrones();
-
         preWarm();
     }
 
@@ -89,6 +88,7 @@ public class DroneDashboard extends JPanel {
     }
 
     private void preWarm() {
+        // Caches the drones and droneTypes as re-fetching them for every dynamic drone is inefficient and slow.
         try {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
@@ -126,28 +126,28 @@ public class DroneDashboard extends JPanel {
 
         List<DynamicDrone> dynamicDrones = new ArrayList<>();
         try {
-            dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, 40, 0);
+            dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, DRONE_SAMPLE_SIZE, 0);
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drone Sample.");
             showErrorPanel(e);
-            throw new DroneAPIException("Failed to load drone sample");
+            throw new DroneAPIException("Failed to load Drone sample");
         }
-        log.log(Level.INFO, "Successfully loaded " + dynamicDrones.size() + " Drones.");
+        log.log(Level.INFO, "Successfully loaded " + dynamicDrones.size() + " Drones with a sample size of: " + DRONE_SAMPLE_SIZE);
 
         if (!dynamicDrones.isEmpty()) {
             DynamicDrone latestDynamicDrone = dynamicDrones.get(dynamicDrones.size() - 1);
             Drone latestDrone = droneCache.get(latestDynamicDrone.getId());
             DroneType latestDroneType = droneTypesCache.get(latestDrone.getDroneTypeID());
 
-            // Create top status bar
+            // Create the StatusBar (ON/OFF, TimeStamp, SerialNumber...)
             JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
             statusBar.setOpaque(false);
-            //statusBar.setBackground(new Color(230, 230, 230));
             statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
             OffsetDateTime dateTime = OffsetDateTime.parse(latestDynamicDrone.getTimestamp());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             String formattedDate = dateTime.format(formatter);
+
             // Add timestamp
             JLabel timestampLabel = new JLabel("Timestamp: " + formattedDate);
             timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -155,33 +155,16 @@ public class DroneDashboard extends JPanel {
 
             System.out.println(latestDynamicDrone.getTimestamp());
 
-
-
-            boolean isOn = false;
-
-            // Add status indicator
-            JPanel statusIndicator = new JPanel() {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    Graphics2D g2 = (Graphics2D) g;
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(latestDynamicDrone.getStatus().equals("ON") ? Color.GREEN : Color.RED);
-                    g2.fillOval(0, 0, 20, 20);
-                }
-            };
-            statusIndicator.setPreferredSize(new Dimension(20, 20));
-
             // Add components to status bar
             statusBar.add(timestampLabel);
-            statusBar.add(statusIndicator);
+            statusBar.add(createStatusIndicator(latestDynamicDrone));
             statusBar.add(new JLabel("SN: " + latestDrone.getSerialNumber()));
 
             // Create main info panel
             JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
             mainInfo.setBackground(UIManager.getColor("Panel.background").brighter());
 
-            // Calculates the total distance and average speed the drone traveled for the last 40 samples.
+            // Calculates the total distance and average speed the drone traveled for the last DRONE_SAMPLE_SIZE samples.
             double totalDistance = 0;
             double averageSpeed = 0;
             for (int i = 1; i < dynamicDrones.size(); i++) {
@@ -203,9 +186,10 @@ public class DroneDashboard extends JPanel {
             mainInfo.add(createInfoBox("Average Speed", String.format("%.2f km/h", averageSpeed)));
             mainInfo.add(createInfoBox("Carriage Last", String.format("%.2f", carriageLast) + " %"));
             mainInfo.add(createInfoBox("Last Seen", "Yesterday oder so"));
-            // Need to add html for line breaks to work
-            mainInfo.add(createInfoBox("General Info", "<html>" + "Carriage Type: " + latestDrone.getCarriageType() + "<br/>Manufacturer: "
-                    + latestDroneType.getManufacturer() + "<br/>Model: " + latestDroneType.getTypeName() + "</html>"));
+            mainInfo.add(createInfoBox("General Info", "<html>" + "Carriage Type: "
+                    + latestDrone.getCarriageType() + "<br/>Manufacturer: "
+                    + latestDroneType.getManufacturer() + "<br/>Model: "
+                    + latestDroneType.getTypeName() + "</html>")); // Need to add html for line breaks to work
 
             // Add all components to main panel
             droneInfoLabel.add(statusBar, BorderLayout.NORTH);
@@ -216,6 +200,21 @@ public class DroneDashboard extends JPanel {
 
         droneInfoLabel.revalidate();
         droneInfoLabel.repaint();
+    }
+
+    private JPanel createStatusIndicator(DynamicDrone latestDynamicDrone) {
+        JPanel statusIndicator = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(latestDynamicDrone.getStatus().equals("ON") ? Color.GREEN : Color.RED);
+                g2.fillOval(0, 0, 20, 20);
+            }
+        };
+        statusIndicator.setPreferredSize(new Dimension(20, 20));
+        return statusIndicator;
     }
 
     // Helper method to create consistent info boxes

@@ -1,24 +1,24 @@
-Jan. 26, 2025 4:43:00 PM services.DroneSimulationInterfaceAPI getInstance
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI getInstance
 INFORMATION: Initializing new instance for the DroneSimulationInterfaceAPI
-Jan. 26, 2025 4:43:00 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM utils.AutoRefresh start
+Jan. 26, 2025 7:29:23 PM utils.AutoRefresh start
 INFORMATION: Scheduler started
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:23 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM gui.view.DroneDashboard loadDrones
+Jan. 26, 2025 7:29:23 PM gui.view.DroneDashboard loadDrones
 INFORMATION: Successfully fetched 40 Drones.
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:24 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:24 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:39 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Jan. 26, 2025 7:29:25 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 26, 2025 4:43:39 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones.
+Jan. 26, 2025 7:29:25 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40

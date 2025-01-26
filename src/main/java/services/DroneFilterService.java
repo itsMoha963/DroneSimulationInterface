@@ -1,8 +1,7 @@
 package services;
 
-
-import core.DroneBase;
-import utils.BaseDroneFilter;
+import core.drone.DroneBase;
+import core.filter.BaseDroneFilter;
 
 import java.util.Collection;
 import java.util.List;

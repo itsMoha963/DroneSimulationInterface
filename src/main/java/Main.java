@@ -6,24 +6,26 @@ import utils.RootLogger;
 
 public class Main {
     public static void main(String[] args) {
-        // Default Theme
-        try {
-            UIManager.setLookAndFeel( new FlatDarculaLaf() );
-        } catch(Exception ex) {
-            System.err.println("Failed to initialize FlatLightLeaf Look and Feel");
-        }
-
-        try {
-            RootLogger.initializeLogger(true); // Initialize RootLogger
-        }
-        catch (Exception ex) {
-            System.err.println("Failed to initialize RootLogger");
-        }
+        processArgs(args);
 
         EventQueue.invokeLater( () ->  {
-            MainWindow mainWindow = new MainWindow(); // Create the main window
-            mainWindow.setVisible(true);             // Make the main window visible
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.setVisible(true);
         }
         );
+    }
+
+    private static void processArgs(String[] args) {
+        boolean debug = false;
+
+        for (String arg : args) {
+            switch (arg) {
+                case "--debug":
+                    debug = true;
+                    break;
+            }
+        }
+
+        RootLogger.initializeLogger(debug);
     }
 }

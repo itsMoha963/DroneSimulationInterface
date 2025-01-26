@@ -1,8 +1,7 @@
 import com.formdev.flatlaf.FlatDarculaLaf;
-import gui.APIErrorPanel;
+import gui.components.APIErrorPanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 

@@ -15,7 +15,7 @@ public class RootLogger {
             createLogDirectory();
             configureFileHandler(debug);
         } catch (IOException e) {
-            System.err.println("IO error while initializing the logger: " + e.getMessage());
+            throw new SecurityException("Failed to create logs directory.");
         }
     }
 

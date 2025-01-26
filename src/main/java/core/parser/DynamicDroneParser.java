@@ -1,7 +1,7 @@
 package core.parser;
 
 import org.json.JSONObject;
-import core.DynamicDrone;
+import core.drone.DynamicDrone;
 
 public class DynamicDroneParser implements JsonDroneParser<DynamicDrone> {
     @Override

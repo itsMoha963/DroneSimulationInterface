@@ -1,12 +1,12 @@
 package services;
 
-import core.DroneBase;
-import core.DynamicDrone;
+import core.drone.DroneBase;
+import core.drone.DynamicDrone;
 import core.parser.DynamicDroneParser;
 import core.parser.JsonDroneParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.exception.DroneAPIException;
+import exception.DroneAPIException;
 
 
 import java.io.FileInputStream;

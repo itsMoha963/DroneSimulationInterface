@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 import com.formdev.flatlaf.*;
 
 public class MainWindow extends JFrame {
-    private static final Logger log = Logger.getLogger(MainWindow.class.getName()); // Logger for MainWindow
-    private DroneSimulationInterfaceAPI droneAPI;                                   // Drone API for the MainWindow to show the data of the drones
+    private static final Logger log = Logger.getLogger(MainWindow.class.getName());
+    private DroneSimulationInterfaceAPI droneAPI;
 
     public MainWindow() {
         // Set the title of the main window
@@ -25,7 +25,13 @@ public class MainWindow extends JFrame {
         setSize(900, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Set the layout of the main window
+        setTheme("Dark");           // Initialize default theme (Dark/Light)
+        createToolBar();
+        loadAppIcon();
+        createTabbedPane();
+    }
+
+    private void createToolBar() {
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         add(toolBar, BorderLayout.NORTH);
@@ -39,19 +45,21 @@ public class MainWindow extends JFrame {
         JMenu themeMenu = new JMenu("Change Theme");
         settingsMenu.add(themeMenu);
 
-        //Theme-Options
+        // Theme-Options
         JMenuItem lightThemeItem = new JMenuItem("Light Theme");
-        lightThemeItem.addActionListener(e -> setLookAndFeel("Light"));
+        lightThemeItem.addActionListener(e -> setTheme("Light"));
         themeMenu.add(lightThemeItem);
 
         JMenuItem darkThemeItem = new JMenuItem("Dark Theme");
-        darkThemeItem.addActionListener(e -> setLookAndFeel("Dark"));
+        darkThemeItem.addActionListener(e -> setTheme("Dark"));
         themeMenu.add(darkThemeItem);
+    }
 
-        // Add the icon to the main window
+    private void loadAppIcon() {
         try {
             BufferedImage appIcon = ImageIO.read(getClass().getResource(Constants.APP_ICON_PATH));
 
+            // Setting the icon works differently for MacOS
             if (System.getProperty("os.name").toLowerCase().contains("mac")) {
                 Taskbar.getTaskbar().setIconImage(appIcon);
             }
@@ -61,12 +69,9 @@ public class MainWindow extends JFrame {
         } catch (IOException e) {
             log.log(Level.WARNING, "Failed to load App Icon" + e.getMessage());
         }
-
-        createTaskBar();
     }
 
-    // Create the task bar for the main window
-    public void createTaskBar() {
+    private void createTabbedPane() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Drone Catalog", new DroneCatalog());
         tabbedPane.addTab("Flight Dynamics", new FlightDynamics());
@@ -74,16 +79,16 @@ public class MainWindow extends JFrame {
         add(tabbedPane);
     }
 
-    private void setLookAndFeel(String theme) {
-        try{
-            if(theme.equals("Dark")){
+    private void setTheme(String theme) {
+        try {
+            if (theme.equals("Dark")){
                 UIManager.setLookAndFeel(new FlatDarculaLaf());
-            } else if(theme.equals("Light")){
+            } else if (theme.equals("Light")){
                 UIManager.setLookAndFeel(new FlatLightLaf());
             }
             SwingUtilities.updateComponentTreeUI(this);
-        }catch (UnsupportedLookAndFeelException e){
-            log.log(Level.WARNING, "Failed to set Look and Feel" + e.getMessage());
+        } catch (UnsupportedLookAndFeelException e){
+            log.log(Level.WARNING, "Failed to set Look and Feel: " + e.getMessage());
         }
     }
 }
