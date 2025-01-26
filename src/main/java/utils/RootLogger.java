@@ -7,30 +7,44 @@ import java.util.logging.*;
 public class RootLogger {
 
     /**
-     * If debug is ticked then the logs are displayed in the console.
-     * @param debug
-     * @throws IOException
+     * Initializes the logger with a FileHandler and optional debug mode.
+     * @param debug If true, logs are also displayed in the console.
      */
-    public static void init(boolean debug) throws IOException {
-        // Create Log file/dir if it does not exist
-        File logsDir = new File("logs");
-        if (!logsDir.exists()) {
-            logsDir.mkdirs();
+    public static void initializeLogger(boolean debug) {
+        try {
+            createLogDirectory();
+            configureFileHandler(debug);
+        } catch (IOException e) {
+            System.err.println("IO error while initializing the logger: " + e.getMessage());
         }
+    }
 
+    /**
+     * Creates the logs directory if it does not exist.
+     * @throws SecurityException If the application does not have permissions to create the directory.
+     */
+    private static void createLogDirectory() throws SecurityException {
+        File logsDir = new File("logs");
+        if (!logsDir.exists() && !logsDir.mkdirs()) {
+            throw new SecurityException("Failed to create logs directory: logs");
+        }
+    }
+
+    /**
+     * Configures the FileHandler for the logger.
+     * @param debug If true, console logging will be enabled.
+     * @throws IOException If there is an error while creating the FileHandler.
+     */
+    private static void configureFileHandler(boolean debug) throws IOException {
         String logsDirPath = "logs" + File.separator + "dsi_logs.txt";
-
-        // If append is false, then the file gets reset everytime the App gets started
-        FileHandler fh = new FileHandler(logsDirPath, false);
-        fh.setFormatter(new SimpleFormatter());
+        FileHandler fileHandler = new FileHandler(logsDirPath, false);
+        fileHandler.setFormatter(new SimpleFormatter());
 
         Logger rootLogger = Logger.getLogger("");
-        rootLogger.addHandler(fh);
+        rootLogger.addHandler(fileHandler);
 
-        // Console logging
         if (!debug) {
-            Handler[] handlers = rootLogger.getHandlers();
-            for (Handler handler : handlers) {
+            for (Handler handler : rootLogger.getHandlers()) {
                 if (handler instanceof ConsoleHandler) {
                     rootLogger.removeHandler(handler);
                 }

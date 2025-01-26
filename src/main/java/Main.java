@@ -14,7 +14,7 @@ public class Main {
         }
 
         try {
-            RootLogger.init(true); // Initialize RootLogger
+            RootLogger.initializeLogger(true); // Initialize RootLogger
         }
         catch (Exception ex) {
             System.err.println("Failed to initialize RootLogger");
