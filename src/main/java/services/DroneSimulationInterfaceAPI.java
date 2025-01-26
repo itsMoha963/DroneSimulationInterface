@@ -131,7 +131,7 @@ public final class DroneSimulationInterfaceAPI {
             return data;
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Error while parsing drone data");
-            throw new DroneAPIException("Error while parsing drone data");
+            throw new DroneAPIException(e.getMessage());
         }
     }
 

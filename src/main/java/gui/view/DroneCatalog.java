@@ -1,7 +1,9 @@
 package gui.view;
 
+import core.drone.Drone;
 import core.drone.DroneType;
 import core.parser.DroneTypeParser;
+import gui.components.APIErrorPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.Constants;
 import exception.DroneAPIException;
@@ -13,13 +15,28 @@ import java.util.Map;
 public class DroneCatalog extends JPanel {
 
     public DroneCatalog() {
-        setLayout(new BorderLayout());
+        initialize();
+    }
 
-        JPanel titlePanel = createTitlePanel();
-        add(titlePanel, BorderLayout.NORTH);
+    private void initialize() {
+        try {
+            setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = createContentScrollPane();
-        add(scrollPane, BorderLayout.CENTER);
+            JPanel titlePanel = createTitlePanel();
+            add(titlePanel, BorderLayout.NORTH);
+
+            JScrollPane scrollPane = createContentScrollPane();
+            add(scrollPane, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        } catch (DroneAPIException e) {
+            APIErrorPanel errorPanel = new APIErrorPanel(action -> {
+                removeAll();
+                initialize();
+            }, "Failed to fetch drones");
+            removeAll();
+            add(errorPanel);
+        }
     }
 
     private JPanel createTitlePanel() {
@@ -42,7 +59,7 @@ public class DroneCatalog extends JPanel {
         return label;
     }
 
-    private JScrollPane createContentScrollPane() {
+    private JScrollPane createContentScrollPane() throws DroneAPIException {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columns with spacing
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
@@ -59,12 +76,8 @@ public class DroneCatalog extends JPanel {
         return scrollPane;
     }
 
-    private Map<Integer, DroneType> fetchDrones() {
-        try {
-            return DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
-        } catch (DroneAPIException e) {
-            throw new DroneAPIException("Failed to fetch drones", e);
-        }
+    private Map<Integer, DroneType> fetchDrones() throws DroneAPIException {
+        return DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
     }
 
     private JPanel createDroneCard(DroneType droneType) {

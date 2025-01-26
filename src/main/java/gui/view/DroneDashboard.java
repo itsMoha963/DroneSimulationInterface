@@ -42,7 +42,7 @@ public class DroneDashboard extends JPanel {
         JScrollPane leftScrollPane = new JScrollPane(dronesPanel);
         leftScrollPane.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker()));
-        leftScrollPane.getVerticalScrollBar().setUnitIncrement(16);                     // Smoother scrolling
+        leftScrollPane.getVerticalScrollBar().setUnitIncrement(16);                     // 16 Smoother scrolling
 
         leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -152,8 +152,6 @@ public class DroneDashboard extends JPanel {
             JLabel timestampLabel = new JLabel("Timestamp: " + formattedDate);
             timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
             statusBar.add(new BatteryPanel(latestDynamicDrone.getBatteryStatus(), latestDroneType.getBatteryCapacity()));
-
-            System.out.println(latestDynamicDrone.getTimestamp());
 
             // Add components to status bar
             statusBar.add(timestampLabel);
