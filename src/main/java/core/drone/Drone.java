@@ -16,7 +16,7 @@ public class Drone extends DroneBase {
         this.carriageWeight = carriageWeight;
         this.droneType = droneType;
         this.created = created;
-        this.droneTypeID = Helper.extractID(droneType);
+        this.droneTypeID = Helper.extractDroneIDFromUrl(droneType);
     }
 
     public String getCarriageType() { return carriageType; }

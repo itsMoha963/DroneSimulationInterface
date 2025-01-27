@@ -9,11 +9,13 @@ public final class Helper {
      * @param url
      * @return Drone ID
      */
-    public static int extractID(String url) {
-        int droneId = -1;
-        String[] parts = url.split("/");
-        droneId = Integer.parseInt(parts[parts.length - 2]);
-        return droneId;
+    public static int extractDroneIDFromUrl(String url) {
+        try {
+            String[] parts = url.split("/");
+            return Integer.parseInt(parts[parts.length - 2]);
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Invalid URL format for extracting drone ID: " + url, e);
+        }
     }
 
     /**
@@ -25,7 +27,7 @@ public final class Helper {
      * @return
      */
     public static double haversineDistance(double long1, double lat1, double long2, double lat2) {
-        double r = 6378137.0;
+        static double Earth_Radius = 6378137.0; //Earth´s radius in meters
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(long2 - long1);
 
@@ -34,6 +36,6 @@ public final class Helper {
 
         double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-        return r * c;
+        return Earth_Radius * c;
     }
 }

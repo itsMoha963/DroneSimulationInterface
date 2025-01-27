@@ -42,7 +42,7 @@ public class DynamicDrone extends DroneBase {
         this.last_seen = last_seen;
         this.status = status;
 
-        this.id = Helper.extractID(drone);
+        this.id = Helper.extractDroneIDFromUrl(drone);
     }
 
     public String getDrone() {
