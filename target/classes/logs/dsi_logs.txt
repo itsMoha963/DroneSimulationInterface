@@ -1,0 +1,2 @@
+Jan. 27, 2025 12:39:34 PM services.DroneSimulationInterfaceAPI getInstance
+INFORMATION: Initializing new instance for the DroneSimulationInterfaceAPI
