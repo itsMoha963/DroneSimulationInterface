@@ -11,8 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Displays Battery Percentage.
- * Code is really fucking ugly.
+ * Displays Battery Percentage with Visuals
  */
 public class BatteryPanel extends JPanel {
     private static final Logger log = Logger.getLogger(BatteryPanel.class.getName());
@@ -26,7 +25,7 @@ public class BatteryPanel extends JPanel {
     private static final int FILL_MARGIN = 4;
 
     /**
-     * Simply creates the Battery Panel and displays the percentage
+     * Creates a Battery Panel to display battery percentage
      * @param currentBatteryCapacity
      * @param maxBatteryCapacity
      */
@@ -41,7 +40,7 @@ public class BatteryPanel extends JPanel {
             batteryImage = ImageIO.read(getClass().getResource(Constants.BATTERY_ICON_PATH));
         } catch (IOException e) {
             log.log(Level.SEVERE, "Failed to load Battery Icon" + e.getMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("Battery icon loading failed", e);
         }
 
         JComponent batteryPanel = new JComponent() {
@@ -52,7 +51,7 @@ public class BatteryPanel extends JPanel {
 
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                /* This part is party generated with ChatGPT */
+                /* This part is partly generated with ChatGPT */
 
                 // Calculate the scale factor
                 int scaledWidth = getWidth();

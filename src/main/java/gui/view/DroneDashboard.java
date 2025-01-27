@@ -77,8 +77,7 @@ public class DroneDashboard extends JPanel {
     }
 
     private void loadDrones() {
-        try {
-            // Only 40 Drones exist, so we only fetch 40 drones.
+        try {.
             Map<Integer, Drone> drones = fetchDrones();
             populateDroneButtons(drones);
             log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones.");
@@ -87,7 +86,7 @@ public class DroneDashboard extends JPanel {
             throw new RuntimeException("Drone loading failed", e);
         }
     }
-
+    // Only 40 Drones exist, so we only fetch 40 drones
     private Map<Integer, Drone> fetchDrones() throws DroneAPIException {
         return DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
     }
