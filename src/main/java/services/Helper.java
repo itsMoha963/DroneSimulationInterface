@@ -27,7 +27,7 @@ public final class Helper {
      * @return
      */
     public static double haversineDistance(double long1, double lat1, double long2, double lat2) {
-        static double Earth_Radius = 6378137.0; //Earth´s radius in meters
+        double Earth_Radius = 6378137.0; //Earth´s radius in meters
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(long2 - long1);
 
