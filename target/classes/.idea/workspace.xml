@@ -5,23 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9eeaa0e0-7fea-41b3-8914-ba742d6ad945" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/dsi_logs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/logs/dsi_logs.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/APIFetchException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/DroneDataCacheException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/DroneDataFetchException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/FlightDynamicDataException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/InvalidURIException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/LoadingException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/ParsingException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/customException/TokenLoadException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/BatteryPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/BatteryPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/BatteryPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/BatteryPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/view/DroneCatalog$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/view/DroneCatalog$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/view/DroneCatalog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/view/DroneCatalog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/DroneSimulationInterfaceAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/DroneSimulationInterfaceAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/core/drone/Drone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/drone/Drone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/core/drone/DynamicDrone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/drone/DynamicDrone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,6 +96,8 @@
       <workItem from="1737814910275" duration="392000" />
       <workItem from="1737815420577" duration="4241000" />
       <workItem from="1737838015603" duration="1707000" />
+      <workItem from="1737905315984" duration="9316000" />
+      <workItem from="1737984245896" duration="2193000" />
     </task>
     <servers />
   </component>
