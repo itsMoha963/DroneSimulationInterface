@@ -139,6 +139,11 @@ public class FlightDynamics extends JPanel {
                 contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
             }
 
+            if(drones.isEmpty() && page > 0){
+                loadPage(page - 1);
+                return;
+            }
+
             contentPanel.revalidate();
             contentPanel.repaint();
 
