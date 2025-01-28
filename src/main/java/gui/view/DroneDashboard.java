@@ -77,7 +77,7 @@ public class DroneDashboard extends JPanel {
     }
 
     private void loadDrones() {
-        try {.
+        try {
             Map<Integer, Drone> drones = fetchDrones();
             populateDroneButtons(drones);
             log.log(Level.INFO, "Successfully fetched " + drones.size() + " Drones.");
