@@ -67,7 +67,7 @@ public final class DroneSimulationInterfaceAPI {
      * @throws DroneAPIException If an error occurs during the API call.
      */
     private JSONObject fetchDataFromEndpoint(String endpointUrl, int limit, int offset) throws DroneAPIException {
-        for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        for (int attempt = 1; attempt < MAX_RETRIES; attempt++) {
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(createURI(endpointUrl, limit, offset))
@@ -78,7 +78,7 @@ public final class DroneSimulationInterfaceAPI {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
-                    log.log(Level.INFO, "Got response from endpoint, after " + (attempt + 1) + " trys");
+                    log.log(Level.INFO, "Got response from endpoint, after " + attempt + " trys");
                     return new JSONObject(response.body());
                 } else if (response.statusCode() == 404) {
                     log.log(Level.INFO, "Endpoint not found");
@@ -90,10 +90,13 @@ public final class DroneSimulationInterfaceAPI {
                     log.log(Level.WARNING, "API Request to endpoint " + endpointUrl + " failed with status " + response.statusCode() + " retrying....");
                 }
             } catch (InterruptedException | IOException e) {
-                log.log(Level.SEVERE, "Error while fetching data from endpoint {0} on attempt {1}", new Object[]{endpointUrl, attempt});
-                if (attempt == MAX_RETRIES) {
-                    throw new DroneAPIException("Failed to connect to the API after " + MAX_RETRIES + " attempts", e);
-                }
+                log.log(Level.SEVERE, "Error while fetching data from endpoint {0} on attempt {1}", new Object[] {endpointUrl, attempt});
+            }
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
         throw new DroneAPIException("Error while fetching data from endpoint: " + endpointUrl);
@@ -146,6 +149,26 @@ public final class DroneSimulationInterfaceAPI {
 
             ArrayList<DynamicDrone> dynamicDrones = new ArrayList<>();
             DynamicDroneParser parser = new DynamicDroneParser();
+            for (int i = 0; i < jsonResults.length(); i++) {
+                JSONObject object = jsonResults.getJSONObject(i);
+                if (parser.isValid(object)) {
+                    dynamicDrones.add(parser.parse(object));
+                }
+            }
+            return dynamicDrones;
+        } catch (DroneAPIException e) {
+            log.log(Level.SEVERE, "Error while parsing dynamic drone data", e);
+            throw new DroneAPIException("Error while parsing dynamic drone data", e);
+        }
+    }
+
+    public ArrayList<DynamicDrone> fetchDrones(int limit, int offset) throws DroneAPIException {
+        try {
+            DynamicDroneParser parser = new DynamicDroneParser();
+            JSONObject jsonObject = fetchDataFromEndpoint(parser.getEndpoint(), limit, offset);
+            JSONArray jsonResults = jsonObject.getJSONArray("results");
+
+            ArrayList<DynamicDrone> dynamicDrones = new ArrayList<>();
             for (int i = 0; i < jsonResults.length(); i++) {
                 JSONObject object = jsonResults.getJSONObject(i);
                 if (parser.isValid(object)) {

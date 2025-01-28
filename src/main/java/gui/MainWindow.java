@@ -18,6 +18,7 @@ import com.formdev.flatlaf.*;
 public class MainWindow extends JFrame {
     private static final Logger log = Logger.getLogger(MainWindow.class.getName());
     private DroneSimulationInterfaceAPI droneAPI;
+    private Component lastComponent = null;
 
     public MainWindow() {
         // Set the title of the main window
@@ -76,6 +77,23 @@ public class MainWindow extends JFrame {
         tabbedPane.addTab("Drone Catalog", new DroneCatalog());
         tabbedPane.addTab("Flight Dynamics", new FlightDynamics());
         tabbedPane.addTab("Drone Dashboard", new DroneDashboard());
+
+        tabbedPane.addChangeListener(
+                onStateChange -> {
+                    Component newComponent = tabbedPane.getSelectedComponent();
+
+                    if (lastComponent instanceof TabbedPaneActivationListener listener) {
+                        listener.onDeactivate();
+                    }
+
+                    if (newComponent instanceof TabbedPaneActivationListener listener) {
+                        listener.onActivate();
+                    }
+
+                    lastComponent = newComponent;
+                }
+        );
+
         add(tabbedPane);
     }
 

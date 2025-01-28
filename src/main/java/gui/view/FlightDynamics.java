@@ -6,6 +6,7 @@ import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import core.parser.DynamicDroneParser;
+import gui.TabbedPaneActivationListener;
 import gui.components.BatteryPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
@@ -16,21 +17,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class FlightDynamics extends JPanel {
+public class FlightDynamics extends JPanel implements TabbedPaneActivationListener {
     private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
-    public static final int MAX_DRONES_PER_PAGE = 32;
+    public static final int MAX_DRONES_PER_PAGE = 20;
     private int currentPage = 0;
     private final JPanel contentPanel;
     private JLabel currentPageLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
     private DefaultDroneFilter defaultDroneFilter = new DefaultDroneFilter("NOT", 0, Integer.MAX_VALUE);
+    private AutoRefresh autoRefresh = new AutoRefresh();
 
     public FlightDynamics() {
         setLayout(new BorderLayout());
@@ -71,9 +74,6 @@ public class FlightDynamics extends JPanel {
 
         preWarm();
         loadPage(0);
-
-        AutoRefresh refresh = new AutoRefresh();
-        refresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
     }
 
     private JPanel createPaginationPanel() {
@@ -130,17 +130,22 @@ public class FlightDynamics extends JPanel {
         contentPanel.removeAll();
 
         if (droneCache.isEmpty() || droneTypesCache.isEmpty()) {
-            log.log(Level.INFO, "Drone Cache is empty. Attempting to cache drones.");
+            log.log(Level.INFO, "Cache is empty. Attempting to cache drones.");
             preWarm();
         }
 
         try {
-            Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
+            //Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
+            ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
-            for (DynamicDrone drone : drones.values()) {
-                contentPanel.add(createDronePanel(drone));
-                contentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+            for (DynamicDrone drone : drones) {
+                JPanel dronePanel = createDronePanel(drone);
+                if (dronePanel != null) {
+                    contentPanel.add(dronePanel);
+                }
             }
+
+            log.log(Level.INFO, "Created " + drones.size() + " drones, for panel with MAX_DRONES_PER_PAGE: " + MAX_DRONES_PER_PAGE);
 
             if(drones.isEmpty() && page > 0){
                 loadPage(page - 1);
@@ -166,15 +171,17 @@ public class FlightDynamics extends JPanel {
         ));
         panel.setBackground(UIManager.getColor("Panel.background"));
 
-        Drone d = droneCache.get(drone.getId());
-        DroneType type = (d != null) ? droneTypesCache.get(d.getDroneTypeID()) : null;
+        Drone baseDrone = null;
+        DroneType droneType = null;
 
-        if (d == null || type == null) {
-            log.log(Level.WARNING, "Drone or DroneType is null for Drone ID: " + drone.getId());
-            JLabel warningLabel = new JLabel("Data for Drone ID: " + drone.getId() + " is incomplete or missing.");
-            warningLabel.setForeground(Color.RED);
-            panel.add(warningLabel);
-            return panel;
+        // Sometimes the DynamicDrone has a Drone that doesn't exist
+        // This means we cant access the DroneType
+        try {
+            baseDrone = droneCache.get(drone.getId());
+            droneType = droneTypesCache.get(baseDrone.getDroneTypeID());
+        } catch (Exception e) {
+            log.log(Level.WARNING, "Failed to fetch DroneType/Drone for the DynamicDrone: " + drone.getId());
+            return null;
         }
 
         JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
@@ -189,7 +196,7 @@ public class FlightDynamics extends JPanel {
 
         JLabel locationLabel = new JLabel(String.format(
                 "Location: [%.6f, %.6f] | Control Range: %.2f m",
-                drone.getLongitude(), drone.getLatitude(), (double) type.getControlRange()
+                drone.getLongitude(), drone.getLatitude(), (double) droneType.getControlRange()
         ));
         locationLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
 
@@ -204,7 +211,7 @@ public class FlightDynamics extends JPanel {
         statusPanel.setOpaque(false);
         statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-        BatteryPanel batteryPanel = new BatteryPanel(drone.getBatteryStatus(), type.getBatteryCapacity());
+        BatteryPanel batteryPanel = new BatteryPanel(drone.getBatteryStatus(), droneType.getBatteryCapacity());
         statusPanel.add(batteryPanel);
 
         JPanel powerStatus = new JPanel();
@@ -221,5 +228,15 @@ public class FlightDynamics extends JPanel {
         defaultDroneFilter = filter;
         log.log(Level.INFO, "Set Drone Filter");
         loadPage(currentPage);
+    }
+
+    @Override
+    public void onActivate() {
+        autoRefresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void onDeactivate() {
+        autoRefresh.stop();
     }
 }
