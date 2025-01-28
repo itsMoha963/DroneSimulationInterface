@@ -3,6 +3,11 @@ package core.parser;
 import org.json.JSONObject;
 import core.drone.DroneType;
 
+/**
+ * Parser for JSON objects into DroneTypes
+ * @param obj The Jason object to parse
+ * @return A DroneType instance with data from the JSON object
+ */
 public class DroneTypeParser implements JsonDroneParser<DroneType> {
     @Override
     public DroneType parse(JSONObject obj) {
@@ -18,11 +23,20 @@ public class DroneTypeParser implements JsonDroneParser<DroneType> {
         );
     }
 
+    /**
+     * Validates if the given object contains the required data for DroneType
+     * @param obj The JSON object
+     * @return True if the JSON object contains the required data
+     */
     @Override
     public boolean isValid(JSONObject obj) {
         return obj.has("id") && obj.has("manufacturer");
     }
 
+    /**
+     * Endpoint for fetching drone type data
+     * @return Endpoint string
+     */
     @Override
     public String getEndpoint() {
         return "dronetypes";

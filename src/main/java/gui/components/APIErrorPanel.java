@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 public class APIErrorPanel extends JPanel {
 
     /**
-     * Create a generic error panel that can be reused for all views.
+     * Create a generic error panel and a button to the panel that can be reused for all views.
      * Assigns {@code listener} to the retry button.
      * Displays {code errorMessage} on the screen.
      * @param listener
@@ -29,6 +29,8 @@ public class APIErrorPanel extends JPanel {
         label.setFont(label.getFont().deriveFont(35f));
         label.setForeground(Color.RED);
         label.setAlignmentX(CENTER_ALIGNMENT);
+
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setOpaque(false);
