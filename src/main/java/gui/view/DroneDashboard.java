@@ -215,9 +215,7 @@ public class DroneDashboard extends JPanel {
     /**
      * Creates a status bar showing drone status, timestamp, and serial number.
      *
-     * @param latestDynamicDrone The latest dynamic drone data.
-     * @param latestDrone The static drone metadata.
-     * @param latestDroneType The drone type metadata.
+     * @param latestDynamicDrone The latest dynamic drone data
      * @return A JPanel representing the status bar.
      */
 
