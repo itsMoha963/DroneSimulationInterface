@@ -136,7 +136,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
 
         try {
             //Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
-            ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
+            ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
             for (DynamicDrone drone : drones) {
                 JPanel dronePanel = createDronePanel(drone);

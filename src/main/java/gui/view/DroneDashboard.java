@@ -139,7 +139,7 @@ public class DroneDashboard extends JPanel {
 
         List<DynamicDrone> dynamicDrones = new ArrayList<>();
         try {
-            dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(id, DRONE_SAMPLE_SIZE, 0);
+            dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDronesById(id, DRONE_SAMPLE_SIZE, 0);
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to load Drone Sample.");
             showErrorPanel(e);
