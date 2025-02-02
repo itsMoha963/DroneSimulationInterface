@@ -1,134 +1,48 @@
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI getInstance
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI getInstance
 INFORMATION: Created a new instance for the DroneSimulationInterfaceAPI
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 266
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 262
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 265
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 261
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 263
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 264
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics createDronePanel
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics createDronePanel
 WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 267
-Jan. 28, 2025 8:29:54 PM gui.view.FlightDynamics loadPage
+Feb. 02, 2025 1:59:29 PM gui.view.FlightDynamics loadPage
 INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:54 PM gui.view.DroneDashboard loadDrones
-INFORMATION: Successfully fetched 40 Drones.
-Jan. 28, 2025 8:29:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:55 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:29 PM gui.view.DroneDashboard loadDrones
+INFORMATION: Created drone buttons.
+Feb. 02, 2025 1:59:31 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:56 PM utils.AutoRefresh start
-INFORMATION: Scheduler started
-Jan. 28, 2025 8:29:56 PM utils.AutoRefresh stop
-INFORMATION: Scheduler stopped
-Jan. 28, 2025 8:29:57 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:31 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
+Feb. 02, 2025 1:59:31 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:57 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:58 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:31 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
+Feb. 02, 2025 1:59:32 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:58 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:58 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 02, 2025 1:59:32 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
+Feb. 02, 2025 1:59:32 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:58 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:59 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:59 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:59 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:59 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:59 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:59 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:29:59 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:29:59 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:30:00 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:00 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 80 Drones with a sample size of: 80
-Jan. 28, 2025 8:30:00 PM utils.AutoRefresh start
-INFORMATION: Scheduler started
-Jan. 28, 2025 8:30:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:01 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 267
-Jan. 28, 2025 8:30:01 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 268
-Jan. 28, 2025 8:30:01 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:02 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:02 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 265
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 266
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 270
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 261
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 262
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:02 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 261
-Jan. 28, 2025 8:30:02 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:03 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 268
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 262
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 261
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 264
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 267
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:03 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Got response from endpoint, after 1 trys
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 266
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 265
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 268
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 270
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics createDronePanel
-WARNUNG: Failed to fetch DroneType/Drone for the DynamicDrone: 267
-Jan. 28, 2025 8:30:03 PM gui.view.FlightDynamics loadPage
-INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Jan. 28, 2025 8:30:04 PM utils.AutoRefresh stop
-INFORMATION: Scheduler stopped
+Feb. 02, 2025 1:59:32 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40

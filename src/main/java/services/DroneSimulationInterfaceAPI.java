@@ -95,6 +95,7 @@ public final class DroneSimulationInterfaceAPI {
             }
 
             try {
+                log.log(Level.INFO, "Sleeping before next API try, for " + RETRY_DELAY_MS + "ms");
                 Thread.sleep(RETRY_DELAY_MS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

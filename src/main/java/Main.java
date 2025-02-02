@@ -1,6 +1,4 @@
-import javax.swing.*;
 import java.awt.*;
-import com.formdev.flatlaf.*;
 import gui.MainWindow;
 import utils.RootLogger;
 
@@ -19,10 +17,8 @@ public class Main {
         boolean debug = false;
 
         for (String arg : args) {
-            switch (arg) {
-                case "--debug":
-                    debug = true;
-                    break;
+            if (arg.equals("--debug")) {
+                debug = true;
             }
         }
 
