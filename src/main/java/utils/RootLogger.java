@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ * The {@code RootLogger} class initializes and configures the logger.
+ * Optionally enables console logging.
+ */
 public class RootLogger {
 
     /**

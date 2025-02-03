@@ -6,18 +6,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
 /**
- * This class
+ * The {@code AutoRefresh} class provides a simple way to periodically execute a task
+ * It allows starting and stopping a task dynamically, to make sure only one task runs at a time.
  */
 public class AutoRefresh {
     private static final Logger log = Logger.getLogger(AutoRefresh.class.getName());
     private ScheduledExecutorService scheduler;
 
     /**
-     * Runs the given {@code task} after the initial delay and then each period
-     * @param task          Task to be executed
-     * @param initialDelay  Initial Delay after which the Task is executed
+     * Runs the given {@code task} after the initial delay and then in intervals.
+     * @param task          Task to be executed.
+     * @param initialDelay  Initial Delay after which the Task is executed.
      * @param period        Period after which the Task is run again.
-     * @param unit          Time unit
+     * @param unit          Time unit for the delay and interval.
      */
     public synchronized void start(Runnable task, long initialDelay, long period, TimeUnit unit) {
         stop();
@@ -28,7 +29,7 @@ public class AutoRefresh {
     }
 
     /**
-     * Stops the current task if there is any
+     * Stops the currently running task if there is any
      */
     public synchronized void stop() {
         if (scheduler != null && !scheduler.isShutdown()) {

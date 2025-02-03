@@ -1,4 +1,4 @@
-package gui;
+package gui.interfaces;
 
 /**
  * This interface serves as a listener for when a TabbedPane gets activated or deactivated

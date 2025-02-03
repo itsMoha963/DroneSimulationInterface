@@ -1,9 +1,9 @@
 package gui;
 
+import gui.interfaces.TabbedPaneActivationListener;
 import gui.view.DroneCatalog;
 import gui.view.DroneDashboard;
 import gui.view.FlightDynamics;
-import services.DroneSimulationInterfaceAPI;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -17,7 +17,6 @@ import com.formdev.flatlaf.*;
 
 public class MainWindow extends JFrame {
     private static final Logger log = Logger.getLogger(MainWindow.class.getName());
-    private DroneSimulationInterfaceAPI droneAPI;
     private Component lastComponent = null;
 
     public MainWindow() {
@@ -60,7 +59,7 @@ public class MainWindow extends JFrame {
         try {
             BufferedImage appIcon = ImageIO.read(getClass().getResource(Constants.APP_ICON_PATH));
 
-            // Setting the icon works differently for MacOS
+            // Setting the icon works differently for macOS
             if (System.getProperty("os.name").toLowerCase().contains("mac")) {
                 Taskbar.getTaskbar().setIconImage(appIcon);
             }

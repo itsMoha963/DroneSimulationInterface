@@ -7,6 +7,7 @@ import core.parser.JsonDroneParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import exception.DroneAPIException;
+import utils.Constants;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -82,8 +83,7 @@ public final class DroneSimulationInterfaceAPI {
 
                 switch (statusCode) {
                     case 200:
-                        log.log(Level.INFO, "Successfully retrieved data from endpoint after " + attempt +
-                                " attempts");
+                        log.log(Level.INFO, "Successfully retrieved data from endpoint: " + endpointUrl);
                         return new JSONObject(response.body());
                     case 404:
                         throw new DroneAPIException("Endpoint " + endpointUrl +
@@ -216,7 +216,7 @@ public final class DroneSimulationInterfaceAPI {
      * Note: This method is currently not needed as the token is already hardcoded.
      */
     private void loadToken() {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(Constants.CONFIG_FILE)) {
             if (inputStream == null) {
                 throw new FileNotFoundException("config.properties not found.");
             }

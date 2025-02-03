@@ -2,12 +2,19 @@ package services;
 
 import static java.lang.Math.*;
 
+/**
+ * The {@code Helper} class provides utility methods for common operations
+ * such as extracting drone IDs from URLs and calculating distances between two coordinates
+ */
 public final class Helper {
 
     /**
-     * Extracts the drone id from the given {@code url}
-     * @param url
-     * @return Drone ID
+     * Extracts the drone ID from the given URL. The drone ID is assumed to be
+     * located as the second-to-last segment of the URL, separated by slashes.
+     *
+     * @param url The URL containing the drone ID.
+     * @return The extracted drone ID.
+     * @throws IllegalArgumentException If the URL format is invalid or the drone ID cannot be parsed.
      */
     public static int extractDroneIDFromUrl(String url) {
         try {
@@ -19,15 +26,16 @@ public final class Helper {
     }
 
     /**
-     * Return the distance in meters between the 2 coordinates
-     * @param long1
-     * @param lat1
-     * @param long2
-     * @param lat2
-     * @return
+     * Calculates the distance in meters between two coordinates using the Haversine formula.
+     *
+     * @param long1 Longitude of the first point.
+     * @param lat1 Latitude of the first point.
+     * @param long2 Longitude of the second point.
+     * @param lat2 Latitude of the second point.
+     * @return The distance in meters between the two points on earth.
      */
     public static double haversineDistance(double long1, double lat1, double long2, double lat2) {
-        double Earth_Radius = 6378137.0; //Earth´s radius in meters
+        double Earth_Radius = 6378137.0;
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(long2 - long1);
 

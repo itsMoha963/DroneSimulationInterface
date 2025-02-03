@@ -5,7 +5,7 @@ import core.drone.DroneType;
 import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
-import gui.TabbedPaneActivationListener;
+import gui.interfaces.TabbedPaneActivationListener;
 import gui.components.FlightDynamicsPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
@@ -19,6 +19,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The FlightDynamics class is a GUI panel for displaying flight dynamocs for each drone.
+ * It implements {@link TabbedPaneActivationListener} to handle activation events and includes features like pagination,
+ * auto-refresh, and asynchronous data loading using SwingWorker.
+ */
 public class FlightDynamics extends JPanel implements TabbedPaneActivationListener {
     private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
 
@@ -35,11 +40,13 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
     private JLabel currentPageLabel;
     private int currentPage = 0;
 
+    /**
+     * Creates a new FlightDynamics panel. Initializes the GUI and preloads drone data asynchronously.
+     */
     public FlightDynamics() {
         initializeGUI();
 
-        preWarm();
-        loadPage(0);
+        preWarmAsync();
     }
 
     private void initializeGUI() {
@@ -61,8 +68,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
                 titlePanel.setVisible(getVerticalScrollBar().getValue() == 0);
             }
         };
-        scrollPane.getVerticalScrollBar().addAdjustmentListener(e ->
-                titlePanel.setVisible(scrollPane.getVerticalScrollBar().getValue() == 0));
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> titlePanel.setVisible(scrollPane.getVerticalScrollBar().getValue() == 0));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         return scrollPane;
@@ -74,9 +80,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
 
-        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
-                UIManager.getColor("Panel.background").darker())));
+        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(), UIManager.getColor("Panel.background").darker())));
         return contentPanel;
     }
 
@@ -101,8 +105,15 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         currentPageLabel = new JLabel("Page: " + (currentPage + 1));
         currentPageLabel.setForeground(UIManager.getColor("Label.foreground"));
 
-        prevPageButton.addActionListener(e -> loadPage(currentPage - 1));
-        nextPageButton.addActionListener(e -> loadPage(currentPage + 1));
+        // StartAutoRefresh resets the refresh timer as it wouldn't make sense to refresh after we just changed the page
+        prevPageButton.addActionListener(e -> {
+            StartAutoRefresh();
+            loadPageAsync(currentPage - 1);
+        });
+        nextPageButton.addActionListener(e -> {
+            StartAutoRefresh();
+            loadPageAsync(currentPage + 1);
+        });
 
         paginationPanel.add(prevPageButton);
         paginationPanel.add(currentPageLabel);
@@ -111,13 +122,32 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         return paginationPanel;
     }
 
+    // First thread
+    private void loadPageAsync(int page) {
+        // Runs the loadPage function in a background thread
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                loadPage(page);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            }
+        };
+        worker.execute(); // Start the worker thread
+    }
+
     private JTextField createPagingTextField() {
         JTextField pageInputField = new JTextField(5);
         pageInputField.addActionListener(e -> {
             try {
                 int targetPage = Integer.parseInt(pageInputField.getText().trim());
                 if (targetPage > 0) {
-                    loadPage(targetPage);
+                    loadPageAsync(targetPage);
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid page number. Please enter a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -126,13 +156,25 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         return pageInputField;
     }
 
-    private void preWarm() {
-        try {
-            droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
-            droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
-        } catch (DroneAPIException e) {
-            log.log(Level.SEVERE, "Failed to cache DroneTypes/Drones. Exception: " + e.getMessage());
-        }
+    private void preWarmAsync() {
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                try {
+                    droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
+                    droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
+                } catch (DroneAPIException e) {
+                    log.log(Level.SEVERE, "Failed to cache DroneTypes/Drones. Exception: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                loadPageAsync(0);
+            }
+        };
+        worker.execute();
     }
 
     private void loadPage(int page) {
@@ -144,21 +186,20 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
 
         if (droneCache.isEmpty() || droneTypesCache.isEmpty()) {
             log.log(Level.INFO, "Cache is empty. Attempting to cache drones.");
-            preWarm();
+            preWarmAsync();
         }
 
         try {
             // Some DynamicDrones have drones that do not exist. One method to fix this would be to fetch a
-            // sample of dynamicdrones and loop through them till we find one that has the correct drone.
-
+            // sample of dynamic drones and loop through them till we find one that has the correct drone. But this would be very slow.
             ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
-            if(drones.isEmpty() && page > 0){
+            if (drones.isEmpty() && page > 0) {
                 loadPage(currentPage);
                 return;
             }
 
-            int dronesCreated = 0;
+            int dronesCreated = 0;          // To keep count of drones with missing data
             for (DynamicDrone drone : drones) {
                 JPanel dronePanel = createDronePanel(drone);
                 if (dronePanel != null) {
@@ -175,16 +216,15 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
             contentPanel.revalidate();
             contentPanel.repaint();
         } catch (DroneAPIException e) {
-            log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page);
+            log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page + " Error: " + e.getMessage());
         }
     }
 
     private JPanel createDronePanel(DynamicDrone drone) {
-        Drone baseDrone = null;
-        DroneType droneType = null;
+        Drone baseDrone;
+        DroneType droneType;
 
-        // Sometimes the DynamicDrone has a Drone that doesn't exist
-        // This means we cant access the DroneType
+        // Sometimes the DynamicDrone has a Drone that doesn't exist which means we cant access the DroneType
         try {
             baseDrone = droneCache.get(drone.getId());
             droneType = droneTypesCache.get(baseDrone.getDroneTypeID());
@@ -198,11 +238,18 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
 
     @Override
     public void onActivate() {
-        autoRefresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
+        StartAutoRefresh();
     }
 
     @Override
     public void onDeactivate() {
         autoRefresh.stop();
+    }
+
+    /**
+     * To reduce code duplication as this would be called multiple times in this class.
+      */
+    private void StartAutoRefresh() {
+        autoRefresh.start(() -> loadPage(currentPage), 60, 45, TimeUnit.SECONDS);
     }
 }

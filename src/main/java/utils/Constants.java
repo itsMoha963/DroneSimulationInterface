@@ -19,4 +19,5 @@ public final class Constants {
     public static final String SEN = "SEN";
 
     public static final String SETTINGS_FILE = "settings.xml";
+    public static final String CONFIG_FILE = "config.properties";
 }
