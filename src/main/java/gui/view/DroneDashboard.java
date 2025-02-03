@@ -1,10 +1,7 @@
 package gui.view;
 
-import core.drone.Drone;
-import core.drone.DroneType;
-import core.drone.DynamicDrone;
-import core.parser.DroneParser;
-import core.parser.DroneTypeParser;
+import core.drone.*;
+import core.parser.*;
 import gui.components.APIErrorPanel;
 import gui.components.DroneInfoPanel;
 import services.DroneSimulationInterfaceAPI;
@@ -145,7 +142,7 @@ public class DroneDashboard extends JPanel {
      */
     private void loadDronePage(int id) {
         droneInfoPanel.removeAll();
-        ArrayList<DynamicDrone> dynamicDrones = new ArrayList<>();
+        ArrayList<DynamicDrone> dynamicDrones;
         try {
             dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDronesById(id, DRONE_SAMPLE_SIZE, 0);
         } catch (DroneAPIException e) {

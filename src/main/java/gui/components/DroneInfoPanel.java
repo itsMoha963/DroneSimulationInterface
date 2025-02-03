@@ -2,18 +2,25 @@ package gui.components;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 import core.drone.*;
-import gui.components.BatteryPanel;
 import services.Helper;
 
+/**
+ * The Drone Information Panel for the drones passed in the constructor
+ * Displays information such as the battery, status, traveled distance and more.
+ */
 public class DroneInfoPanel extends JPanel {
 
+    /**
+     * Simply create the DroneInformation panel for the given DynamicDrone
+     * @param drones The Sample for which the information will be calculated
+     * @param drone The Drone that belongs to this sample
+     * @param droneType The DroneType that belongs to this sample
+     */
     public DroneInfoPanel(ArrayList<DynamicDrone> drones, Drone drone, DroneType droneType) {
         setLayout(new BorderLayout());
         setupPanel(drones, drone, droneType);
@@ -22,29 +29,12 @@ public class DroneInfoPanel extends JPanel {
     private void setupPanel(ArrayList<DynamicDrone> drones, Drone drone, DroneType droneType) {
         DynamicDrone latestDynamicDrone = drones.getLast();
 
-        // Create the StatusBar (ON/OFF, TimeStamp, SerialNumber...)
-        JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-        statusBar.setOpaque(false);
-        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-        OffsetDateTime dateTime = OffsetDateTime.parse(latestDynamicDrone.getTimestamp());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String formattedDate = dateTime.format(formatter);
-
-        // Add timestamp
-        JLabel timestampLabel = new JLabel("Timestamp: " + formattedDate);
-        timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        statusBar.add(new BatteryPanel(latestDynamicDrone.getBatteryStatus(), droneType.getBatteryCapacity()));
-
-        // Add components to status bar
-        statusBar.add(timestampLabel);
-        statusBar.add(createStatusIndicator(latestDynamicDrone));
-        statusBar.add(new JLabel("SN: " + drone.getSerialNumber()));
-
         // Create main info panel
         JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
         mainInfo.setBackground(UIManager.getColor("Panel.background").brighter());
 
+        // Cant extract this method as we would then have to loop through the drones twice.
+        // Once to calculate the average speed and once to calculate the total distance.
         // Calculates the total distance and average speed the drone traveled for the last DRONE_SAMPLE_SIZE samples.
         double totalDistance = 0;
         double averageSpeed = 0;
@@ -59,10 +49,6 @@ public class DroneInfoPanel extends JPanel {
         double carriageLast = (double) drone.getCarriageWeight() / (double) droneType.getWeight();
         carriageLast = carriageLast * 100;                  // To get the actual percentage
 
-        // Formatting last seen to get the right DateTime
-        OffsetDateTime lastSeenTime = OffsetDateTime.parse(latestDynamicDrone.getLastSeen());
-        String formattedLastSeen = lastSeenTime.format(formatter);
-
         // Create info boxes with data
         mainInfo.add(createInfoBox("Current Speed", String.format("%.1f km/h", (double) latestDynamicDrone.getSpeed())));
         mainInfo.add(createInfoBox("Total Distance", String.format("%.2f km", totalDistance / 1000)));
@@ -70,7 +56,7 @@ public class DroneInfoPanel extends JPanel {
                 String.format("%.6f, %.6f", latestDynamicDrone.getLongitude(), latestDynamicDrone.getLatitude())));
         mainInfo.add(createInfoBox("Average Speed", String.format("%.2f km/h", averageSpeed)));
         mainInfo.add(createInfoBox("Carriage Last", String.format("%.2f", carriageLast) + " %"));
-        mainInfo.add(createInfoBox("Last Seen", formattedLastSeen));
+        mainInfo.add(createInfoBox("Last Seen", formatTime(latestDynamicDrone.getLastSeen())));
 
         mainInfo.add(createInfoBox("General Info", "<html>" + "Carriage Type: "
                 + drone.getCarriageType() + "<br/>Manufacturer: "
@@ -78,7 +64,7 @@ public class DroneInfoPanel extends JPanel {
                 + droneType.getTypeName() + "</html>")); // Need to add html for line breaks to work
 
         // Add all components to main panel
-        add(statusBar, BorderLayout.NORTH);
+        add(createStatusBar(latestDynamicDrone, drone, droneType), BorderLayout.NORTH);
         add(mainInfo, BorderLayout.CENTER);
     }
 
@@ -117,5 +103,29 @@ public class DroneInfoPanel extends JPanel {
         };
         statusIndicator.setPreferredSize(new Dimension(20, 20));
         return statusIndicator;
+    }
+
+    private JPanel createStatusBar(DynamicDrone dynamicDrone, Drone drone, DroneType droneType) {
+        JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        statusBar.setOpaque(false);
+        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        // Add timestamp
+        JLabel timestampLabel = new JLabel("Timestamp: " + formatTime(dynamicDrone.getTimestamp()));
+        timestampLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        statusBar.add(new BatteryPanel(dynamicDrone.getBatteryStatus(), droneType.getBatteryCapacity()));
+
+        // Add components to status bar
+        statusBar.add(timestampLabel);
+        statusBar.add(createStatusIndicator(dynamicDrone));
+        statusBar.add(new JLabel("SN: " + dynamicDrone.getSerialNumber()));
+
+        return statusBar;
+    }
+
+    private String formatTime(String timestamp) {
+        OffsetDateTime lastSeenTime = OffsetDateTime.parse(timestamp);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return lastSeenTime.format(formatter);
     }
 }

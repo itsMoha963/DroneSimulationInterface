@@ -99,6 +99,7 @@ public final class DroneSimulationInterfaceAPI {
                 Thread.sleep(RETRY_DELAY_MS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                log.log(Level.SEVERE, "Retry thread got interrupted!");
                 throw new RuntimeException("Retry thread got interrupted");
             }
         }

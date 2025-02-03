@@ -5,12 +5,11 @@ import core.drone.DroneType;
 import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
-import core.parser.DynamicDroneParser;
 import gui.TabbedPaneActivationListener;
 import gui.components.BatteryPanel;
+import gui.components.FlightDynamicsPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
-import core.filter.DefaultDroneFilter;
 import exception.DroneAPIException;
 
 import javax.swing.*;
@@ -28,34 +27,32 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
     private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
     public static final int MAX_DRONES_PER_PAGE = 20;
     private int currentPage = 0;
-    private final JPanel contentPanel;
+    private JPanel contentPanel;
     private JLabel currentPageLabel;
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
-    private DefaultDroneFilter defaultDroneFilter = new DefaultDroneFilter("NOT", 0, Integer.MAX_VALUE);
-    private AutoRefresh autoRefresh = new AutoRefresh();
+    private final AutoRefresh autoRefresh = new AutoRefresh();
 
     public FlightDynamics() {
         setLayout(new BorderLayout());
 
-        // Top panel for title
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Flight Dynamics", JLabel.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        titleLabel.setOpaque(true);
-        titleLabel.setBackground(UIManager.getColor("Panel.background"));
-        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        initializeGUI();
+
+        preWarm();
+        loadPage(0);
+    }
+
+    private void initializeGUI() {
+        JPanel titlePanel = createTitlePanel();
+        contentPanel = createContentPanel();
+        JScrollPane scrollPane = createJScrollPanel(titlePanel);
+
         add(titlePanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+        add(createPaginationPanel(), BorderLayout.SOUTH);
+    }
 
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(UIManager.getColor("Panel.background"));
-
-        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
-                UIManager.getColor("Panel.background").darker())));
-
+    private JScrollPane createJScrollPanel(JPanel titlePanel) {
         JScrollPane scrollPane = new JScrollPane(contentPanel) {
             @Override
             public void setBounds(int x, int y, int width, int height) {
@@ -68,20 +65,39 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         });
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        add(scrollPane, BorderLayout.CENTER);
+        return scrollPane;
+    }
 
-        add(createPaginationPanel(), BorderLayout.SOUTH);
+    private JPanel createContentPanel() {
+        final JPanel contentPanel;
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(UIManager.getColor("Panel.background"));
 
-        preWarm();
-        loadPage(0);
+        contentPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
+                UIManager.getColor("Panel.background").darker())));
+        return contentPanel;
+    }
+
+    private static JPanel createTitlePanel() {
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = new JLabel("Flight Dynamics", JLabel.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(UIManager.getColor("Panel.background"));
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        return titlePanel;
     }
 
     private JPanel createPaginationPanel() {
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         paginationPanel.setBackground(UIManager.getColor("Panel.background"));
-        JButton prevPageButton = new JButton("< Previous");
-        JButton nextPageButton = new JButton("Next >");
+        JButton prevPageButton = new JButton("<");
+        JButton nextPageButton = new JButton(">");
         currentPageLabel = new JLabel("Page: " + (currentPage + 1));
         currentPageLabel.setForeground(UIManager.getColor("Label.foreground"));
 
@@ -101,7 +117,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
             try {
                 int targetPage = Integer.parseInt(pageInputField.getText().trim());
                 if (targetPage > 0) {
-                    loadPage(targetPage - 1);
+                    loadPage(targetPage);
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid page number. Please enter a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -114,9 +130,6 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         try {
             droneTypesCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
             droneCache = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneParser(), 40, 0);
-            if (droneTypesCache.isEmpty() || droneCache.isEmpty()) {
-                log.log(Level.WARNING, "Drone Caches are empty after caching.");
-            }
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to cache DroneTypes/Drones. Exception: " + e.getMessage());
         }
@@ -135,22 +148,26 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         }
 
         try {
-            //Map<Integer, DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DynamicDroneParser(), MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
+            // Some DynamicDrones have drones that do not exist. One method to fix this would be to fetch a
+            // sample of dynamicdrones and loop through them till we find one that has the correct drone.
+            int dronesCreated = 0;
             ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
+
+            if(drones.isEmpty() && page > 0){
+                loadPage(currentPage);
+                return;
+            }
 
             for (DynamicDrone drone : drones) {
                 JPanel dronePanel = createDronePanel(drone);
                 if (dronePanel != null) {
+                    dronesCreated++;
                     contentPanel.add(dronePanel);
                 }
             }
 
-            log.log(Level.INFO, "Created " + drones.size() + " drones, for panel with MAX_DRONES_PER_PAGE: " + MAX_DRONES_PER_PAGE);
+            log.log(Level.INFO, "Created " + dronesCreated + " drones, for panel with MAX_DRONES_PER_PAGE: " + MAX_DRONES_PER_PAGE);
 
-            if(drones.isEmpty() && page > 0){
-                loadPage(page - 1);
-                return;
-            }
 
             contentPanel.revalidate();
             contentPanel.repaint();
@@ -163,14 +180,6 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
     }
 
     private JPanel createDronePanel(DynamicDrone drone) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UIManager.getColor("Panel.background").darker(), 2),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-        panel.setBackground(UIManager.getColor("Panel.background"));
-
         Drone baseDrone = null;
         DroneType droneType = null;
 
@@ -184,50 +193,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
             return null;
         }
 
-        JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
-        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-
-        JLabel detailsLabel = new JLabel(String.format(
-                "Speed: %.2f km/h, Last Seen: %s, Status: %s",
-                (double) drone.getSpeed(), OffsetDateTime.parse(drone.getLastSeen()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm")), drone.getStatus()
-        ));
-        detailsLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
-
-        JLabel locationLabel = new JLabel(String.format(
-                "Location: [%.6f, %.6f] | Control Range: %.2f m",
-                drone.getLongitude(), drone.getLatitude(), (double) droneType.getControlRange()
-        ));
-        locationLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
-
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        textPanel.setOpaque(false);
-        textPanel.add(titleLabel);
-        textPanel.add(detailsLabel);
-        textPanel.add(locationLabel);
-
-        JPanel statusPanel = new JPanel();
-        statusPanel.setOpaque(false);
-        statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
-
-        BatteryPanel batteryPanel = new BatteryPanel(drone.getBatteryStatus(), droneType.getBatteryCapacity());
-        statusPanel.add(batteryPanel);
-
-        JPanel powerStatus = new JPanel();
-        powerStatus.setBackground(Objects.equals(drone.getStatus(), "ON") ? Color.GREEN : Color.RED);
-        powerStatus.setPreferredSize(new Dimension(15, 15));
-        statusPanel.add(powerStatus);
-
-        textPanel.add(statusPanel);
-        panel.add(textPanel, BorderLayout.CENTER);
-        return panel;
-    }
-
-    public void setFilter(DefaultDroneFilter filter) {
-        defaultDroneFilter = filter;
-        log.log(Level.INFO, "Set Drone Filter");
-        loadPage(currentPage);
+        return new FlightDynamicsPanel(drone, baseDrone, droneType);
     }
 
     @Override

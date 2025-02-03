@@ -1,6 +1,5 @@
 package gui.view;
 
-import core.drone.Drone;
 import core.drone.DroneType;
 import core.parser.DroneTypeParser;
 import gui.components.APIErrorPanel;
@@ -66,6 +65,7 @@ public class DroneCatalog extends JPanel {
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         Map<Integer, DroneType> drones = fetchDrones();
+
         for (DroneType drone : drones.values()) {
             contentPanel.add(createDroneCard(drone));
         }
