@@ -8,8 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import exception.DroneAPIException;
 
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -29,9 +30,9 @@ public final class DroneSimulationInterfaceAPI {
     private static final String BASE_URL = "http://dronesim.facets-labs.com/api/";
     private static final int TIMEOUT_SECONDS = 300;
     private static final int MAX_RETRIES = 3;
-    private static final int RETRY_DELAY_MS = 3000;
+    private static final int RETRY_DELAY_MS = 500;
 
-    private String token = "b2d431185fd5a8670e99e3efdcb2afe193083931";
+    private String token = "";
     private final HttpClient httpClient;
 
     private static DroneSimulationInterfaceAPI instance;
@@ -51,6 +52,7 @@ public final class DroneSimulationInterfaceAPI {
     }
 
     private DroneSimulationInterfaceAPI() {
+        loadToken();
         httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
                 .build();
@@ -78,20 +80,29 @@ public final class DroneSimulationInterfaceAPI {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                 int statusCode = response.statusCode();
 
-                if (statusCode == 200) {
-                    log.log(Level.INFO, "Got response from endpoint, after " + attempt + " trys");
-                    return new JSONObject(response.body());
-                } else if (statusCode == 404) {
-                    log.log(Level.INFO, "Endpoint not found");
-                    throw new DroneAPIException("Endpoint " + endpointUrl + " not found");
-                } else if (statusCode == 401) {
-                    log.log(Level.SEVERE, "Endpoint " + endpointUrl + " not authorized");
-                    throw new DroneAPIException("Authentication with the API failed. Check if Token is correct.");
-                } else {
-                    log.log(Level.WARNING, "API Request to endpoint " + endpointUrl + " failed with status " + statusCode + " retrying....");
+                switch (statusCode) {
+                    case 200:
+                        log.log(Level.INFO, "Successfully retrieved data from endpoint after " + attempt +
+                                " attempts");
+                        return new JSONObject(response.body());
+                    case 404:
+                        throw new DroneAPIException("Endpoint " + endpointUrl +
+                                " not found. Make sure the given endpoint URL exists.");
+                    case 401:
+                        throw new DroneAPIException("Authentication failed. Invalid API Token.");
+                    default:
+                        throw new DroneAPIException(
+                                "API request failed with status " + statusCode +
+                                " Unexpected HTTP status code.");
                 }
-            } catch (InterruptedException | IOException e) {
-                log.log(Level.SEVERE, "Error on attempt " + attempt + " while fetching data from endpoint: " + endpointUrl, e);
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new DroneAPIException("API request interrupted was interrupted.");
+            } catch (IOException e) {
+                if (attempt == MAX_RETRIES) {
+                    throw new DroneAPIException("Error during API call");
+                }
             }
 
             try {
@@ -99,11 +110,10 @@ public final class DroneSimulationInterfaceAPI {
                 Thread.sleep(RETRY_DELAY_MS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                log.log(Level.SEVERE, "Retry thread got interrupted!");
                 throw new RuntimeException("Retry thread got interrupted");
             }
         }
-        throw new DroneAPIException("Error while fetching data from endpoint: " + endpointUrl);
+        throw new DroneAPIException("Unexpected Error during API call.");
     }
 
     /**
@@ -132,12 +142,20 @@ public final class DroneSimulationInterfaceAPI {
             }
             return data;
         } catch (DroneAPIException e) {
-            log.log(Level.SEVERE, "Error while parsing drone data", e);
-            throw new DroneAPIException("Error parsing drone data.", e);
+            log.log(Level.SEVERE, "Error while parsing drone data.", e);
+            throw new DroneAPIException("Failed to fetch drones: " + e.getMessage());
         }
     }
 
-    public ArrayList<DynamicDrone> fetchDynamicDronesById(int id, int limit, int offset) {
+    /**
+     * Fetches {@code limit} DynamicDrones belonging to {@code id} with {@code offset}
+     * @param id        ID the DynamicDrones have
+     * @param limit     How many DynamicDrones to fetch
+     * @param offset    For Pagination
+     * @return A Sample of DynamicDrones
+     * @throws DroneAPIException When an API Error occurs.
+     */
+    public ArrayList<DynamicDrone> fetchDynamicDronesById(int id, int limit, int offset) throws DroneAPIException {
         return fetchDynamicDrones(id + "/dynamics", limit, offset);
     }
 
@@ -169,9 +187,9 @@ public final class DroneSimulationInterfaceAPI {
             }
 
             return dynamicDrones;
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "Error parsing dynamic drone data.", e);
-            throw new DroneAPIException("Error parsing dynamic drone data.", e);
+        } catch (DroneAPIException e) {
+            log.log(Level.SEVERE, "Error while parsing drone data.", e);
+            throw new DroneAPIException("Failed to fetch drones: " + e.getMessage());
         }
     }
 
@@ -198,13 +216,17 @@ public final class DroneSimulationInterfaceAPI {
      * Note: This method is currently not needed as the token is already hardcoded.
      */
     private void loadToken() {
-        try (FileInputStream inputStream = new FileInputStream("config.properties") ) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("config.properties not found.");
+            }
             Properties properties = new Properties();
             properties.load(inputStream);
-            token = properties.getProperty("API_TOKEN");
+            token = properties.getProperty("TOKEN");
+            System.out.println(token);
         } catch (IOException e) {
-            log.log(Level.SEVERE, "Failed to load configuration files");
-            throw new RuntimeException("Failed to load configuration files");
+            log.log(Level.SEVERE, "Failed to load configuration files", e);
+            throw new RuntimeException("Failed to load configuration files", e);
         }
     }
 }

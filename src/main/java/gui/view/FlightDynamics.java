@@ -6,7 +6,6 @@ import core.drone.DynamicDrone;
 import core.parser.DroneParser;
 import core.parser.DroneTypeParser;
 import gui.TabbedPaneActivationListener;
-import gui.components.BatteryPanel;
 import gui.components.FlightDynamicsPanel;
 import services.DroneSimulationInterfaceAPI;
 import utils.AutoRefresh;
@@ -14,28 +13,29 @@ import exception.DroneAPIException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FlightDynamics extends JPanel implements TabbedPaneActivationListener {
     private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
+
     public static final int MAX_DRONES_PER_PAGE = 20;
-    private int currentPage = 0;
-    private JPanel contentPanel;
-    private JLabel currentPageLabel;
+
+    // Drone Cache
     private Map<Integer, DroneType> droneTypesCache = Map.of();
     private Map<Integer, Drone> droneCache = Map.of();
+
     private final AutoRefresh autoRefresh = new AutoRefresh();
 
-    public FlightDynamics() {
-        setLayout(new BorderLayout());
+    // GUI Elements
+    private JPanel contentPanel;
+    private JLabel currentPageLabel;
+    private int currentPage = 0;
 
+    public FlightDynamics() {
         initializeGUI();
 
         preWarm();
@@ -43,6 +43,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
     }
 
     private void initializeGUI() {
+        setLayout(new BorderLayout());
         JPanel titlePanel = createTitlePanel();
         contentPanel = createContentPanel();
         JScrollPane scrollPane = createJScrollPanel(titlePanel);
@@ -60,9 +61,8 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
                 titlePanel.setVisible(getVerticalScrollBar().getValue() == 0);
             }
         };
-        scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
-            titlePanel.setVisible(scrollPane.getVerticalScrollBar().getValue() == 0);
-        });
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(e ->
+                titlePanel.setVisible(scrollPane.getVerticalScrollBar().getValue() == 0));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         return scrollPane;
@@ -150,7 +150,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         try {
             // Some DynamicDrones have drones that do not exist. One method to fix this would be to fetch a
             // sample of dynamicdrones and loop through them till we find one that has the correct drone.
-            int dronesCreated = 0;
+
             ArrayList<DynamicDrone> drones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDrones(MAX_DRONES_PER_PAGE, page * MAX_DRONES_PER_PAGE);
 
             if(drones.isEmpty() && page > 0){
@@ -158,6 +158,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
                 return;
             }
 
+            int dronesCreated = 0;
             for (DynamicDrone drone : drones) {
                 JPanel dronePanel = createDronePanel(drone);
                 if (dronePanel != null) {
@@ -168,12 +169,11 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
 
             log.log(Level.INFO, "Created " + dronesCreated + " drones, for panel with MAX_DRONES_PER_PAGE: " + MAX_DRONES_PER_PAGE);
 
+            currentPage = page;
+            currentPageLabel.setText("Page: " + (currentPage + 1));
 
             contentPanel.revalidate();
             contentPanel.repaint();
-
-            currentPage = page;
-            currentPageLabel.setText("Page: " + (currentPage + 1));
         } catch (DroneAPIException e) {
             log.log(Level.SEVERE, "Failed to fetch DynamicDrone during page load: " + page);
         }
