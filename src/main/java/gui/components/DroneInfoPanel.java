@@ -118,7 +118,7 @@ public class DroneInfoPanel extends JPanel {
         // Add components to status bar
         statusBar.add(timestampLabel);
         statusBar.add(createStatusIndicator(dynamicDrone));
-        statusBar.add(new JLabel("SN: " + dynamicDrone.getSerialNumber()));
+        statusBar.add(new JLabel("SN: " + drone.getSerialNumber()));
 
         return statusBar;
     }

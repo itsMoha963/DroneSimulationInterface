@@ -155,6 +155,7 @@ public class DroneDashboard extends JPanel {
         DynamicDrone dynamicDrone = dynamicDrones.getLast();
         Drone drone = droneCache.get(dynamicDrone.getId());
         DroneType droneType = droneTypesCache.get(drone.getDroneTypeID());
+        System.out.println("Dyn ID: " + dynamicDrone.getId() + " SN: " + drone.getSerialNumber());
 
         droneInfoPanel.add(new DroneInfoPanel(dynamicDrones, drone, droneType), BorderLayout.CENTER);
 

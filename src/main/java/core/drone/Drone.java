@@ -4,6 +4,7 @@ import services.Helper;
 
 public class Drone extends DroneBase {
     private final String carriageType;
+    private final String serialNumber;
     private final int carriageWeight;
     private final String droneType;
     private final String created;
@@ -24,4 +25,5 @@ public class Drone extends DroneBase {
     public String getDroneType() { return droneType; }
     public String getCreated() { return created; }
     public int getDroneTypeID() { return droneTypeID; }
+    public String getSerialNumber() { return serialNumber; }
 }
