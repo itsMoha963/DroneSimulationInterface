@@ -4,6 +4,7 @@ import gui.interfaces.TabbedPaneActivationListener;
 import gui.view.DroneCatalog;
 import gui.view.DroneDashboard;
 import gui.view.FlightDynamics;
+import utils.ConfigManager;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import com.formdev.flatlaf.*;
 public class MainWindow extends JFrame {
     private static final Logger log = Logger.getLogger(MainWindow.class.getName());
     private Component lastComponent = null;
+    private final ConfigManager configManager = new ConfigManager();
 
     public MainWindow() {
         // Set the title of the main window
@@ -26,7 +28,7 @@ public class MainWindow extends JFrame {
         setMinimumSize(new Dimension(1200, 1000));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setTheme("Dark");           // Initialize default theme (Dark/Light)
+        setTheme(configManager.getTheme());           // Initialize default theme (Dark/Light)
         createToolBar();
         loadAppIcon();
         createTabbedPane();
@@ -105,6 +107,7 @@ public class MainWindow extends JFrame {
                 UIManager.setLookAndFeel(new FlatLightLaf());
             }
             SwingUtilities.updateComponentTreeUI(this);
+            configManager.setTheme(theme);
         } catch (UnsupportedLookAndFeelException e){
             log.log(Level.WARNING, "Failed to set Look and Feel: " + e.getMessage());
         }
