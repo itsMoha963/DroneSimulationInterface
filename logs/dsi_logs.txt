@@ -1,206 +1,74 @@
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI getInstance
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI getInstance
 INFORMATION: Created a new instance for the DroneSimulationInterfaceAPI
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: dronetypes
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: dronetypes
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: dronetypes
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: drones
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: drones
-Feb. 04, 2025 3:22:29 PM gui.view.DroneDashboard loadDrones
+Feb. 04, 2025 9:24:21 PM gui.view.DroneDashboard loadDrones
 INFORMATION: Created drone buttons.
-Feb. 04, 2025 3:22:29 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:21 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: dronedynamics
-Feb. 04, 2025 3:22:30 PM gui.view.FlightDynamics loadPage
+Feb. 04, 2025 9:24:21 PM gui.view.FlightDynamics loadPage
 INFORMATION: Created 20 drones, for panel with MAX_DRONES_PER_PAGE: 20
-Feb. 04, 2025 3:22:31 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 257/dynamics
-Feb. 04, 2025 3:22:31 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:31 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 222/dynamics
-Feb. 04, 2025 3:22:31 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:32 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 226/dynamics
-Feb. 04, 2025 3:22:32 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:33 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 230/dynamics
-Feb. 04, 2025 3:22:33 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:33 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 233/dynamics
-Feb. 04, 2025 3:22:33 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:34 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 237/dynamics
-Feb. 04, 2025 3:22:34 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:34 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 241/dynamics
-Feb. 04, 2025 3:22:34 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:35 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 246/dynamics
-Feb. 04, 2025 3:22:35 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:36 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 247/dynamics
-Feb. 04, 2025 3:22:36 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:37 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 255/dynamics
-Feb. 04, 2025 3:22:37 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:37 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 254/dynamics
-Feb. 04, 2025 3:22:37 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 253/dynamics
-Feb. 04, 2025 3:22:38 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 252/dynamics
-Feb. 04, 2025 3:22:38 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:38 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 251/dynamics
-Feb. 04, 2025 3:22:38 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:39 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 251/dynamics
-Feb. 04, 2025 3:22:39 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:39 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 249/dynamics
-Feb. 04, 2025 3:22:39 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:39 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 248/dynamics
-Feb. 04, 2025 3:22:39 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:40 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 247/dynamics
-Feb. 04, 2025 3:22:40 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:40 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 246/dynamics
-Feb. 04, 2025 3:22:40 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:41 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 245/dynamics
-Feb. 04, 2025 3:22:41 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:41 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 244/dynamics
-Feb. 04, 2025 3:22:41 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:42 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 243/dynamics
-Feb. 04, 2025 3:22:42 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:42 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 242/dynamics
-Feb. 04, 2025 3:22:42 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:42 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 240/dynamics
-Feb. 04, 2025 3:22:42 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:43 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 235/dynamics
-Feb. 04, 2025 3:22:43 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:44 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 230/dynamics
-Feb. 04, 2025 3:22:44 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:45 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 227/dynamics
-Feb. 04, 2025 3:22:45 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:45 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 222/dynamics
-Feb. 04, 2025 3:22:45 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:46 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 259/dynamics
-Feb. 04, 2025 3:22:46 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:47 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:26 PM utils.AutoRefresh start
+INFORMATION: Scheduler started
+Feb. 04, 2025 9:24:26 PM utils.AutoRefresh stop
+INFORMATION: Scheduler stopped
+Feb. 04, 2025 9:24:27 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: 258/dynamics
-Feb. 04, 2025 3:22:47 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:24:27 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:47 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 257/dynamics
-Feb. 04, 2025 3:22:47 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:24:28 PM utils.AutoRefresh start
+INFORMATION: Scheduler started
+Feb. 04, 2025 9:24:28 PM utils.AutoRefresh stop
+INFORMATION: Scheduler stopped
+Feb. 04, 2025 9:24:49 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 227/dynamics
+Feb. 04, 2025 9:24:49 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:47 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 256/dynamics
-Feb. 04, 2025 3:22:47 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:24:49 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 230/dynamics
+Feb. 04, 2025 9:24:49 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:49 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 224/dynamics
-Feb. 04, 2025 3:22:49 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:49 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 228/dynamics
-Feb. 04, 2025 3:22:49 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 232/dynamics
-Feb. 04, 2025 3:22:50 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 237/dynamics
-Feb. 04, 2025 3:22:50 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 241/dynamics
-Feb. 04, 2025 3:22:51 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:51 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:24:50 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: 233/dynamics
-Feb. 04, 2025 3:22:51 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:24:50 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:52 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 227/dynamics
-Feb. 04, 2025 3:22:52 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:00 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 224/dynamics
+Feb. 04, 2025 9:25:00 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:52 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:25:00 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 229/dynamics
+Feb. 04, 2025 9:25:00 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
+Feb. 04, 2025 9:25:01 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: 223/dynamics
-Feb. 04, 2025 3:22:52 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:01 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:53 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 259/dynamics
-Feb. 04, 2025 3:22:53 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:04 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 260/dynamics
+Feb. 04, 2025 9:25:04 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:53 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 257/dynamics
-Feb. 04, 2025 3:22:53 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:04 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 260/dynamics
+Feb. 04, 2025 9:25:04 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+Feb. 04, 2025 9:25:04 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 260/dynamics
+Feb. 04, 2025 9:25:04 PM gui.view.DroneDashboard loadDronePage
+INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
+Feb. 04, 2025 9:25:08 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
 INFORMATION: Successfully retrieved data from endpoint: 221/dynamics
-Feb. 04, 2025 3:22:54 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:08 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:54 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 227/dynamics
-Feb. 04, 2025 3:22:54 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:55 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 231/dynamics
-Feb. 04, 2025 3:22:55 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:55 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 236/dynamics
-Feb. 04, 2025 3:22:55 PM gui.view.DroneDashboard loadDronePage
-INFORMATION: Successfully loaded 40 Drones with a sample size of: 40
-Feb. 04, 2025 3:22:55 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
-INFORMATION: Successfully retrieved data from endpoint: 239/dynamics
-Feb. 04, 2025 3:22:55 PM gui.view.DroneDashboard loadDronePage
+Feb. 04, 2025 9:25:09 PM services.DroneSimulationInterfaceAPI fetchDataFromEndpoint
+INFORMATION: Successfully retrieved data from endpoint: 260/dynamics
+Feb. 04, 2025 9:25:09 PM gui.view.DroneDashboard loadDronePage
 INFORMATION: Successfully loaded 40 Drones with a sample size of: 40

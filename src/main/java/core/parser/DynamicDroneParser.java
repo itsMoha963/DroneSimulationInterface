@@ -5,8 +5,6 @@ import core.drone.DynamicDrone;
 
 /**
  * Parser for JSON objects into DynamicDrone
- * @param obj The Jason object to parse
- * @return A DynamicDrone instance with data from the JSON object
  */
 
 public class DynamicDroneParser implements JsonDroneParser<DynamicDrone> {
@@ -32,7 +30,6 @@ public class DynamicDroneParser implements JsonDroneParser<DynamicDrone> {
      * @param obj The JSON object
      * @return True if the JSON object contains the required data
      */
-
     @Override
     public boolean isValid(JSONObject obj) {
         return obj.has("drone") && obj.has("timestamp");
