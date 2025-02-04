@@ -28,9 +28,10 @@ public class RootLogger {
      * @throws SecurityException If the application does not have permissions to create the directory.
      */
     private static void createLogDirectory() throws SecurityException {
-        File logsDir = new File("logs");
+        String userHome = System.getProperty("user.home");
+        File logsDir = new File(userHome, "logs");
         if (!logsDir.exists() && !logsDir.mkdirs()) {
-            throw new SecurityException("Failed to create logs directory: logs");
+            throw new SecurityException("Failed to create logs directory: " + logsDir.getAbsolutePath());
         }
     }
 
@@ -40,7 +41,7 @@ public class RootLogger {
      * @throws IOException If there is an error while creating the FileHandler.
      */
     private static void configureFileHandler(boolean debug) throws IOException {
-        String logsDirPath = "logs" + File.separator + "dsi_logs.txt";
+        String logsDirPath = System.getProperty("user.home") + File.separator + "dsi_logs.txt";
         FileHandler fileHandler = new FileHandler(logsDirPath, false);
         fileHandler.setFormatter(new SimpleFormatter());
 
