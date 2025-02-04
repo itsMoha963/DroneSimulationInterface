@@ -44,12 +44,16 @@ public class FlightDynamicsPanel extends JPanel {
         ));
         locationLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
 
+        JLabel AllignmentLabel = new JLabel("Allignments: Yaw:"+dynamicDrone.getAlignYaw()+" | Pitch:"+dynamicDrone.getAlignPitch()+" | Roll:"+dynamicDrone.getAlignRoll());
+        AllignmentLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
+
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
         textPanel.add(titleLabel);
         textPanel.add(detailsLabel);
         textPanel.add(locationLabel);
+        textPanel.add(AllignmentLabel);
 
         JPanel statusPanel = new JPanel();
         statusPanel.setOpaque(false);

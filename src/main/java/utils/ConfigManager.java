@@ -31,8 +31,16 @@ public class ConfigManager {
      * This prevents the path from being “hard” written in the code.
      */
     public ConfigManager() {
-        // The default path is the user's home directory
-        this(System.getProperty("user.home") + File.separator + "config.properties");
+        // The default path is now a directory in the user's home directory
+        String userHome = System.getProperty("user.home");
+        String configDirPath = userHome + File.separator + "DSI" + File.separator + "config";
+        File configDir = new File(configDirPath);
+        if (!configDir.exists() && !configDir.mkdirs()) {
+            throw new SecurityException("Failed to create config directory: " + configDirPath);
+        }
+        this.configFile = configDirPath + File.separator + "config.properties";
+        properties = new Properties();
+        loadConfig();
     }
 
     private void loadConfig() {

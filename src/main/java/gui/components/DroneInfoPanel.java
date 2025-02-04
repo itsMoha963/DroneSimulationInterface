@@ -62,6 +62,10 @@ public class DroneInfoPanel extends JPanel {
                 + drone.getCarriageType() + "<br/>Manufacturer: "
                 + droneType.getManufacturer() + "<br/>Model: "
                 + droneType.getTypeName() + "</html>")); // Need to add html for line breaks to work
+        mainInfo.add(createInfoBox("Allignment", "<html>" + "Roll: "
+                + latestDynamicDrone.getAlignRoll() + "<br/>Pitch: "
+                + latestDynamicDrone.getAlignPitch() + "<br/>Yaw: "
+                + latestDynamicDrone.getAlignYaw() + "</html>")); // Need to add html for line breaks to work
 
         // Add all components to main panel
         add(createStatusBar(latestDynamicDrone, drone, droneType), BorderLayout.NORTH);
