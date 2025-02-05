@@ -14,19 +14,6 @@ public class ConfigManager {
     private final Properties properties;
 
     /**
-     * Constructor, of the ConfigManager class. It loads the configuration file.
-     * If the file does not exist, a new one is created.
-     *
-     *
-     * @param configFile Path to the configuration file.
-     */
-    public ConfigManager(String configFile) {
-        this.configFile = configFile;
-        properties = new Properties();
-        loadConfig();
-    }
-
-    /**
      * Default constructor, of the ConfigManager class.
      * This prevents the path from being “hard” written in the code.
      */

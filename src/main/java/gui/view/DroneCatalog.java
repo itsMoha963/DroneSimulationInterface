@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class DroneCatalog extends JPanel implements TabbedPaneActivationListener {
-    private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
+    private static final Logger log = Logger.getLogger(DroneCatalog.class.getName());
 
     // GUI
     private JPanel contentPanel;
@@ -28,26 +28,17 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
     }
 
     private void initialize() {
-        try {
-            setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 
-            JPanel titlePanel = createTitlePanel();
-            add(titlePanel, BorderLayout.NORTH);
+        JPanel titlePanel = createTitlePanel();
+        add(titlePanel, BorderLayout.NORTH);
 
-            JScrollPane scrollPane = createContentScrollPane();
-            populateContentPanelAsync();
-            add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollPane = createContentScrollPane();
+        populateContentPanelAsync();
+        add(scrollPane, BorderLayout.CENTER);
 
-            revalidate();
-            repaint();
-        } catch (DroneAPIException e) {
-            APIErrorPanel errorPanel = new APIErrorPanel(action -> {
-                removeAll();
-                initialize();
-            }, "Failed to fetch drones");
-            removeAll();
-            add(errorPanel);
-        }
+        revalidate();
+        repaint();
     }
 
     private JPanel createTitlePanel() {
@@ -62,20 +53,36 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         return titlePanel;
     }
 
-    private void populateContentPanelAsync() {
+    private void populateContentPanelAsync() throws DroneAPIException {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                populateContentPanel();
+                try {
+                    Map<Integer, DroneType> drones = fetchDrones();
+                    SwingUtilities.invokeLater(() -> populateContentPanel(drones));
+                } catch (DroneAPIException e) {
+                    SwingUtilities.invokeLater(() -> showErrorPanel(e));
+                }
+
                 return null;
             }
         };
-        worker.execute(); // Start t
+        worker.execute();
     }
 
-    private void populateContentPanel() {
+    private void showErrorPanel(DroneAPIException e) {
+        APIErrorPanel errorPanel = new APIErrorPanel(action -> {
+            removeAll();
+            initialize();
+        }, "Failed to fetch drones: " + e.getMessage());
+        removeAll();
+        add(errorPanel);
+        revalidate();
+        repaint();
+    }
+
+    private void populateContentPanel(Map<Integer, DroneType> drones) throws DroneAPIException{
         contentPanel.removeAll();
-        Map<Integer, DroneType> drones = fetchDrones();
 
         for (DroneType drone : drones.values()) {
             contentPanel.add(new DroneCardPanel(drone));
@@ -85,7 +92,7 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         contentPanel.repaint();
     }
 
-    private JScrollPane createContentScrollPane() throws DroneAPIException {
+    private JScrollPane createContentScrollPane() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columns with spacing
         contentPanel.setBackground(UIManager.getColor("Panel.background"));
