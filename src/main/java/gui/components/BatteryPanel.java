@@ -52,6 +52,7 @@ public class BatteryPanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 /* This part is partly generated with ChatGPT */
+                // Prompt: Using Java Swing create a
 
                 // Calculate the scale factor
                 int scaledWidth = getWidth();

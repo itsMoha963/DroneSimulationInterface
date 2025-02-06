@@ -43,14 +43,14 @@ public class DroneDashboard extends JPanel {
         droneButtonsPanel.setLayout(new BoxLayout(droneButtonsPanel, BoxLayout.Y_AXIS));
         droneButtonsPanel.setBackground(UIManager.getColor("Panel.background"));
 
-        addComponentToGrid(createScrollPane(), 0, 0.3);
+        addComponentToGrid(createScrollPane(), 0, 0.2);
 
         droneInfoPanel = new JPanel();
         droneInfoPanel.setLayout(new BorderLayout());
         droneInfoPanel.setBorder(BorderFactory.createEtchedBorder(UIManager.getColor("Panel.background").brighter(),
                 UIManager.getColor("Panel.background").darker()));
         droneInfoPanel.setBackground(UIManager.getColor("Panel.background"));
-        addComponentToGrid(droneInfoPanel, 1, 0.7);
+        addComponentToGrid(droneInfoPanel, 1, 0.8);
     }
 
     /**

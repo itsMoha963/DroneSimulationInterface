@@ -24,7 +24,8 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         // Set the title of the main window
         setTitle("Drone Simulation Interface");
-        setSize(1000, 1000);
+        setSize(1200, 700);
+        setMinimumSize(new Dimension(1200, 700));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         setTheme(configManager.getTheme());           // Initialize default theme (Dark/Light)
