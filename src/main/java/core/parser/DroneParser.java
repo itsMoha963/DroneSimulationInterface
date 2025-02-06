@@ -3,11 +3,16 @@ package core.parser;
 import core.drone.Drone;
 
 /**
- * Parser for JSON objects into Drones
- * @param obj The Jason object to parse
- * @return A DroneType instance with data from the JSON object
+ *  The DroneParser class is responsible for parsing and validating the drone data
+ *  @see JsonDroneParser
  */
 public class DroneParser implements JsonDroneParser<Drone> {
+
+    /**
+     * Parses the JSON object into a Drone object
+     * @param obj The JSON object
+     * @return The Drone object
+     */
     @Override
     public Drone parse(org.json.JSONObject obj) {
         return new Drone(

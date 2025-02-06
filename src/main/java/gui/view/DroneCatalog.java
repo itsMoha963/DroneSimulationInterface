@@ -14,15 +14,22 @@ import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
+/**
+ * The DroneCatalog class is responsible for displaying the Drone Catalog in the GUI.
+ * It fetches the drones from the API and displays them.
+ * @see DroneCardPanel
+ * It implements {@link TabbedPaneActivationListener} to handle activation events.
+ */
 public class DroneCatalog extends JPanel implements TabbedPaneActivationListener {
-    private static final Logger log = Logger.getLogger(DroneCatalog.class.getName());
 
     // GUI
     private JPanel contentPanel;
 
     private final AutoRefresh autoRefresh = new AutoRefresh();
 
+    /**
+     * initializes the GUI.
+     */
     public DroneCatalog() {
         initialize();
     }
@@ -108,6 +115,9 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         return DroneSimulationInterfaceAPI.getInstance().fetchDrones(new DroneTypeParser(), 40, 0);
     }
 
+    /**
+     * Starts the auto refresh when the tab is activated.
+     */
     @Override
     public void onActivate() {
         autoRefresh.start(

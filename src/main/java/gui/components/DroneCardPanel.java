@@ -8,6 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DroneCardPanel extends JPanel {
+
+    /**
+     * Creates a  rounded Drone Card Panels to display drone type information
+     * @param droneType
+     */
     public DroneCardPanel(DroneType droneType) {
         setLayout(new BorderLayout());
 

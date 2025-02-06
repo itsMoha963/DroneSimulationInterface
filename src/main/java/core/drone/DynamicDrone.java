@@ -1,7 +1,11 @@
 package core.drone;
 
 import services.Helper;
-
+/**
+ * The DynamicDrone class is responsible for a dynamic drone object.
+ * It contains the drone's link, timestamp, speed, alignment roll, alignment pitch, alignment yaw, longitude, latitude, battery status, last seen, and status.
+ * @see DroneBase
+ */
 public class DynamicDrone extends DroneBase {
     private final String drone;
     private final String timestamp;

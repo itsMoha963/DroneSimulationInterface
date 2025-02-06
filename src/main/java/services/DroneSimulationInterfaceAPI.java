@@ -27,6 +27,7 @@ import java.util.logging.*;
  * It supports fetching all different drone types (Drone, DynamicDrone, DroneType) data from the API using parsers and configurable parameters.
  */
 public final class DroneSimulationInterfaceAPI {
+
     private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
     private static final String BASE_URL = "http://dronesim.facets-labs.com/api/";
     private static final int TIMEOUT_SECONDS = 5;

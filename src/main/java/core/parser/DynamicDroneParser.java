@@ -5,9 +5,16 @@ import core.drone.DynamicDrone;
 
 /**
  * Parser for JSON objects into DynamicDrone
+ * @see JsonDroneParser
  */
 
 public class DynamicDroneParser implements JsonDroneParser<DynamicDrone> {
+
+    /**
+     * Parses the JSON object into a DynamicDrone object
+     * @param obj The JSON object
+     * @return The DynamicDrone object
+     */
     @Override
     public DynamicDrone parse(JSONObject obj) {
         return new DynamicDrone(

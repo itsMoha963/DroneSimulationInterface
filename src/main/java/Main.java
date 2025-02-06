@@ -2,7 +2,15 @@ import java.awt.*;
 import gui.MainWindow;
 import utils.RootLogger;
 
+/**
+ * Main class of the program and it handles the execution of the program.
+ */
 public class Main {
+
+    /**
+     * It initializes the logger and creates a separate thread for the GUI.
+     * @param args Program arguments
+     */
     public static void main(String[] args) {
         processArgs(args);
 

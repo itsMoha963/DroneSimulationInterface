@@ -1,6 +1,11 @@
 package core.drone;
-
+/**
+ * The DroneType class is responsible for a drone type object.
+ * It contains the drone type's manufacturer, type name, weight, max speed, battery capacity, control range, and max carriage.
+ * @see DroneBase
+ */
 public class DroneType extends DroneBase {
+
     private final String manufacturer;
     private final String typeName;
     private final int weight;
@@ -9,6 +14,17 @@ public class DroneType extends DroneBase {
     private final int controlRange;
     private final int maxCarriage;
 
+    /**
+     * Constructor for the DroneType class
+     * @param id The drone type's ID
+     * @param manufacturer The drone type's manufacturer
+     * @param typeName The drone type's name
+     * @param weight The drone type's weight
+     * @param maxSpeed The drone type's max speed
+     * @param batteryCapacity The drone type's battery capacity
+     * @param controlRange The drone type's control range
+     * @param maxCarriage The drone type's max carriage
+     */
     public DroneType(int id, String manufacturer, String typeName, int weight, int maxSpeed, int batteryCapacity, int controlRange, int maxCarriage) {
         this.id = id;
         this.manufacturer = manufacturer;

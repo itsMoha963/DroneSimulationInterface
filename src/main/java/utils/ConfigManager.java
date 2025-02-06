@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  * It handles loading, saving and writing to the config file.
  */
 public class ConfigManager {
+
     private static final Logger log = Logger.getLogger(ConfigManager.class.getName());
 
     // Config file path is used as a class variable

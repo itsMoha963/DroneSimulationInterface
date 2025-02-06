@@ -44,6 +44,11 @@ public class BatteryPanel extends JPanel {
         }
 
         JComponent batteryPanel = new JComponent() {
+
+            /**
+             * draws the battery panel with the battery image and fill
+             * @param g
+             */
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -101,6 +106,10 @@ public class BatteryPanel extends JPanel {
                 /* ----------------- End GPT --------- */
             }
 
+            /**
+             * Returns the preferred size of the battery panel
+             * @return Dimension
+             */
             @Override
             public Dimension getPreferredSize() {
                 return new Dimension(100, 40);
@@ -110,6 +119,10 @@ public class BatteryPanel extends JPanel {
         add(batteryPanel);
     }
 
+    /**
+     * Returns the preferred size of the battery panel
+     * @return Dimension
+     */
     public Dimension getPreferredSize() {
         return new Dimension(90, 30);
     }

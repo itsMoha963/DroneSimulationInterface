@@ -15,8 +15,13 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/**
+ * The DroneDashboard class is responsible for displaying the Drone Dashboard in the GUI.
+ * It fetches the drones from the API and displays them.
+ * @see DroneInfoPanel
+ */
 public class DroneDashboard extends JPanel {
+    
     private final Logger log = Logger.getLogger(DroneDashboard.class.getName());
     private static final int DRONE_SAMPLE_SIZE = 40;
 

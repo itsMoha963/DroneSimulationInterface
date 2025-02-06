@@ -6,6 +6,7 @@ import java.io.File;
  * Class that hold Constants to avoid String/Path errors for Variables used in different classes.
  */
 public final class Constants {
+
     // Icon Paths
     public static final String APP_ICON_PATH = "/icons/appicon.png";
     public static final String BATTERY_ICON_PATH = "/icons/battery.png";

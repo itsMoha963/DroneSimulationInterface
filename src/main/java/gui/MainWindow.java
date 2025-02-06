@@ -15,12 +15,19 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.formdev.flatlaf.*;
-
+/**
+ * The MainWindow class is the main window of the application.
+ * It contains the main components of the application like the toolbar, tabbed pane, and the theme settings.
+ */
 public class MainWindow extends JFrame {
+
     private static final Logger log = Logger.getLogger(MainWindow.class.getName());
     private Component lastComponent = null;
     private final ConfigManager configManager = new ConfigManager();
 
+    /**
+     * Initializes the main window of the application.
+     */
     public MainWindow() {
         // Set the title of the main window
         setTitle("Drone Simulation Interface");
