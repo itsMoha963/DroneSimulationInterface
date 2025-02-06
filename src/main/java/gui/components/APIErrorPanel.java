@@ -30,7 +30,6 @@ public class APIErrorPanel extends JPanel {
         label.setForeground(Color.RED);
         label.setAlignmentX(CENTER_ALIGNMENT);
 
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setOpaque(false);

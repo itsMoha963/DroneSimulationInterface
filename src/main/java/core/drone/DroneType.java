@@ -23,29 +23,22 @@ public class DroneType extends DroneBase {
     public String getManufacturer() {
         return manufacturer;
     }
-
     public String getTypeName() {
         return typeName;
     }
-
     public int getWeight() {
         return weight;
     }
-
     public int getMaxSpeed() {
         return maxSpeed;
     }
-
     public int getBatteryCapacity() {
         return batteryCapacity;
     }
-
     public int getControlRange() {
         return controlRange;
     }
-
     public int getMaxCarriage() {
         return maxCarriage;
     }
-
 }

@@ -31,9 +31,9 @@ public final class DroneSimulationInterfaceAPI {
     private static final String BASE_URL = "http://dronesim.facets-labs.com/api/";
     private static final int TIMEOUT_SECONDS = 300;
     private static final int MAX_RETRIES = 3;
-    private static final int RETRY_DELAY_MS = 500;
+    private static final int RETRY_DELAY_MS = 1000;
 
-    private String token = "";
+    private String token = "b2d431185fd5a8670e99e3efdcb2afe193083931";
     private final HttpClient httpClient;
 
     private static DroneSimulationInterfaceAPI instance;
@@ -89,7 +89,8 @@ public final class DroneSimulationInterfaceAPI {
                         throw new DroneAPIException("Endpoint " + endpointUrl +
                                 " not found. Make sure the given endpoint URL exists.");
                     case 401:
-                        throw new DroneAPIException("Authentication failed. Invalid API Token.");
+                        log.log(Level.SEVERE, "Authentication failed. Invalid API Token: " + token);
+                        throw new DroneAPIException("Authentication failed. Invalid API Token: " + token);
                     default:
                         throw new DroneAPIException(
                                 "API request failed with status " + statusCode +

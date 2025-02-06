@@ -16,22 +16,9 @@ public class RootLogger {
      */
     public static void initializeLogger(boolean debug) {
         try {
-            createLogDirectory();
             configureFileHandler(debug);
         } catch (IOException e) {
-            throw new SecurityException("Failed to create logs directory.");
-        }
-    }
-
-    /**
-     * Creates the logs directory if it does not exist.
-     * @throws SecurityException If the application does not have permissions to create the directory.
-     */
-    private static void createLogDirectory() throws SecurityException {
-        String userHome = System.getProperty("user.home");
-        File logsDir = new File(userHome + File.separator + "DSI" + File.separator + "logs");
-        if (!logsDir.exists() && !logsDir.mkdirs()) {
-            throw new SecurityException("Failed to create logs directory: " + logsDir.getAbsolutePath());
+            throw new RuntimeException(e);
         }
     }
 
@@ -41,8 +28,7 @@ public class RootLogger {
      * @throws IOException If there is an error while creating the FileHandler.
      */
     private static void configureFileHandler(boolean debug) throws IOException {
-        String logsDirPath = System.getProperty("user.home") + File.separator + "DSI" + File.separator + "logs" + File.separator + "dsi_logs.txt";
-        FileHandler fileHandler = new FileHandler(logsDirPath, false);
+        FileHandler fileHandler = getFileHandler();
         fileHandler.setFormatter(new SimpleFormatter());
 
         Logger rootLogger = Logger.getLogger("");
@@ -55,5 +41,20 @@ public class RootLogger {
                 }
             }
         }
+    }
+
+    private static FileHandler getFileHandler() throws IOException {
+        String logsDirPath = Constants.APP_DIRECTORY + "logs";
+        File logsDir = new File(logsDirPath);
+        if (!logsDir.exists()) {
+            if (!logsDir.mkdirs()) {
+                throw new IOException("Failed to create logs directory: " + logsDirPath);
+            }
+        }
+
+        String logFilePath = logsDirPath + File.separator + "logs.txt";
+
+        // If append is set to false, the log file gets cleared when the app is launched
+        return new FileHandler(logFilePath, false);
     }
 }

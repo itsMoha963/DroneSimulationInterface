@@ -74,7 +74,7 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         APIErrorPanel errorPanel = new APIErrorPanel(action -> {
             removeAll();
             initialize();
-        }, "Failed to fetch drones: " + e.getMessage());
+        }, e.getMessage());
         removeAll();
         add(errorPanel);
         revalidate();

@@ -34,9 +34,8 @@ public class DroneDashboard extends JPanel {
     public DroneDashboard() {
         setLayout(new GridBagLayout());
         setupPanels();
-        cacheDroneData();
+        cacheDronesAsync();
         showPlaceholder();
-        loadDrones();
     }
 
     private void setupPanels() {
@@ -114,6 +113,39 @@ public class DroneDashboard extends JPanel {
         }
     }
 
+    private void cacheDronesAsync() {
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                showPlaceholder("Loading...");
+                cacheDroneData();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                showPlaceholder();
+                loadDrones();
+            }
+        };
+
+        worker.execute();
+    }
+
+    private void loadDronePageAsync(int id) {
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                log.log(Level.INFO, "Loading Drone Page " + id);
+                showPlaceholder("Loading Drone: " + id + "...");
+                loadDronePage(id);
+                log.log(Level.INFO, "Done loading Drone Page " + id);
+                return null;
+            }
+        };
+        worker.execute();
+    }
+
     /**
      * Displays an error panel when an API exception occurs.
      *
@@ -122,7 +154,7 @@ public class DroneDashboard extends JPanel {
     private void showErrorPanel(DroneAPIException exception) {
         APIErrorPanel errorPanel = new APIErrorPanel(action -> {
             showPlaceholder();
-            cacheDroneData();
+            cacheDronesAsync();
             loadDrones();
         }, exception.getMessage());
 
@@ -141,7 +173,6 @@ public class DroneDashboard extends JPanel {
      * @param id The ID of the drone to display
      */
     private void loadDronePage(int id) {
-        droneInfoPanel.removeAll();
         ArrayList<DynamicDrone> dynamicDrones;
         try {
             dynamicDrones = DroneSimulationInterfaceAPI.getInstance().fetchDynamicDronesById(id, DRONE_SAMPLE_SIZE, 0);
@@ -155,10 +186,8 @@ public class DroneDashboard extends JPanel {
         DynamicDrone dynamicDrone = dynamicDrones.getLast();
         Drone drone = droneCache.get(dynamicDrone.getId());
         DroneType droneType = droneTypesCache.get(drone.getDroneTypeID());
-        System.out.println("Dyn ID: " + dynamicDrone.getId() + " SN: " + drone.getSerialNumber());
-
+        droneInfoPanel.removeAll();
         droneInfoPanel.add(new DroneInfoPanel(dynamicDrones, drone, droneType), BorderLayout.CENTER);
-
         droneInfoPanel.revalidate();
         droneInfoPanel.repaint();
     }
@@ -183,7 +212,7 @@ public class DroneDashboard extends JPanel {
             }
         });
 
-        button.addActionListener(e -> loadDronePage(id));
+        button.addActionListener(e -> loadDronePageAsync(id));
         return button;
     }
 
@@ -204,6 +233,24 @@ public class DroneDashboard extends JPanel {
         placeholderLabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
         placeholderLabel2.setFont(new Font("Arial", Font.ITALIC, 16));
         placeholderPanel.add(placeholderLabel2);
+
+        droneInfoPanel.add(placeholderPanel, BorderLayout.CENTER);
+
+        droneInfoPanel.revalidate();
+        droneInfoPanel.repaint();
+    }
+
+    private void showPlaceholder(String message) {
+        droneInfoPanel.removeAll();
+
+        JPanel placeholderPanel = new JPanel();
+        placeholderPanel.setLayout(new BoxLayout(placeholderPanel, BoxLayout.Y_AXIS));
+        placeholderPanel.setBorder(BorderFactory.createEmptyBorder(100, 50, 100, 50));
+
+        JLabel placeholderLabel = new JLabel(message);
+        placeholderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        placeholderLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+        placeholderPanel.add(placeholderLabel);
 
         droneInfoPanel.add(placeholderPanel, BorderLayout.CENTER);
 
