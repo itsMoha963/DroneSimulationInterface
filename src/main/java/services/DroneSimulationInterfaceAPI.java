@@ -29,7 +29,7 @@ import java.util.logging.*;
 public final class DroneSimulationInterfaceAPI {
     private static final Logger log = Logger.getLogger(DroneSimulationInterfaceAPI.class.getName());
     private static final String BASE_URL = "http://dronesim.facets-labs.com/api/";
-    private static final int TIMEOUT_SECONDS = 300;
+    private static final int TIMEOUT_SECONDS = 5;
     private static final int MAX_RETRIES = 3;
     private static final int RETRY_DELAY_MS = 1000;
 
@@ -70,11 +70,13 @@ public final class DroneSimulationInterfaceAPI {
      * @throws DroneAPIException If an error occurs during the API call.
      */
     private JSONObject fetchDataFromEndpoint(String endpointUrl, int limit, int offset) throws DroneAPIException {
+        log.log(Level.INFO, "Fetching data from endpoint " + endpointUrl);
         for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(createURI(endpointUrl, limit, offset))
                         .header("Authorization", "Token " + token)
+                        .timeout(Duration.ofSeconds(10))
                         .GET()
                         .build();
 

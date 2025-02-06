@@ -53,7 +53,7 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         return titlePanel;
     }
 
-    private void populateContentPanelAsync() throws DroneAPIException {
+    private synchronized void populateContentPanelAsync() throws DroneAPIException {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
