@@ -86,6 +86,8 @@ public class DroneDashboard extends JPanel {
                 throw new DroneAPIException("Drone Cache is empty");
             }
 
+            droneButtonsPanel.removeAll();
+
             for (Drone drone : droneCache.values()) {
                 droneButtonsPanel.add(createDroneButton(drone.getId()));
             }
