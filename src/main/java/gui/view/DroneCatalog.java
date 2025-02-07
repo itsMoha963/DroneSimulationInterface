@@ -13,27 +13,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+
 /**
  * The DroneCatalog class is responsible for displaying the Drone Catalog in the GUI.
  * It fetches the drones from the API and displays them.
+ *
  * @see DroneCardPanel
- * It implements {@link TabbedPaneActivationListener} to handle activation events.
+ * @see TabbedPaneActivationListener
  */
 public class DroneCatalog extends JPanel implements TabbedPaneActivationListener {
 
-    // GUI
+    // GUI Components
     private JPanel contentPanel;
-
     private final AutoRefresh autoRefresh = new AutoRefresh();
 
     /**
-     * initializes the GUI.
+     * Initializes the Drone Catalog GUI by setting up the layout and panels.
      */
     public DroneCatalog() {
         initialize();
     }
 
+    /**
+     * Sets up the layout and adds components to the panel.
+     */
     private void initialize() {
         setLayout(new BorderLayout());
 
@@ -60,6 +63,12 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         return titlePanel;
     }
 
+    /**
+     * Populates the content panel asynchronously with drone data.
+     * This method runs in the background and updates the UI once the data is fetched.
+     *
+     * @throws DroneAPIException if there is an error fetching drone data
+     */
     private synchronized void populateContentPanelAsync() throws DroneAPIException {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -77,6 +86,11 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         worker.execute();
     }
 
+    /**
+     * Displays an error panel in case of a failure to fetch drone data.
+     *
+     * @param e the exception that occurred during the drone data fetch
+     */
     private void showErrorPanel(DroneAPIException e) {
         APIErrorPanel errorPanel = new APIErrorPanel(action -> {
             removeAll();
@@ -88,9 +102,16 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
         repaint();
     }
 
+    /**
+     * Populates the content panel with drone cards.
+     *
+     * @param drones a map of drone types to be displayed in the catalog
+     * @throws DroneAPIException if there is an error while adding drone cards to the content panel
+     */
     private void populateContentPanel(Map<Integer, DroneType> drones) throws DroneAPIException{
         contentPanel.removeAll();
 
+        // Create Drone cards for each drone
         for (DroneType drone : drones.values()) {
             contentPanel.add(new DroneCardPanel(drone));
         }
@@ -116,18 +137,17 @@ public class DroneCatalog extends JPanel implements TabbedPaneActivationListener
     }
 
     /**
-     * Starts the auto refresh when the tab is activated.
+     * Starts the auto-refresh functionality when the tab is activated.
+     * Auto-refresh will fetch the latest drone data every 60 seconds, refreshing every 120 seconds.
      */
     @Override
     public void onActivate() {
-        autoRefresh.start(
-                this::populateContentPanelAsync,
-                120,
-                60,
-                TimeUnit.SECONDS
-        );
+        autoRefresh.start(this::populateContentPanelAsync, 120, 60, TimeUnit.SECONDS);
     }
 
+    /**
+     * Stops the auto-refresh when the tab is deactivated.
+     */
     @Override
     public void onDeactivate() {
         autoRefresh.stop();

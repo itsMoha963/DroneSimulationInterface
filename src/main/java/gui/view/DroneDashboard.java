@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  * The DroneDashboard class is responsible for displaying the Drone Dashboard in the GUI.
  * It fetches the drones from the API and displays them.
+ *
  * @see DroneInfoPanel
  */
 public class DroneDashboard extends JPanel {
@@ -34,7 +36,8 @@ public class DroneDashboard extends JPanel {
     private Map<Integer, Drone> droneCache = Map.of();
 
     /**
-     * Initializes the DroneDashboard
+     * Initializes the DroneDashboard.
+     * Sets up the layout, panels, and starts fetching the drone data asynchronously.
      */
     public DroneDashboard() {
         setLayout(new GridBagLayout());
@@ -60,7 +63,8 @@ public class DroneDashboard extends JPanel {
 
     /**
      * Creates the Scroll Pane for the drone buttons.
-     * @return JScrollPane
+     *
+     * @return JScrollPane The scroll pane containing the drone buttons.
      */
     private JScrollPane createScrollPane() {
         JScrollPane leftScrollPane = new JScrollPane(droneButtonsPanel);
@@ -72,7 +76,14 @@ public class DroneDashboard extends JPanel {
         return leftScrollPane;
     }
 
-    // To reduce code duplication
+    /**
+     * Utility method to add components to the GridBagLayout.
+     * Reduces code duplicatiom.
+     *
+     * @param component The component to be added to the layout.
+     * @param gridx The x position in the grid.
+     * @param weightx The weight/percentage this component will occupy horizontally.
+     */
     private void addComponentToGrid(Component component, int gridx, double weightx) {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = gridx;
@@ -83,7 +94,8 @@ public class DroneDashboard extends JPanel {
     }
 
     /**
-     * Creates the buttons for all the drones
+     * Creates the buttons for all the drones.
+     * Loops through the drone cache and adds a button for each drone.
      */
     private void loadDrones() {
         try {

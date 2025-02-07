@@ -15,18 +15,23 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.formdev.flatlaf.*;
+
 /**
- * The MainWindow class is the main window of the application.
- * It contains the main components of the application like the toolbar, tabbed pane, and the theme settings.
+ * The {@code MainWindow} class represents the main window of the drone simulation application.
+ * It is responsible for initializing the user interface, setting up the theme, and managing the main components such as the toolbar, menu, and tabbed pane.
+ * <p>
+ * The main window contains several views (tabs) like the Drone Catalog, Flight Dynamics, and Drone Dashboard.
+ * It also allows for changing the app theme (Light/Dark).
  */
 public class MainWindow extends JFrame {
-
     private static final Logger log = Logger.getLogger(MainWindow.class.getName());
     private Component lastComponent = null;
     private final ConfigManager configManager = new ConfigManager();
 
     /**
      * Initializes the main window of the application.
+     * <p>
+     * This constructor sets the window title, size, minimum size, default close operation, theme, and creates the toolbar, app icon, and tabbed pane.
      */
     public MainWindow() {
         // Set the title of the main window
@@ -35,12 +40,17 @@ public class MainWindow extends JFrame {
         setMinimumSize(new Dimension(1200, 700));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setTheme(configManager.getTheme());           // Initialize default theme (Dark/Light)
+        // Initialize default theme (Dark/Light)
+        setTheme(configManager.getTheme());
         createToolBar();
         loadAppIcon();
         createTabbedPane();
     }
 
+    /**
+     * Creates and configures the toolbar for the main window.
+     * It adds a menu bar with a settings menu that allows the user to change the application's theme.
+     */
     private void createToolBar() {
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
@@ -91,14 +101,17 @@ public class MainWindow extends JFrame {
                 onStateChange -> {
                     Component newComponent = tabbedPane.getSelectedComponent();
 
+                    // Deactivates previous active tab
                     if (lastComponent instanceof TabbedPaneActivationListener listener) {
                         listener.onDeactivate();
                     }
 
+                    // Activates the newly selected tab
                     if (newComponent instanceof TabbedPaneActivationListener listener) {
                         listener.onActivate();
                     }
 
+                    // Update reference
                     lastComponent = newComponent;
                 }
         );

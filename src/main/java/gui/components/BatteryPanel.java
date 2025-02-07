@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Displays Battery Percentage with Visuals
+ * Displays the battery percentage with a visual representation as a status bar.
  */
 public class BatteryPanel extends JPanel {
     private static final Logger log = Logger.getLogger(BatteryPanel.class.getName());
@@ -25,9 +25,10 @@ public class BatteryPanel extends JPanel {
     private static final int FILL_MARGIN = 4;
 
     /**
-     * Creates a Battery Panel to display battery percentage
-     * @param currentBatteryCapacity
-     * @param maxBatteryCapacity
+     * Creates a BatteryPanel to display the current battery percentage.
+     *
+     * @param currentBatteryCapacity The current battery level.
+     * @param maxBatteryCapacity The maximum battery capacity.
      */
     public BatteryPanel(int currentBatteryCapacity, int maxBatteryCapacity) {
         this.currentBatteryCapacity = currentBatteryCapacity;
@@ -46,8 +47,9 @@ public class BatteryPanel extends JPanel {
         JComponent batteryPanel = new JComponent() {
 
             /**
-             * draws the battery panel with the battery image and fill
-             * @param g
+             * Draws the battery panel with the battery image and fill.
+             *
+             * @param g The {@link Graphics} object used for rendering.
              */
             @Override
             public void paintComponent(Graphics g) {
@@ -57,7 +59,11 @@ public class BatteryPanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 /* This part is partly generated with ChatGPT */
-                // Prompt: Using Java Swing create a
+                /* Prompt: Using Java Swing create a Battery Component that displays the current percentage in Text and
+                    as a Status Bar/Battery Icon.
+                    Previously written code.......
+                 */
+
 
                 // Calculate the scale factor
                 int scaledWidth = getWidth();
@@ -120,8 +126,9 @@ public class BatteryPanel extends JPanel {
     }
 
     /**
-     * Returns the preferred size of the battery panel
-     * @return Dimension
+     * Returns the preferred size of the battery panel.
+     *
+     * @return A {@link Dimension} representing the preferred size.
      */
     public Dimension getPreferredSize() {
         return new Dimension(90, 30);

@@ -3,15 +3,18 @@ package core.parser;
 import core.drone.Drone;
 
 /**
- *  The DroneParser class is responsible for parsing and validating the drone data
- *  @see JsonDroneParser
+ * The DroneParser class is responsible for parsing and validating drone data.
+ * Implements the {@link JsonDroneParser} interface.
+ *
+ * @see JsonDroneParser
  */
 public class DroneParser implements JsonDroneParser<Drone> {
 
     /**
-     * Parses the JSON object into a Drone object
-     * @param obj The JSON object
-     * @return The Drone object
+     * Parses the given JSON object into a {@link Drone} object.
+     *
+     * @param obj The JSON object containing drone data.
+     * @return A {@link Drone} object parsed from the JSON data.
      */
     @Override
     public Drone parse(org.json.JSONObject obj) {
@@ -24,23 +27,21 @@ public class DroneParser implements JsonDroneParser<Drone> {
                 obj.getString("created")
         );
     }
-    /**
-     * Validates if the given object contains the required data for Drones
-     * @param obj The JSON object
-     * @return True if the JSON object contains the required data
-     */
-    @Override
-    public boolean isValid(org.json.JSONObject obj) {
-        return obj.has("carriage_type") && obj.has("carriage_weight");
-    }
 
     /**
-     * Endpoint for fetching drone data
-     * @return Endpoint string
+     * Validates if the given JSON object contains the required data for a Drone.
+     *
+     * @param obj The JSON object to validate.
+     * @return {@code true} if the JSON object contains the required data, otherwise {@code false}.
      */
     @Override
-    public String getEndpoint() {
-        return "drones";
-    }
+    public boolean isValid(org.json.JSONObject obj) { return obj.has("carriage_type") && obj.has("carriage_weight"); }
+
+    /**
+     * Returns the endpoint for fetching drone data.
+     *
+     * @return A {@link String} representing the API endpoint for drone data.
+     */
+    @Override
+    public String getEndpoint() { return "drones"; }
 }
-

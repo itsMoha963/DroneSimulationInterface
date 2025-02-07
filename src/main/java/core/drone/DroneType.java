@@ -1,4 +1,5 @@
 package core.drone;
+
 /**
  * The DroneType class is responsible for a drone type object.
  * It contains the drone type's manufacturer, type name, weight, max speed, battery capacity, control range, and max carriage.

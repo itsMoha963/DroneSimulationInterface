@@ -1,6 +1,7 @@
 package core.drone;
 
 import services.Helper;
+
 /**
  * The Drone class is responsible for a drone object.
  * It contains the drone's serial number, carriage type, carriage weight, drone type, created date, and drone type ID.
@@ -33,6 +34,7 @@ public class Drone extends DroneBase {
         this.created = created;
         this.droneTypeID = Helper.extractDroneIDFromUrl(droneType);
     }
+
     public String getCarriageType() { return carriageType; }
     public int getCarriageWeight() { return carriageWeight; }
     public String getDroneType() { return droneType; }

@@ -20,9 +20,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The FlightDynamics class is a GUI panel for displaying flight dynamocs for each drone.
- * It implements {@link TabbedPaneActivationListener} to handle activation events and includes features like pagination,
- * auto-refresh, and asynchronous data loading using SwingWorker.
+ * The {@code FlightDynamics} class is a {@link JPanel} responsible for displaying the flight dynamics of drones in the GUI.
+ * It handles displaying the dynamic data of drones, pagination, and auto-refreshing the data asynchronously.
+ * <p>
+ * It implements {@link TabbedPaneActivationListener} to handle activation and deactivation events for refreshing data.
+ * The class is designed to support pagination and automatically load new drone data for each page, displaying them in a scrollable list.
+ * It also includes error handling and automatic data preloading to improve performance.
  */
 public class FlightDynamics extends JPanel implements TabbedPaneActivationListener {
     private static final Logger log = Logger.getLogger(FlightDynamics.class.getName());
@@ -41,14 +44,18 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
     private int currentPage = 0;
 
     /**
-     * Creates a new FlightDynamics panel. Initializes the GUI and preloads drone data asynchronously.
+     * Creates a new {@code FlightDynamics} panel.
+     * Initializes the GUI layout and preloads drone data asynchronously.
      */
     public FlightDynamics() {
         initializeGUI();
-
         preWarmAsync();
     }
 
+    /**
+     * Initializes the graphical user interface (GUI) components.
+     * Sets up layout, title panel, content panel, and pagination controls.
+     */
     private void initializeGUI() {
         setLayout(new BorderLayout());
         JPanel titlePanel = createTitlePanel();
@@ -84,7 +91,7 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         return contentPanel;
     }
 
-    private static JPanel createTitlePanel() {
+    private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Flight Dynamics", JLabel.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -236,15 +243,17 @@ public class FlightDynamics extends JPanel implements TabbedPaneActivationListen
         return new FlightDynamicsPanel(drone, baseDrone, droneType);
     }
 
+    /**
+     * Triggered when this panel is activated. Used to start auto-refresh when tab is activated.
+     */
     @Override
-    public void onActivate() {
-        StartAutoRefresh();
-    }
+    public void onActivate() { StartAutoRefresh(); }
 
+    /**
+     * Triggered when this panel is activated. Used to stop auto-refresh when tab is deactivated.
+     */
     @Override
-    public void onDeactivate() {
-        autoRefresh.stop();
-    }
+    public void onDeactivate() { autoRefresh.stop(); }
 
     /**
      * To reduce code duplication as this would be called multiple times in this class.

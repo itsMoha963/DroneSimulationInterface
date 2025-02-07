@@ -10,28 +10,32 @@ import core.drone.*;
 import services.Helper;
 
 /**
- * The Drone Information Panel for the drones passed in the constructor
- * Displays information such as the battery, status, traveled distance and more.
+ * The Drone Information Panel for displaying information about the provided drones.
+ * It shows information such as battery, status, traveled distance, and more.
  */
 public class DroneInfoPanel extends JPanel {
 
     /**
-     * Simply create the DroneInformation panel for the given DynamicDrone
-     * @param drones The Sample for which the information will be calculated
-     * @param drone The Drone that belongs to this sample
-     * @param droneType The DroneType that belongs to this sample
+     * Constructs the Drone Information Panel for the given DynamicDrone.
+     *
+     * @param drones The list of DynamicDrone samples for calculating statistics.
+     * @param drone The Drone object containing basic information.
+     * @param droneType The DroneType object containing specifications of the drone.
      */
     public DroneInfoPanel(ArrayList<DynamicDrone> drones, Drone drone, DroneType droneType) {
         setLayout(new BorderLayout());
         setupPanel(drones, drone, droneType);
     }
 
+    /**
+     * Sets up the panel with drone statistics such as speed, distance, and alignment.
+     *
+     * @param drones The list of DynamicDrone samples for calculating statistics.
+     * @param drone The Drone object containing basic information.
+     * @param droneType The DroneType object containing specifications of the drone.
+     */
     private void setupPanel(ArrayList<DynamicDrone> drones, Drone drone, DroneType droneType) {
         DynamicDrone latestDynamicDrone = drones.getLast();
-
-        // Create main info panel
-        JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
-        mainInfo.setBackground(UIManager.getColor("Panel.background").brighter());
 
         // Cant extract this method as we would then have to loop through the drones twice.
         // Once to calculate the average speed and once to calculate the total distance.
@@ -41,16 +45,28 @@ public class DroneInfoPanel extends JPanel {
         for (int i = 1; i < drones.size(); i++) {
             DynamicDrone prev = drones.get(i - 1);
             DynamicDrone curr = drones.get(i);
-            totalDistance += Helper.haversineDistance(prev.getLongitude(), prev.getLatitude(), curr.getLongitude(), curr.getLatitude());
+            totalDistance += Helper.haversineDistance(prev.getLongitude(), prev.getLatitude(), curr.getLongitude(),
+                    curr.getLatitude());
             averageSpeed += curr.getSpeed();
         }
         averageSpeed = averageSpeed / drones.size();
 
         double carriageLast = (double) drone.getCarriageWeight() / (double) droneType.getWeight();
-        carriageLast = carriageLast * 100;                  // To get the actual percentage
+        carriageLast = carriageLast * 100; // To get the actual percentage
 
-        // Create info boxes with data
-        mainInfo.add(createInfoBox("Current Speed", String.format("%.1f km/h", (double) latestDynamicDrone.getSpeed())));
+        // Add all components to main panel
+        add(createStatusBar(latestDynamicDrone, drone, droneType), BorderLayout.NORTH);
+        add(createMainInfoPanel(drone, droneType, latestDynamicDrone, totalDistance, averageSpeed, carriageLast),
+                BorderLayout.CENTER);
+    }
+
+    private JPanel createMainInfoPanel(Drone drone, DroneType droneType, DynamicDrone latestDynamicDrone,
+                                       double totalDistance, double averageSpeed, double carriageLast) {
+        JPanel mainInfo = new JPanel(new GridLayout(4, 1, 10, 10));
+        mainInfo.setBackground(UIManager.getColor("Panel.background").brighter());
+
+        mainInfo.add(createInfoBox("Current Speed", String.format("%.1f km/h",
+                (double) latestDynamicDrone.getSpeed())));
         mainInfo.add(createInfoBox("Total Distance", String.format("%.2f km", totalDistance / 1000)));
         mainInfo.add(createInfoBox("Location",
                 String.format("%.6f, %.6f", latestDynamicDrone.getLongitude(), latestDynamicDrone.getLatitude())));
@@ -67,9 +83,7 @@ public class DroneInfoPanel extends JPanel {
                 + latestDynamicDrone.getAlignPitch() + "<br/>Yaw: "
                 + latestDynamicDrone.getAlignYaw() + "</html>")); // Need to add html for line breaks to work
 
-        // Add all components to main panel
-        add(createStatusBar(latestDynamicDrone, drone, droneType), BorderLayout.NORTH);
-        add(mainInfo, BorderLayout.CENTER);
+        return mainInfo;
     }
 
     private JPanel createInfoBox(String title, String value) {

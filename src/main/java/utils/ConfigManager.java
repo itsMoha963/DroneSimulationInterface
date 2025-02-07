@@ -10,13 +10,9 @@ import java.util.logging.Logger;
  * It handles loading, saving and writing to the config file.
  */
 public class ConfigManager {
-
     private static final Logger log = Logger.getLogger(ConfigManager.class.getName());
-
-    // Config file path is used as a class variable
-    // Here the path is defined via the constructor or a system property.
-    private final String configFile;
-    private final Properties properties;
+    private final String configFile; // Path to the configFile
+    private final Properties properties; // Holds config files
 
     /**
      * Default constructor for ConfigManager.
@@ -27,14 +23,24 @@ public class ConfigManager {
      */
     public ConfigManager() {
         String configDirPath = Constants.APP_DIRECTORY + "config";
+        createConfigDirectory(configDirPath);
+
+        this.configFile = configDirPath + File.separator + "config.properties";
+        this.properties = new Properties();
+        loadConfig();
+    }
+
+    /**
+     * Creates the configuration directory if it doesn't exist.
+     *
+     * @param configDirPath The path to the config directory
+     * @throws SecurityException if the directory cannot be created
+     */
+    private void createConfigDirectory(String configDirPath) {
         File configDir = new File(configDirPath);
         if (!configDir.exists() && !configDir.mkdirs()) {
             throw new SecurityException("Failed to create config directory: " + configDirPath);
         }
-
-        this.configFile = configDirPath + File.separator + "config.properties";
-        properties = new Properties();
-        loadConfig();
     }
 
     private void loadConfig() {

@@ -4,15 +4,18 @@ import org.json.JSONObject;
 import core.drone.DroneType;
 
 /**
- *  The DroneParser class is responsible for parsing and validating the droneType data
- *  @see JsonDroneParser
+ * The DroneTypeParser class is responsible for parsing and validating drone type data.
+ * Implements the {@link JsonDroneParser} interface.
+ *
+ * @see JsonDroneParser
  */
 public class DroneTypeParser implements JsonDroneParser<DroneType> {
 
     /**
-     * Parses the JSON object into a DroneType object
-     * @param obj The JSON object
-     * @return The DroneType object
+     * Parses the given JSON object into a {@link DroneType} object.
+     *
+     * @param obj The JSON object containing drone type data.
+     * @return A {@link DroneType} object parsed from the JSON data.
      */
     @Override
     public DroneType parse(JSONObject obj) {
@@ -29,21 +32,19 @@ public class DroneTypeParser implements JsonDroneParser<DroneType> {
     }
 
     /**
-     * Validates if the given object contains the required data for DroneType
-     * @param obj The JSON object
-     * @return True if the JSON object contains the required data
+     * Validates if the given JSON object contains the required data for a DroneType.
+     *
+     * @param obj The JSON object to validate.
+     * @return {@code true} if the JSON object contains the required fields, otherwise {@code false}.
      */
     @Override
-    public boolean isValid(JSONObject obj) {
-        return obj.has("id") && obj.has("manufacturer");
-    }
+    public boolean isValid(JSONObject obj) { return obj.has("id") && obj.has("manufacturer"); }
 
     /**
-     * Endpoint for fetching drone type data
-     * @return Endpoint string
+     * Returns the endpoint for fetching drone type data.
+     *
+     * @return A {@link String} representing the API endpoint for drone types.
      */
     @Override
-    public String getEndpoint() {
-        return "dronetypes";
-    }
+    public String getEndpoint() { return "dronetypes"; }
 }

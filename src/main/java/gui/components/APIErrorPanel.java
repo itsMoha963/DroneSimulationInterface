@@ -6,15 +6,16 @@ import java.util.function.Consumer;
 
 /**
  * A generic error panel with a retry button.
+ * This panel displays the error message and provides options to retry or exit the program.
  */
 public class APIErrorPanel extends JPanel {
 
     /**
-     * Create a generic error panel and a button to the panel that can be reused for all views.
-     * Assigns {@code listener} to the retry button.
-     * Displays {code errorMessage} on the screen.
-     * @param listener
-     * @param errorMessage
+     * Creates a generic error panel with a retry and exit button.
+     * Displays the given {@code errorMessage} and assigns the {@code listener} to the retry button.
+     *
+     * @param listener A {@link Consumer} that defines the action to be performed when the retry button is clicked.
+     * @param errorMessage The error message to be displayed on the panel.
      */
     public APIErrorPanel(Consumer<Void> listener, String errorMessage) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

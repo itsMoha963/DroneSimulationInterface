@@ -9,15 +9,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * A panel to display all the information of the DynamicDrone relevant for the FlightDynamics Tab
+ * A panel to display all the information of the DynamicDrone relevant for the FlightDynamics Tab.
  */
 public class FlightDynamicsPanel extends JPanel {
 
     /**
-     * Creates the JPanel for the given data
-     * @param dynamicDrone The DynamicDrone for which the JPanel is created
-     * @param drone The Drone which belongs to the DynamicDrone
-     * @param droneType The DroneType which belongs to the Drone
+     * Constructs the FlightDynamicsPanel to display the given dynamic drone's information.
+     *
+     * @param dynamicDrone The DynamicDrone object containing real-time data for the drone.
+     * @param drone The Drone object belonging to {@code dynamicDrone}.
+     * @param droneType The DroneType object that belongs to {@code drone}.
      */
     public FlightDynamicsPanel(DynamicDrone dynamicDrone, Drone drone, DroneType droneType) {
         setLayout(new BorderLayout());
@@ -27,34 +28,30 @@ public class FlightDynamicsPanel extends JPanel {
         ));
         setBackground(UIManager.getColor("Panel.background"));
 
-        JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
-        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        JLabel titleLabel = createTitleLabel(drone);
+        JLabel detailsLabel = createDetailsLabel(dynamicDrone);
+        JLabel locationLabel = createLocationLabel(dynamicDrone, droneType);
+        JLabel alignmentLabel = createAlignmentLabel(dynamicDrone);
 
-        JLabel detailsLabel = new JLabel(String.format(
-                "Speed: %.2f km/h, Last Seen: %s, Status: %s",
-                (double) dynamicDrone.getSpeed(), OffsetDateTime.parse(dynamicDrone.getLastSeen()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm")),
-                dynamicDrone.getStatus()
-        ));
-        detailsLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
+        JPanel statusPanel = createStatusPanel(dynamicDrone, droneType);
+        JPanel textPanel = createTextPanel(titleLabel, detailsLabel, locationLabel, alignmentLabel, statusPanel);
 
-        JLabel locationLabel = new JLabel(String.format(
-                "Location: [%.6f, %.6f] | Control Range: %.2f m",
-                dynamicDrone.getLongitude(), dynamicDrone.getLatitude(), (double) droneType.getControlRange()
-        ));
-        locationLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
+        add(textPanel, BorderLayout.CENTER);
+    }
 
-        JLabel AllignmentLabel = new JLabel("Allignments: Yaw:"+dynamicDrone.getAlignYaw()+" | Pitch:"+dynamicDrone.getAlignPitch()+" | Roll:"+dynamicDrone.getAlignRoll());
-        AllignmentLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
-
+    private JPanel createTextPanel(JLabel titleLabel, JLabel detailsLabel, JLabel locationLabel, JLabel alignmentLabel, JPanel statusPanel) {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
         textPanel.add(titleLabel);
         textPanel.add(detailsLabel);
         textPanel.add(locationLabel);
-        textPanel.add(AllignmentLabel);
+        textPanel.add(alignmentLabel);
+        textPanel.add(statusPanel); // Add status panel at the end
+        return textPanel;
+    }
 
+    private JPanel createStatusPanel(DynamicDrone dynamicDrone, DroneType droneType) {
         JPanel statusPanel = new JPanel();
         statusPanel.setOpaque(false);
         statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -67,7 +64,35 @@ public class FlightDynamicsPanel extends JPanel {
         powerStatus.setPreferredSize(new Dimension(15, 15));
         statusPanel.add(powerStatus);
 
-        textPanel.add(statusPanel);
-        add(textPanel, BorderLayout.CENTER);
+        return statusPanel;
+    }
+
+    private JLabel createAlignmentLabel(DynamicDrone dynamicDrone) {
+        return new JLabel("Allignments: Yaw:" + dynamicDrone.getAlignYaw() +
+                " | Pitch:" + dynamicDrone.getAlignPitch() +
+                " | Roll:" + dynamicDrone.getAlignRoll());
+    }
+
+    private JLabel createLocationLabel(DynamicDrone dynamicDrone, DroneType droneType) {
+        return new JLabel(String.format(
+                "Location: [%.6f, %.6f] | Control Range: %.2f m",
+                dynamicDrone.getLongitude(), dynamicDrone.getLatitude(), (double) droneType.getControlRange()
+        ));
+    }
+
+    private JLabel createDetailsLabel(DynamicDrone dynamicDrone) {
+        return new JLabel(String.format(
+                "Speed: %.2f km/h, Last Seen: %s, Status: %s",
+                (double) dynamicDrone.getSpeed(),
+                OffsetDateTime.parse(dynamicDrone.getLastSeen()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm")),
+                dynamicDrone.getStatus()
+        ));
+    }
+
+    private JLabel createTitleLabel(Drone drone) {
+        JLabel titleLabel = new JLabel("Drone | ID: " + drone.getId());
+        titleLabel.setForeground(UIManager.getColor("Label.foreground"));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        return titleLabel;
     }
 }
